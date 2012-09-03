@@ -1,0 +1,48 @@
+#include "GetBufferResponseProtocol.h"
+
+GetBufferResponseProtocol::GetBufferResponseProtocol() :
+    RequestProtocol(ProtocolType::GetBufferResponse),
+    bufferId(0),
+    requestType(ProtocolType::GetBufferRequest)
+{
+}
+
+
+GetBufferResponseProtocol::GetBufferResponseProtocol(TimeStamp timeStamp, quint16 bufferId, const QVector<TimeStamp> &bufferTimeStamps, const QVector<SignalData> &bufferData) :
+    RequestProtocol(ProtocolType::GetBufferResponse, timeStamp),
+    bufferId(bufferId),
+    bufferTimeStamps(bufferTimeStamps),
+    bufferData(bufferData),
+    requestType(ProtocolType::GetBufferRequest)
+{
+}
+
+quint16 GetBufferResponseProtocol::getBufferId() const
+{
+    return bufferId;
+}
+
+QVector<TimeStamp> GetBufferResponseProtocol::getBufferTimeStamps() const
+{
+    return bufferTimeStamps;
+}
+
+QVector<SignalData> GetBufferResponseProtocol::getBufferData() const
+{
+    return bufferData;
+}
+
+quint8 GetBufferResponseProtocol::getRequestType() const
+{
+    return requestType;
+}
+
+void GetBufferResponseProtocol::encodeData(QDataStream *out) const
+{
+    *out << bufferId << bufferTimeStamps << bufferData;
+}
+
+void GetBufferResponseProtocol::decodeData(QDataStream *in)
+{
+    *in >> bufferId >> bufferTimeStamps >> bufferData;
+}

@@ -1,0 +1,13 @@
+bin/
+lib/
+coverage/
+
+.directory
+*.gcno
+Makefile*
+*.pro.user
+*.o
+*.gcda
+*.*~
+moc_*
+*.moc
