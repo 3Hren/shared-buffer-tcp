@@ -15,6 +15,8 @@
 #include "protocol/GetBufferRequestProtocol.h"
 #include "protocol/RequestProtocolFactory.h"
 #include "protocol/GetBufferResponseProtocol.h"
+#include "server/buffer/HashTableBufferManager.h"
+#include "server/buffer/TreeBufferManager.h"
 
 #define QVERIFY_THROW(expression, ExpectedExceptionType) \
     do { \
@@ -25,7 +27,7 @@
     QVERIFY2(caught, "expecting " #expression " to throw <" #ExpectedExceptionType ">"); \
     } while(0)
 
-static const int WAIT_MSEC = 10;
+static const int WAIT_MSEC = 50;
 
 class CyclicBufferTest : public QObject
 {
@@ -39,6 +41,8 @@ private:
     RequestProtocol *getInputRequestThroughNetworkSendMock(RequestProtocol *outputRequest) const;
     void tryPushWrongDataCountToServerAndCompareError(quint16 dataCount, quint16 wrongDataCount, quint8 errorType) const;
     void compareBufferGetResults(QSignalSpy *spy, int spyCount, const QVector<TimeStamp> &bufferTimeStamps, const QVector<SignalData> &signalDatas) const;
+    void createBuffers(BufferManager *bufferManager) const;
+    QVector<SignalData> createSignalDatas() const;
     
 private Q_SLOTS:
     void testPushRequestSerializing();
@@ -51,7 +55,7 @@ private Q_SLOTS:
 
     void testServerIsListening();
     void testClientConnectionToServer();
-    void testClientConnectionToServerWithEmptyParameterList();    
+    void testClientConnectionToServerWithEmptyParameterList();
     void testInitializingBufferManager();
     void testBufferNotFoundInBufferManager();
 
@@ -59,7 +63,7 @@ private Q_SLOTS:
     void testPushDataToServerWithMoreDatasThanOnServer();
     void testPushDataToServerWithLessDatasThanOnServer();
 
-    void testGetValueFromServer();    
+    void testGetValueFromServer();
     void testGetValuesFromServer();
     void testGetValuesWrongSomeIndexes();
     void testGetValuesWrongTimeStamp();
@@ -68,6 +72,9 @@ private Q_SLOTS:
     void testGetBufferWrongIndex();
 
     void testTrySendRequestClientNotConnected();
+
+    void benchmarkHashTableBufferManager();
+    void benchmarkTreeBufferManager();
 
     void testHighLoad();
 };
@@ -293,7 +300,7 @@ void CyclicBufferTest::testPushDataToServer()
     client.connectToServer();
     client.waitForConnected();
     client.push(data);
-    QTest::qWait(100);
+    QTest::qWait(WAIT_MSEC);
 
     // Compare
     BufferManager *bM = server.getBufferManager();
@@ -325,7 +332,7 @@ void CyclicBufferTest::tryPushWrongDataCountToServerAndCompareError(quint16 data
     client.connectToServer();
     client.waitForConnected();
     client.push(data, timeStamp);
-    QTest::qWait(100);
+    QTest::qWait(WAIT_MSEC);
 
     QCOMPARE(spy.count(), 1);
     QVariantList arguments = spy.takeFirst();
@@ -354,7 +361,6 @@ void CyclicBufferTest::testPushDataToServerWithLessDatasThanOnServer()
 Q_DECLARE_METATYPE(QVector<SignalData>)
 void CyclicBufferTest::testGetValueFromServer()
 {
-    const int waitMsec = 50;
     qRegisterMetaType<QVector<SignalData> >("QVector<SignalData>");
 
     // Initialize
@@ -375,12 +381,12 @@ void CyclicBufferTest::testGetValueFromServer()
     server.run();
     client.blockingConnectToServer();
     client.push(data.values().toVector(), pushTimeStamp);
-    QTest::qWait(waitMsec);
+    QTest::qWait(WAIT_MSEC);
 
     QVector<quint16> bufferIds;
     bufferIds << 1000;
     client.getSignalData(bufferIds, pushTimeStamp);
-    QTest::qWait(waitMsec);
+    QTest::qWait(WAIT_MSEC);
 
     // Compare
     QCOMPARE(spy.count(), 1);
@@ -399,8 +405,6 @@ void CyclicBufferTest::testGetValueFromServer()
 
 void CyclicBufferTest::testGetValuesFromServer()
 {
-    const int waitMsec = 50;
-
     // Initialize
     Server server;
     Client client;
@@ -419,11 +423,11 @@ void CyclicBufferTest::testGetValuesFromServer()
     server.run();
     client.blockingConnectToServer();
     client.push(data.values().toVector(), pushTimeStamp);
-    QTest::qWait(waitMsec);
+    QTest::qWait(WAIT_MSEC);
 
     QVector<quint16> bufferIds = data.keys().toVector();
     client.getSignalData(bufferIds, pushTimeStamp);
-    QTest::qWait(waitMsec);
+    QTest::qWait(WAIT_MSEC);
 
     // Compare
     QCOMPARE(spy.count(), 1);
@@ -442,8 +446,6 @@ void CyclicBufferTest::testGetValuesFromServer()
 
 void CyclicBufferTest::testGetValuesWrongSomeIndexes()
 {
-    const int waitMsec = 50;
-
     // Initialize
     Server server;
     Client client;
@@ -462,12 +464,12 @@ void CyclicBufferTest::testGetValuesWrongSomeIndexes()
     server.run();
     client.blockingConnectToServer();
     client.push(data.values().toVector(), pushTimeStamp);
-    QTest::qWait(waitMsec);
+    QTest::qWait(WAIT_MSEC);
 
     QVector<quint16> bufferIds = data.keys().toVector();
     bufferIds << 1004;
     client.getSignalData(bufferIds, pushTimeStamp);
-    QTest::qWait(waitMsec);
+    QTest::qWait(WAIT_MSEC);
 
     // Compare
     QCOMPARE(spy.count(), 1);
@@ -481,8 +483,6 @@ void CyclicBufferTest::testGetValuesWrongSomeIndexes()
 
 void CyclicBufferTest::testGetValuesWrongTimeStamp()
 {
-    const int waitMsec = 50;
-
     // Initialize
     Server server;
     Client client;
@@ -501,11 +501,11 @@ void CyclicBufferTest::testGetValuesWrongTimeStamp()
     server.run();
     client.blockingConnectToServer();
     client.push(data.values().toVector(), pushTimeStamp);
-    QTest::qWait(waitMsec);
+    QTest::qWait(WAIT_MSEC);
 
     QVector<quint16> bufferIds = data.keys().toVector();
     client.getSignalData(bufferIds, pushTimeStamp - 1);
-    QTest::qWait(waitMsec);
+    QTest::qWait(WAIT_MSEC);
 
     // Compare
     QCOMPARE(spy.count(), 1);
@@ -615,6 +615,54 @@ void CyclicBufferTest::testTrySendRequestClientNotConnected()
     QCOMPARE(client.getBuffer(-1), (qint64)-1);
 }
 
+const int BUFFERS_COUNT = 30000;
+const int BUFFER_MAX_SIZE = 1024;
+
+void CyclicBufferTest::createBuffers(BufferManager *bufferManager) const
+{
+    BufferInfoMap map;
+    for (int bufferId = 0; bufferId < BUFFERS_COUNT; ++bufferId)
+        map.insert(bufferId, BUFFER_MAX_SIZE);
+
+    bufferManager->setBuffers(map);
+}
+
+QVector<SignalData> CyclicBufferTest::createSignalDatas() const
+{
+    QVector<SignalData> signalDatas;
+    signalDatas.reserve(BUFFERS_COUNT);
+    for (int i = 0; i < BUFFERS_COUNT; ++i) {
+        SignalData signalData(qrand() % 10000 / 100.0, qrand() % 2);
+        signalDatas.append(signalData);
+    }
+
+    return signalDatas;
+}
+
+void CyclicBufferTest::benchmarkHashTableBufferManager()
+{
+    HashTableBufferManager bufferManager;
+    createBuffers(&bufferManager);
+    QVector<SignalData> signalDatas = createSignalDatas();
+
+    TimeStamp tS = 0;
+    QBENCHMARK {
+        bufferManager.pushSignalDatas(signalDatas, tS++);
+    }
+}
+
+void CyclicBufferTest::benchmarkTreeBufferManager()
+{
+    TreeBufferManager bM;
+    createBuffers(&bM);
+    QVector<SignalData> sD = createSignalDatas();
+
+    TimeStamp tS = 0;
+    QBENCHMARK {
+        bM.pushSignalDatas(sD, tS++);
+    }
+}
+
 // Рефакторить тесты
 // Тестить невозможность иметь соединение одновременно двух писателей
 
@@ -622,6 +670,7 @@ void CyclicBufferTest::testTrySendRequestClientNotConnected()
 // Пересмотреть смысл временной метки. Убрать их там, где они не нужны. Внедрить диспетчеризацию на основе магических чисел
 // Рефакторить код
 // Сделать все #TODO:
+// Бенчмарк классов разновидностей BufferManager
 
 void CyclicBufferTest::testHighLoad()
 {
@@ -641,7 +690,7 @@ void CyclicBufferTest::testHighLoad()
             data.replace(i, SignalData(qrand() % 100 / 10, 0));
         TimeStamp timeStamp = QDateTime::currentDateTime().toTime_t();
         client.push(data, timeStamp);
-        QTest::qWait(100);
+        QTest::qWait(WAIT_MSEC);
     }
 }
 

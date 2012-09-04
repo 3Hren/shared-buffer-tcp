@@ -1,6 +1,6 @@
 #pragma once
 
-#include <QQueue>
+#include "FixedSizeQueue.h"
 #include "SignalData.h"
 
 struct Buffer {
@@ -10,10 +10,6 @@ struct Buffer {
 
     quint16 size() const {
         return signalDatas.size();
-    }
-
-    bool isFull() const {
-        return size() >= maximumQueueSize;
     }
 
     bool isOverFull() const {
@@ -33,3 +29,5 @@ struct Buffer {
     quint16 maximumQueueSize;
     QQueue<SignalData> signalDatas;
 };
+
+//typedef FixedSizeQueue<SignalData> Buffer;

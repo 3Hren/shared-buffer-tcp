@@ -1,0 +1,55 @@
+#include "TreeBufferManager.h"
+
+#include "exceptions/BufferNotFoundException.h"
+#include "exceptions/WrongPushedDataSizeException.h"
+#include "exceptions/WrongTimeStampException.h"
+
+TreeBufferManager::~TreeBufferManager()
+{
+    qDeleteAll(buffers);
+}
+
+Buffer *TreeBufferManager::getBuffer(quint16 id) const
+{
+    if (!buffers.contains(id))
+        throw BufferNotFoundException(id);
+
+    return buffers.value(id);
+}
+
+void TreeBufferManager::setBuffers(const BufferInfoMap &bufferInfoMap)
+{
+    QMapIterator<quint16, quint16> it(bufferInfoMap);
+    while (it.hasNext()) {
+        it.next();
+        quint16 id = it.key();
+        quint16 maximumQueueSize = it.value();
+
+        buffers.insert(id, new Buffer(maximumQueueSize));
+    }
+}
+
+QVector<TimeStamp> TreeBufferManager::getTimeStamps() const
+{
+    return timeStamps.toVector();
+}
+
+SignalData TreeBufferManager::getSignalData(quint16 bufferId, TimeStamp timeStamp) const
+{
+}
+
+void TreeBufferManager::pushSignalDatas(const QVector<SignalData> &signalDatas, TimeStamp timeStamp)
+{
+    if (signalDatas.size() != buffers.size())
+        throw WrongPushedDataSizeException(signalDatas.size(), buffers.size());
+
+    int i = 0;
+    QMapIterator<quint16, Buffer*> it(buffers);
+    while (it.hasNext()) {
+        it.next();
+        Buffer *buffer = it.value();       
+        buffer->enqueue(signalDatas.at(i++));
+    }
+
+    timeStamps.enqueue(timeStamp);
+}
