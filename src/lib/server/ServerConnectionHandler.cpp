@@ -11,11 +11,10 @@
 #include <QTcpSocket>
 
 ServerConnectionHandler::ServerConnectionHandler(QTcpSocket *socket, QObject *visitor) :
-    ConnectionHandler(socket),
+    ConnectionHandler(socket, socket),
     server(qobject_cast<Server *>(visitor))
-{    
-    connect(socket,SIGNAL(disconnected()),SLOT(deleteLater()));//#TODO: Сервер создает обработчика на каждый новый сокет, поэтому они живут одинаковое время.
-    //Клиент же не должен удалять обработчик, пока жив сокет.
+{        
+    connect(socket,SIGNAL(disconnected()),socket,SLOT(deleteLater()));
 }
 
 void ServerConnectionHandler::processRequest(RequestProtocol *requestProtocol)

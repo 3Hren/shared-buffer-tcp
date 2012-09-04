@@ -10,8 +10,7 @@ ConnectionHandler::ConnectionHandler(QTcpSocket *socket, QObject *parent) :
     QObject(parent),
     socket(socket),
     requestSize(0)
-{    
-    connect(socket,SIGNAL(disconnected()),socket,SLOT(deleteLater()));
+{        
     connect(socket,SIGNAL(readyRead()),SLOT(readPendingData()));
 }
 

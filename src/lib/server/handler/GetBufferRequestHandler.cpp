@@ -26,7 +26,7 @@ void GetBufferRequestHandler::execute()
     try {
         bufferTimeStamps = bufferManager->getTimeStamps();
         Buffer *buffer = bufferManager->getBuffer(bufferId);
-        bufferData = buffer->signalDatas.toVector();
+        bufferData = buffer->toVector();
     } catch (BufferException &exception) {
         throw exception;
     }

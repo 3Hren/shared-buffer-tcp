@@ -52,7 +52,7 @@ SignalData HashTableBufferManager::getSignalData(quint16 bufferId, TimeStamp tim
     if (signalDataId >= buffer->size())
         throw WrongTimeStampException(timeStamp);
 
-    return buffer->signalDatas.at(signalDataId);
+    return buffer->at(signalDataId);
 }
 
 void HashTableBufferManager::pushSignalDatas(const QVector<SignalData> &signalDatas, TimeStamp timeStamp)

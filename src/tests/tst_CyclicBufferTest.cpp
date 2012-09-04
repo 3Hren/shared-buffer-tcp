@@ -269,9 +269,9 @@ void CyclicBufferTest::testInitializingBufferManager()
 
     BufferManager *bufferManager = server.getBufferManager();
 
-    QCOMPARE(bufferManager->getBuffer(1000)->maximumQueueSize, (quint16)40);
-    QCOMPARE(bufferManager->getBuffer(1010)->maximumQueueSize, (quint16)40);
-    QCOMPARE(bufferManager->getBuffer(1020)->maximumQueueSize, (quint16)40);
+    QCOMPARE(bufferManager->getBuffer(1000)->getMaximumSize(), (quint16)40);
+    QCOMPARE(bufferManager->getBuffer(1010)->getMaximumSize(), (quint16)40);
+    QCOMPARE(bufferManager->getBuffer(1020)->getMaximumSize(), (quint16)40);
 }
 
 void CyclicBufferTest::testBufferNotFoundInBufferManager()
@@ -308,7 +308,7 @@ void CyclicBufferTest::testPushDataToServer()
         Buffer *buffer = bM->getBuffer(START_INDEX + i);
         Q_ASSERT(buffer);
         QCOMPARE(buffer->size(), (quint16)1);
-        QCOMPARE(buffer->signalDatas.first(), data.at(i));
+        QCOMPARE(buffer->first(), data.at(i));
     }
 }
 
@@ -670,7 +670,6 @@ void CyclicBufferTest::benchmarkTreeBufferManager()
 // Пересмотреть смысл временной метки. Убрать их там, где они не нужны. Внедрить диспетчеризацию на основе магических чисел
 // Рефакторить код
 // Сделать все #TODO:
-// Бенчмарк классов разновидностей BufferManager
 
 void CyclicBufferTest::testHighLoad()
 {

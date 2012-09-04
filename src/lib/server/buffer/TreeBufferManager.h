@@ -4,7 +4,7 @@
 
 class TreeBufferManager : public BufferManager
 {    
-    QQueue<TimeStamp> timeStamps;
+    FixedSizeQueue<TimeStamp> timeStamps;
     QMap<quint16, Buffer*> buffers;
 public:
     ~TreeBufferManager();

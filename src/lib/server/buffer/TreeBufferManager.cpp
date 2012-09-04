@@ -27,6 +27,13 @@ void TreeBufferManager::setBuffers(const BufferInfoMap &bufferInfoMap)
 
         buffers.insert(id, new Buffer(maximumQueueSize));
     }
+
+    quint16 timeStampsQueueSize = 0;
+    foreach (quint16 maximumQueueSize, bufferInfoMap.values())
+        if (maximumQueueSize > timeStampsQueueSize)
+            timeStampsQueueSize = maximumQueueSize;
+
+    timeStamps.setMaximumSize(timeStampsQueueSize);
 }
 
 QVector<TimeStamp> TreeBufferManager::getTimeStamps() const
@@ -36,6 +43,14 @@ QVector<TimeStamp> TreeBufferManager::getTimeStamps() const
 
 SignalData TreeBufferManager::getSignalData(quint16 bufferId, TimeStamp timeStamp) const
 {
+    const QQueue<TimeStamp> &timeStampsQueue = timeStamps.getData();
+    Buffer *buffer = getBuffer(bufferId);
+    quint16 signalDataId = std::distance(timeStampsQueue.begin(), qBinaryFind(timeStampsQueue, timeStamp));
+
+    if (signalDataId >= buffer->size())
+        throw WrongTimeStampException(timeStamp);
+
+    return buffer->at(signalDataId);
 }
 
 void TreeBufferManager::pushSignalDatas(const QVector<SignalData> &signalDatas, TimeStamp timeStamp)

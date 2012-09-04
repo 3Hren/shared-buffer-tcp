@@ -8,6 +8,13 @@ class FixedSizeQueue {
     QQueue<T> queue;
 
 public:
+    FixedSizeQueue() {}
+    FixedSizeQueue(quint16 maximumSize) : maximumSize(maximumSize) {}
+
+    quint16 getMaximumSize() const {
+        return maximumSize;
+    }
+
     void setMaximumSize(quint16 size) {
         maximumSize = size;
     }
@@ -32,5 +39,13 @@ public:
 
     QQueue<T> getData() const {
         return queue;
+    }
+
+    const T &first() const {
+        return queue.first();
+    }
+
+    const T &at(quint16 id) const {
+        return queue.at(id);
     }
 };

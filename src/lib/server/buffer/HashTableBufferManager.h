@@ -5,7 +5,6 @@
 
 class HashTableBufferManager : public BufferManager
 {
-
     FixedSizeQueue<TimeStamp> timeStamps;
     QHash<quint16, Buffer *> buffers;    
     QVector<Buffer *> buffersVector;

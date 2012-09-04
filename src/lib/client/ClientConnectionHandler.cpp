@@ -8,7 +8,7 @@
 #include <QDebug>
 
 ClientConnectionHandler::ClientConnectionHandler(QTcpSocket *socket, QObject *visitor) :
-    ConnectionHandler(socket), //#TODO: Обрати внимание на его родителя. Его нету!!!
+    ConnectionHandler(socket, visitor),
     client(qobject_cast<Client *>(visitor))
 {
 }
