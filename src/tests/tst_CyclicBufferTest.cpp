@@ -32,7 +32,7 @@ static const int WAIT_MSEC = 50;
 class CyclicBufferTest : public QObject
 {
     Q_OBJECT
-    
+
 public:
     CyclicBufferTest();
 
@@ -43,7 +43,7 @@ private:
     void compareBufferGetResults(QSignalSpy *spy, int spyCount, const QVector<TimeStamp> &bufferTimeStamps, const QVector<SignalData> &signalDatas) const;
     void createBuffers(BufferManager *bufferManager) const;
     QVector<SignalData> createSignalDatas() const;
-    
+
 private Q_SLOTS:
     void testPushRequestSerializing();
     void testGetSignalDataRequestSerializing();
@@ -284,7 +284,7 @@ void CyclicBufferTest::testBufferNotFoundInBufferManager()
 }
 
 void CyclicBufferTest::testPushDataToServer()
-{    
+{
     const int MAX_BUFFERS = 10;
     const int START_INDEX = 1000;
 
@@ -345,7 +345,7 @@ void CyclicBufferTest::tryPushWrongDataCountToServerAndCompareError(quint16 data
 
 
 void CyclicBufferTest::testPushDataToServerWithMoreDatasThanOnServer()
-{   
+{
     const quint16 DATA_COUNT = 10;
     const quint16 WRONG_DATA_COUNT = 11;
     tryPushWrongDataCountToServerAndCompareError(DATA_COUNT, WRONG_DATA_COUNT, ProtocolError::WrongInputArraySize);
@@ -536,7 +536,7 @@ void CyclicBufferTest::compareBufferGetResults(QSignalSpy *spy, int spyCount, co
 
 Q_DECLARE_METATYPE(BufferData)
 void CyclicBufferTest::testGetBuffer()
-{    
+{
     qRegisterMetaType<BufferData>("BufferData");
 
     // Initialize
@@ -673,7 +673,7 @@ void CyclicBufferTest::benchmarkTreeBufferManager()
 
 void CyclicBufferTest::testHighLoad()
 {
-    QSKIP("Skip wrong load test", SkipSingle);
+    QSKIP("testHighLoad", SkipSingle);
     quint16 MAX_SIZE = 65535;
     // Initialize
     Server server;
@@ -682,8 +682,8 @@ void CyclicBufferTest::testHighLoad()
     QVector<SignalData> data(MAX_SIZE);
 
     server.run();
-    client.connectToServer("127.0.0.1", Server::getStandardPort());
-    client.waitForConnected();
+    client.blockingConnectToServer();
+
     for (int times = 0; times < 10; ++times) {
         for (quint16 i = 0; i < MAX_SIZE; ++i)
             data.replace(i, SignalData(qrand() % 100 / 10, 0));

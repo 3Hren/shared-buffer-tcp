@@ -24,3 +24,5 @@ MOC_DIR = .moc/debug
 # For Code Coverage
 LIBS += -lgcov
 QMAKE_CXXFLAGS += -g -Wall -fprofile-arcs -ftest-coverage -O0
+
+HEADERS +=

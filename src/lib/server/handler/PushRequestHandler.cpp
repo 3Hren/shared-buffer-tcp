@@ -11,7 +11,7 @@ PushRequestHandler::PushRequestHandler(RequestProtocol *requestProtocol, Server 
 }
 
 void PushRequestHandler::execute()
-{
+{    
     BufferManager *bufferManager = server->getBufferManager();
     PushRequestProtocol *pushRequestProtocol = static_cast<PushRequestProtocol *>(requestProtocol);
 
@@ -22,5 +22,5 @@ void PushRequestHandler::execute()
         bufferManager->pushSignalDatas(signalDatas, timeStamp);
     } catch (BufferException &e) {
         throw e;
-    }
+    }    
 }

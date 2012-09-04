@@ -15,7 +15,7 @@ ConnectionHandler::ConnectionHandler(QTcpSocket *socket, QObject *parent) :
 }
 
 void ConnectionHandler::readPendingData()
-{
+{    
     QDataStream in(socket);
     in.setVersion(QDataStream::Qt_4_8);
     in.setFloatingPointPrecision(QDataStream::SinglePrecision);
@@ -24,7 +24,7 @@ void ConnectionHandler::readPendingData()
         if (socket->bytesAvailable() < (int)sizeof(MessageSize))
             return;
         in >> requestSize;
-    }    
+    }
 
     // Don't read message until its completely delivered
     if (socket->bytesAvailable() < requestSize)

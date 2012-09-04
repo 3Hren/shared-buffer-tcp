@@ -68,8 +68,7 @@ BufferManager *Server::getBufferManager() const
 
 void Server::acceptConnection()
 {
-    QTcpSocket *socket = server->nextPendingConnection();
-     //#WARNING: bufferManager - в данном случае разделяемый ресурс и к тому же очень большой. Если писать многопоточную обработку, надо очень хорошо подумать над блокировками
+    QTcpSocket *socket = server->nextPendingConnection();     
     ConnectionHandler *requestHandler = new ServerConnectionHandler(socket, this);
     Q_UNUSED(requestHandler);
 }

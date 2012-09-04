@@ -18,7 +18,7 @@ ServerConnectionHandler::ServerConnectionHandler(QTcpSocket *socket, QObject *vi
 }
 
 void ServerConnectionHandler::processRequest(RequestProtocol *requestProtocol)
-{
+{        
     try {        
         QScopedPointer<RequestHandler>handler(ServerSideRequestHandlerFactory::createHandler(requestProtocol, server, socket));
         handler->execute();
