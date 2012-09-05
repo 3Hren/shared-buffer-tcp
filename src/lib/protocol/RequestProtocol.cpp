@@ -2,15 +2,7 @@
 
 RequestProtocol::RequestProtocol(quint8 type) :
     messageSize(0),
-    type(type),
-    timeStamp(0)
-{
-}
-
-RequestProtocol::RequestProtocol(quint8 type, TimeStamp timeStamp) :
-    messageSize(0),
-    type(type),
-    timeStamp(timeStamp)
+    type(type)
 {
 }
 
@@ -24,7 +16,7 @@ QByteArray RequestProtocol::encode() const
     QDataStream out(&encodedMessage, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_4_8);
     out.setFloatingPointPrecision(QDataStream::SinglePrecision);
-    out << messageSize << MAGIC << type << timeStamp;
+    out << messageSize << MAGIC << type;
     encodeData(&out);
     out.device()->seek(0);
     out << (MessageSize)(encodedMessage.size() - sizeof(MessageSize));
@@ -34,7 +26,6 @@ QByteArray RequestProtocol::encode() const
 
 void RequestProtocol::decode(QDataStream *in)
 {
-    *in >> timeStamp;
     decodeData(in);
 }
 
@@ -43,7 +34,3 @@ quint8 RequestProtocol::getType() const
     return type;
 }
 
-TimeStamp RequestProtocol::getTimeStamp() const
-{
-    return timeStamp;
-}

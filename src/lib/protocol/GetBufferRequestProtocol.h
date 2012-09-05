@@ -7,7 +7,7 @@ class GetBufferRequestProtocol : public RequestProtocol
     quint16 bufferId;
 public:
     GetBufferRequestProtocol();
-    GetBufferRequestProtocol(TimeStamp timeStamp, quint16 bufferId);
+    GetBufferRequestProtocol(quint16 bufferId);
 
     quint16 getBufferId() const;
 

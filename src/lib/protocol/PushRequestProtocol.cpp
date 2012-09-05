@@ -6,9 +6,15 @@ PushRequestProtocol::PushRequestProtocol() :
 }
 
 PushRequestProtocol::PushRequestProtocol(TimeStamp timeStamp, const QVector<SignalData> &signalDatas) :
-    RequestProtocol(ProtocolType::PushRequest, timeStamp),
+    RequestProtocol(ProtocolType::PushRequest),
+    timeStamp(timeStamp),
     signalDatas(signalDatas)
 {
+}
+
+TimeStamp PushRequestProtocol::getTimeStamp() const
+{
+    return timeStamp;
 }
 
 QVector<SignalData> PushRequestProtocol::getSignalDataVector() const
@@ -18,10 +24,10 @@ QVector<SignalData> PushRequestProtocol::getSignalDataVector() const
 
 void PushRequestProtocol::encodeData(QDataStream *out) const
 {
-    *out << signalDatas;
+    *out << timeStamp << signalDatas;
 }
 
 void PushRequestProtocol::decodeData(QDataStream *in)
 {
-    *in >> signalDatas;
+    *in >> timeStamp >> signalDatas;
 }

@@ -1,18 +1,17 @@
 #include "Client.h"
 
-#include "Global.h"
+#include "../Global.h"
 #include "ClientConnectionHandler.h"
 
-#include "protocol/PushRequestProtocol.h"
-#include "protocol/GetSignalDataRequestProtocol.h"
-#include "protocol/GetBufferRequestProtocol.h"
+#include "../protocol/PushRequestProtocol.h"
+#include "../protocol/GetSignalDataRequestProtocol.h"
+#include "../protocol/GetBufferRequestProtocol.h"
+#include "listener/BlockingBufferListener.h"
+#include "../exceptions/ClientNotConnectedException.h"
 
 #include <QTcpSocket>
 #include <QHostAddress>
 #include <QDateTime>
-
-#include <QEventLoop>
-#include <QTimer>
 
 #include <QDebug>
 
@@ -22,6 +21,7 @@ Client::Client(QObject *parent) :
     handler(new ClientConnectionHandler(socket, this))
 {
     connect(socket,SIGNAL(connected()),SIGNAL(connected()));
+    connect(socket,SIGNAL(error(QAbstractSocket::SocketError)),SLOT(setSocketError(QAbstractSocket::SocketError)));
 }
 
 bool Client::isConnected() const
@@ -39,15 +39,15 @@ void Client::connectToServer(const QString &host, quint16 port)
     socket->connectToHost(host, port);
 }
 
-bool Client::blockingConnectToServer()
+bool Client::blockingConnectToServer(int timeout)
 {
     connectToServer();
-    return waitForConnected();
+    return waitForConnected(timeout);
 }
 
-bool Client::waitForConnected() const
+bool Client::waitForConnected(int timeout) const
 {
-    return socket->waitForConnected();
+    return socket->waitForConnected(timeout);
 }
 
 qint64 Client::push(const QVector<SignalData> &signalDatas)
@@ -70,25 +70,47 @@ qint64 Client::getSignalData(const QVector<quint16> bufferIds, TimeStamp timeSta
 
 qint64 Client::getBuffer(quint16 bufferId)
 {
-    //#TODO: timestamp
-    GetBufferRequestProtocol request(QDateTime::currentDateTime().toTime_t(), bufferId);
+    GetBufferRequestProtocol request(bufferId);
     return sendRequest(&request);
 }
 
+#include <QCoreApplication>
+BufferResponse Client::blockingGetBuffer(quint16 bufferId, int timeout)
+{    
+    if (socket->state() != QAbstractSocket::ConnectedState)
+        throw ClientNotConnectedException();
 
-void Client::notifyError(const Response &response, quint8 errorType)
-{
-    emit error(response, errorType);
+    BlockingBufferListener listener(timeout, this);
+
+    GetBufferRequestProtocol request(bufferId);
+    sendRequest(&request);
+
+    while (listener.isListening()) {
+        socket->waitForBytesWritten(timeout * 1 / 4);
+        socket->waitForReadyRead(timeout * 3 / 4);
+    }
+
+    return listener.getBufferResponse();
 }
 
-void Client::notifySignalDatas(const Response &response, const QVector<SignalData> &signalDatas)
+Client::SocketError Client::getSocketError() const
 {
-    emit signalDatasReceived(response, signalDatas);
+    return socketError;
 }
 
-void Client::notifyBuffer(const Response &response, const BufferData &bufferData)
+void Client::notifyError(const ErrorResponse &response)
 {
-    emit bufferReceived(response, bufferData);
+    emit error(response);
+}
+
+void Client::notifySignalDatas(const SignalDataResponse &response)
+{
+    emit signalDatasReceived(response);
+}
+
+void Client::notifyBuffer(const BufferResponse &response)
+{
+    emit bufferReceived(response);
 }
 
 qint64 Client::sendRequest(RequestProtocol *request)
@@ -96,4 +118,11 @@ qint64 Client::sendRequest(RequestProtocol *request)
     const QByteArray &requestMessage = request->encode();
     qint64 bytesWritten = socket->write(requestMessage);
     return bytesWritten;
+}
+
+void Client::setSocketError(QAbstractSocket::SocketError error)
+{
+    socketError.error = error;
+    socketError.errorString = socket->errorString();
+    //#TODO: emit error signal
 }

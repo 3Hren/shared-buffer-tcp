@@ -20,6 +20,6 @@ public:
 protected:
     virtual void processRequest(RequestProtocol *requestProtocol) = 0;
 
-private Q_SLOTS:
+public Q_SLOTS:
     void readPendingData();
 };

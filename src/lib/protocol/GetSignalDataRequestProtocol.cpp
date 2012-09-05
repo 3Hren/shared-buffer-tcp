@@ -6,11 +6,16 @@ GetSignalDataRequestProtocol::GetSignalDataRequestProtocol() :
 }
 
 GetSignalDataRequestProtocol::GetSignalDataRequestProtocol(TimeStamp timeStamp, const QVector<quint16> &bufferIds) :
-    RequestProtocol(ProtocolType::GetSignalDataRequest, timeStamp),
+    RequestProtocol(ProtocolType::GetSignalDataRequest),
+    timeStamp(timeStamp),
     bufferIds(bufferIds)
 {
 }
 
+TimeStamp GetSignalDataRequestProtocol::getTimeStamp() const
+{
+    return timeStamp;
+}
 
 QVector<quint16> GetSignalDataRequestProtocol::getRequestedBufferIndexes() const
 {
@@ -19,10 +24,10 @@ QVector<quint16> GetSignalDataRequestProtocol::getRequestedBufferIndexes() const
 
 void GetSignalDataRequestProtocol::encodeData(QDataStream *out) const
 {
-    *out << bufferIds;
+    *out << timeStamp << bufferIds;
 }
 
 void GetSignalDataRequestProtocol::decodeData(QDataStream *in)
 {
-    *in >> bufferIds;
+    *in >> timeStamp >> bufferIds;
 }

@@ -6,8 +6,8 @@ GetBufferRequestProtocol::GetBufferRequestProtocol() :
 {
 }
 
-GetBufferRequestProtocol::GetBufferRequestProtocol(TimeStamp timeStamp, quint16 bufferId) :
-    RequestProtocol(ProtocolType::GetBufferRequest, timeStamp),
+GetBufferRequestProtocol::GetBufferRequestProtocol(quint16 bufferId) :
+    RequestProtocol(ProtocolType::GetBufferRequest),
     bufferId(bufferId)
 {
 }

@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Runnable.h"
+#include "../Runnable.h"
 
-#include "Global.h"
+#include "../Global.h"
 
 #include <QHash>
 

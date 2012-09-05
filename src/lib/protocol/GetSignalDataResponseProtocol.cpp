@@ -1,16 +1,20 @@
 #include "GetSignalDataResponseProtocol.h"
 
 GetSignalDataResponseProtocol::GetSignalDataResponseProtocol() :
-    RequestProtocol(ProtocolType::GetSignalDataResponse),
-    requestType(ProtocolType::GetSignalDataRequest)
+    ResponseProtocol(ProtocolType::GetSignalDataResponse, ProtocolType::GetSignalDataRequest)
 {
 }
 
 GetSignalDataResponseProtocol::GetSignalDataResponseProtocol(TimeStamp timeStamp, const QVector<SignalData> &signalDatas) :
-    RequestProtocol(ProtocolType::GetSignalDataResponse, timeStamp),
-    signalDatas(signalDatas),
-    requestType(ProtocolType::GetSignalDataRequest)
+    ResponseProtocol(ProtocolType::GetSignalDataResponse, ProtocolType::GetSignalDataRequest),
+    timeStamp(timeStamp),
+    signalDatas(signalDatas)
 {
+}
+
+TimeStamp GetSignalDataResponseProtocol::getTimeStamp() const
+{
+    return timeStamp;
 }
 
 QVector<SignalData> GetSignalDataResponseProtocol::getSignalDatas() const
@@ -18,17 +22,12 @@ QVector<SignalData> GetSignalDataResponseProtocol::getSignalDatas() const
     return signalDatas;
 }
 
-quint8 GetSignalDataResponseProtocol::getRequestType() const
-{
-    return requestType;
-}
-
 void GetSignalDataResponseProtocol::encodeData(QDataStream *out) const
 {
-    *out << signalDatas;
+    *out << timeStamp << signalDatas;
 }
 
 void GetSignalDataResponseProtocol::decodeData(QDataStream *in)
 {
-    *in >> signalDatas;
+    *in >> timeStamp >> signalDatas;
 }

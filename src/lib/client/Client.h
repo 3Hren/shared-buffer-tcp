@@ -2,47 +2,21 @@
 
 #include <QObject>
 
-#include "Global.h"
-#include "SignalData.h"
+#include "../Global.h"
+#include "../SignalData.h"
+#include "struct/BufferResponse.h"
+#include "struct/ErrorResponse.h"
+#include "struct/SignalDataResponse.h"
 
-QT_BEGIN_NAMESPACE
+#include <QtNetwork/QAbstractSocket>
+
 class QTcpSocket;
-QT_END_NAMESPACE
-
-struct Response {
-    Response() :
-        requestTimeStamp(0),
-        requestType(0)
-    {}
-
-    Response(TimeStamp requestTimeStamp, quint8 requestType, const QString &description = QString()) :
-        requestTimeStamp(requestTimeStamp),
-        requestType(requestType),
-        description(description)
-    {}
-
-    TimeStamp requestTimeStamp;
-    quint8 requestType;
-    QString description;
-};
-
-struct BufferData {
-    BufferData() {}
-    BufferData(const QVector<TimeStamp> &timeStamps, const QVector<SignalData> &signalDatas) :
-        timeStamps(timeStamps),
-        signalDatas(signalDatas)
-    {}
-
-    QVector<TimeStamp> timeStamps;
-    QVector<SignalData> signalDatas;
-};
-
 class ConnectionHandler;
 class ErrorMessageResponseHandler;
 class GetSignalDataResponseHandler;
 class RequestProtocol;
 class Client : public QObject
-{
+{    
     friend class ErrorMessageResponseHandler;
     friend class GetSignalDataResponseHandler;
     friend class GetBufferResponseHandler;
@@ -55,8 +29,8 @@ public:
     bool isConnected() const;
     void connectToServer();
     void connectToServer(const QString &host, quint16 port);
-    bool blockingConnectToServer();
-    bool waitForConnected() const;
+    bool blockingConnectToServer(int timeout = 1500);
+    bool waitForConnected(int timeout = 1500) const;
 
     qint64 push(const QVector<SignalData> &signalDatas);
     qint64 push(const QVector<SignalData> &signalDatas, TimeStamp timeStamp);
@@ -64,16 +38,27 @@ public:
     qint64 getSignalData(const QVector<quint16> bufferIds, TimeStamp timeStamp);
 
     qint64 getBuffer(quint16 bufferId);
+    BufferResponse blockingGetBuffer(quint16 bufferId, int timeout = 1500);
+
+    struct SocketError {
+        QAbstractSocket::SocketError error;
+        QString errorString;
+    } socketError;
+
+    SocketError getSocketError() const;
 
 Q_SIGNALS:
     void connected();
-    void error(const Response &response, quint8 errorType);
-    void signalDatasReceived(const Response &response, const QVector<SignalData> &signalDatas);
-    void bufferReceived(const Response &response, const BufferData &bufferData);
+    void error(const ErrorResponse &response);
+    void signalDatasReceived(const SignalDataResponse &response);
+    void bufferReceived(const BufferResponse &response);
 
 private:
-    void notifyError(const Response &response, quint8 errorType);
-    void notifySignalDatas(const Response &response, const QVector<SignalData> &signalDatas);
-    void notifyBuffer(const Response &response, const BufferData &bufferData);
+    void notifyError(const ErrorResponse &response);
+    void notifySignalDatas(const SignalDataResponse &response);
+    void notifyBuffer(const BufferResponse &response);
     qint64 sendRequest(RequestProtocol *request);
+
+private Q_SLOTS:
+    void setSocketError(QAbstractSocket::SocketError error);
 };

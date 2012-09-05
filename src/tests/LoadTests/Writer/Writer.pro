@@ -14,4 +14,4 @@ LIBS += -L../../../../lib -llib
 SOURCES += main.cpp
 
 HEADERS += \
-    Writer.h
+    ThreadedWriter.h

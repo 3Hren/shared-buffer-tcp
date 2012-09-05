@@ -9,11 +9,13 @@
 
 class PushRequestProtocol : public RequestProtocol
 {
+    TimeStamp timeStamp;
     QVector<SignalData> signalDatas;
 public:
     PushRequestProtocol();
     PushRequestProtocol(TimeStamp timeStamp, const QVector<SignalData> &signalDatas);
 
+    TimeStamp getTimeStamp() const;
     QVector<SignalData> getSignalDataVector() const;
 
 protected:

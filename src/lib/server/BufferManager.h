@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Global.h"
-#include "Buffer.h"
+#include "../Global.h"
+#include "../Buffer.h"
 
 #include <QVector>
 

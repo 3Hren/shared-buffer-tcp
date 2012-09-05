@@ -12,12 +12,12 @@ void GetBufferResponseHandler::execute()
 {
     GetBufferResponseProtocol *getBufferResponseProtocol = static_cast<GetBufferResponseProtocol *>(requestProtocol);
 
-    const TimeStamp &requestTimeStamp = getBufferResponseProtocol->getTimeStamp();
-    const quint8 &requestType = getBufferResponseProtocol->getRequestType();
-    Response response(requestTimeStamp, requestType);
+    const quint8 requestType = getBufferResponseProtocol->getRequestType();
+    const quint16 id = getBufferResponseProtocol->getBufferId();
+    const QVector<TimeStamp> &timeStamps = getBufferResponseProtocol->getBufferTimeStamps();
+    const QVector<SignalData> &datas = getBufferResponseProtocol->getBufferData();
 
-    const QVector<TimeStamp> &bufferTimeStamps = getBufferResponseProtocol->getBufferTimeStamps();
-    const QVector<SignalData> &bufferDatas = getBufferResponseProtocol->getBufferData();
-    BufferData bufferData(bufferTimeStamps, bufferDatas);
-    client->notifyBuffer(response, bufferData);
+    BufferResponse response(requestType, id, timeStamps, datas);
+
+    client->notifyBuffer(response);
 }

@@ -14,4 +14,4 @@ LIBS += -L../../../../lib -llib
 SOURCES += main.cpp
 
 HEADERS += \
-    Reader.h
+    ThreadReader.h

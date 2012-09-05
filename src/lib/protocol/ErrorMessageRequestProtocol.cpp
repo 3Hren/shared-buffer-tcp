@@ -1,23 +1,16 @@
 #include "ErrorMessageRequestProtocol.h"
 
 ErrorMessageRequestProtocol::ErrorMessageRequestProtocol() :
-    RequestProtocol(ProtocolType::ErrorMessageResponse),
-    inputRequestType(ProtocolType::UnknownType),
+    ResponseProtocol(ProtocolType::ErrorMessageResponse, ProtocolType::UnknownType),
     errorType(ProtocolError::UnknownError)
 {
 }
 
-ErrorMessageRequestProtocol::ErrorMessageRequestProtocol(TimeStamp timeStamp, quint8 inputRequestType, quint8 errorType, const QString &errorMessage) :
-    RequestProtocol(ProtocolType::ErrorMessageResponse, timeStamp),
-    inputRequestType(inputRequestType),
+ErrorMessageRequestProtocol::ErrorMessageRequestProtocol(quint8 requestType, quint8 errorType, const QString &errorMessage) :
+    ResponseProtocol(ProtocolType::ErrorMessageResponse, requestType),
     errorType(errorType),
     errorMessage(errorMessage)
 {
-}
-
-quint8 ErrorMessageRequestProtocol::getInputRequestType() const
-{
-    return inputRequestType;
 }
 
 quint8 ErrorMessageRequestProtocol::getErrorType() const
@@ -32,10 +25,10 @@ QString ErrorMessageRequestProtocol::getErrorMessage() const
 
 void ErrorMessageRequestProtocol::encodeData(QDataStream *out) const
 {
-    *out << inputRequestType << errorType << errorMessage;
+    *out << requestType << errorType << errorMessage;
 }
 
 void ErrorMessageRequestProtocol::decodeData(QDataStream *in)
 {
-    *in >> inputRequestType >> errorType >> errorMessage;
+    *in >> requestType >> errorType >> errorMessage;
 }

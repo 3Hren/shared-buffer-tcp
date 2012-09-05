@@ -43,7 +43,14 @@ HEADERS += \
     server/handler/ServerSideRequestHandler.h \
     server/buffer/HashTableBufferManager.h \
     server/buffer/TreeBufferManager.h \
-    FixedSizeQueue.h
+    FixedSizeQueue.h \
+    client/listener/BlockingBufferListener.h \
+    client/struct/Response.h \
+    client/struct/BufferResponse.h \
+    client/struct/ErrorResponse.h \
+    client/struct/SignalDataResponse.h \
+    protocol/ResponseProtocol.h \
+    exceptions/ClientNotConnectedException.h
 
 SOURCES += \
     ConnectionHandler.cpp \
@@ -71,4 +78,10 @@ SOURCES += \
     client/handler/ClientSideResponseHandler.cpp \
     server/handler/ServerSideRequestHandler.cpp \
     server/buffer/HashTableBufferManager.cpp \
-    server/buffer/TreeBufferManager.cpp
+    server/buffer/TreeBufferManager.cpp \
+    client/listener/BlockingBufferListener.cpp \
+    client/struct/Response.cpp \
+    client/struct/BufferResponse.cpp \
+    client/struct/ErrorResponse.cpp \
+    client/struct/SignalDataResponse.cpp \
+    protocol/ResponseProtocol.cpp

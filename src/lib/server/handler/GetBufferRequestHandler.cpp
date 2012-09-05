@@ -19,7 +19,6 @@ void GetBufferRequestHandler::execute()
     GetBufferRequestProtocol *getBufferRequestProtocol = static_cast<GetBufferRequestProtocol *>(requestProtocol);
 
     quint16 bufferId = getBufferRequestProtocol->getBufferId();
-    TimeStamp timeStamp = getBufferRequestProtocol->getTimeStamp();
 
     QVector<TimeStamp> bufferTimeStamps;
     QVector<SignalData> bufferData;
@@ -31,6 +30,6 @@ void GetBufferRequestHandler::execute()
         throw exception;
     }
 
-    GetBufferResponseProtocol response(timeStamp, bufferId, bufferTimeStamps, bufferData);
+    GetBufferResponseProtocol response(bufferId, bufferTimeStamps, bufferData);
     socket->write(response.encode());
 }

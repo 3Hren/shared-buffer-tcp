@@ -2,7 +2,7 @@
 
 #include "Exception.h"
 
-#include "Global.h"
+#include "../Global.h"
 
 class ProtocolException : public Exception {    
     TimeStamp timeStamp;

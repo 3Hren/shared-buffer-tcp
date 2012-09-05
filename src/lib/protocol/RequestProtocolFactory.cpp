@@ -1,6 +1,6 @@
 #include "RequestProtocolFactory.h"
 
-#include "Global.h"
+#include "../Global.h"
 #include "PushRequestProtocol.h"
 #include "GetSignalDataRequestProtocol.h"
 #include "GetSignalDataResponseProtocol.h"

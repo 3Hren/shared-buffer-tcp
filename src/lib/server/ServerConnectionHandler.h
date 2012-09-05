@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ConnectionHandler.h"
+#include "../ConnectionHandler.h"
 
 class Server;
 class ServerConnectionHandler : public ConnectionHandler

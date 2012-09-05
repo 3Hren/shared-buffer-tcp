@@ -25,4 +25,5 @@ MOC_DIR = .moc/debug
 LIBS += -lgcov
 QMAKE_CXXFLAGS += -g -Wall -fprofile-arcs -ftest-coverage -O0
 
-HEADERS +=
+HEADERS += \
+    ThreadedServer.h
