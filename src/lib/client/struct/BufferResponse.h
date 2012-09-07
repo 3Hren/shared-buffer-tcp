@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Response.h"
-#include "../../SignalData.h"
+#include "SignalData.h"
 
 struct BufferResponse : public Response {
     BufferResponse() :

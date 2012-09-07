@@ -1,6 +1,7 @@
 #pragma once
 
-#include "../../RequestHandler.h"
+#include <QObject>
+#include "RequestHandler.h"
 
 class Client;
 class ClientSideResponseHandler : public RequestHandler

@@ -2,8 +2,8 @@
 
 #include "RequestProtocol.h"
 
-#include "../Global.h"
-#include "../SignalData.h"
+#include "Global.h"
+#include "SignalData.h"
 
 #include <QVector>
 

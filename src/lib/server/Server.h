@@ -1,15 +1,12 @@
 #pragma once
 
-#include "../Runnable.h"
+#include "Runnable.h"
 
-#include "../Global.h"
+#include "Global.h"
 
 #include <QHash>
 
-QT_BEGIN_NAMESPACE
 class QTcpServer;
-QT_END_NAMESPACE
-
 class BufferManager;
 class Server : public Runnable
 {
@@ -31,7 +28,6 @@ public:
     QString getHost() const;
     quint16 getPort() const;
 
-    // Плохо! Не относится к серверу... SRP! Можно вынести наружу в виде обертки, но в самом конце.
     void initializeBuffers(const BufferInfoMap &bufferInfoMap);
     BufferManager *getBufferManager() const;
 

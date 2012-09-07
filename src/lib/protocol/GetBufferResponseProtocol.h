@@ -2,7 +2,7 @@
 
 #include "ResponseProtocol.h"
 
-#include "../SignalData.h"
+#include "SignalData.h"
 
 class GetBufferResponseProtocol : public ResponseProtocol
 {

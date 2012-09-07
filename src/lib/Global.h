@@ -15,6 +15,8 @@ enum Type {
 
     ErrorMessageResponse = 10,
 
+    SocketError = 200,
+
     UnknownType = 255
 };
 }

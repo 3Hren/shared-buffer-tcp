@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QString>
-#include "../../Global.h"
+#include "Global.h"
 
 //#TODO: Унаследовать их от QSharedData
 struct Response {

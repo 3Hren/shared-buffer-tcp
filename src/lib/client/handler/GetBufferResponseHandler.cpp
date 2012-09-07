@@ -19,5 +19,5 @@ void GetBufferResponseHandler::execute()
 
     BufferResponse response(requestType, id, timeStamps, datas);
 
-    client->notifyBuffer(response);
+    client->bufferReceived(response);
 }

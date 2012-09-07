@@ -1,6 +1,6 @@
 #include "Client.h"
 
-#include "../Global.h"
+#include "Global.h"
 #include "ClientConnectionHandler.h"
 
 #include "../protocol/PushRequestProtocol.h"
@@ -22,6 +22,7 @@ Client::Client(QObject *parent) :
     socketError(SocketError())
 {
     connect(socket,SIGNAL(connected()),SIGNAL(connected()));
+    connect(socket,SIGNAL(stateChanged(QAbstractSocket::SocketState)),SIGNAL(stateChanged(QAbstractSocket::SocketState)));
     connect(socket,SIGNAL(error(QAbstractSocket::SocketError)),SLOT(setSocketError(QAbstractSocket::SocketError)));
 }
 
@@ -75,7 +76,6 @@ qint64 Client::getBuffer(quint16 bufferId)
     return sendRequest(&request);
 }
 
-#include <QCoreApplication>
 BufferResponse Client::blockingGetBuffer(quint16 bufferId, int timeout)
 {    
     if (socket->state() != QAbstractSocket::ConnectedState)
@@ -99,21 +99,6 @@ Client::SocketError Client::getSocketError() const
     return socketError;
 }
 
-void Client::notifyError(const ErrorResponse &response)
-{
-    emit error(response);
-}
-
-void Client::notifySignalDatas(const SignalDataResponse &response)
-{
-    emit signalDatasReceived(response);
-}
-
-void Client::notifyBuffer(const BufferResponse &response)
-{
-    emit bufferReceived(response);
-}
-
 qint64 Client::sendRequest(RequestProtocol *request)
 {
     const QByteArray &requestMessage = request->encode();
@@ -125,5 +110,5 @@ void Client::setSocketError(QAbstractSocket::SocketError error)
 {
     socketError.error = error;
     socketError.errorString = socket->errorString();
-    //#TODO: emit error signal
+    emit this->error(ErrorResponse(ProtocolType::SocketError, socketError.error, socketError.errorString));
 }

@@ -2,7 +2,7 @@
 
 #include "Response.h"
 
-#include "../../SignalData.h"
+#include "SignalData.h"
 
 struct SignalDataResponse : public Response
 {

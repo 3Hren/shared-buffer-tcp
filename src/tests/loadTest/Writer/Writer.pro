@@ -9,7 +9,7 @@ TEMPLATE = app
 
 INCLUDEPATH += ../../../lib
 DEPENDPATH += ../../../lib
-LIBS += -L../../../../lib -llib
+LIBS += -L../../../../lib -lbuffer
 
 SOURCES += main.cpp
 

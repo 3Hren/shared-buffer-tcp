@@ -1,4 +1,4 @@
-TARGET = lib
+TARGET = buffer
 TEMPLATE = lib
 DESTDIR = ../../lib
 
@@ -19,3 +19,5 @@ MOC_DIR = .moc/debug
 headers.path    = ../../lib/headers
 headers.files   += $$HEADERS
 INSTALLS       += headers
+
+QMAKE_CLEAN +=

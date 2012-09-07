@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../RequestHandler.h"
+#include "RequestHandler.h"
 
 class Server;
 class ServerSideRequestHandler : public RequestHandler

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../BufferManager.h"
-#include "../../FixedSizeQueue.h"
+#include "FixedSizeQueue.h"
 
 class HashTableBufferManager : public BufferManager
 {

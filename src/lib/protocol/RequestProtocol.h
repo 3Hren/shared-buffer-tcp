@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QtAlgorithms>
-#include "../Global.h"
+#include "Global.h"
 
 class RequestProtocol
 {

@@ -19,5 +19,5 @@ void ErrorMessageResponseHandler::execute()
 
     ErrorResponse response(requestType, errorType, errorDescription);
 
-    client->notifyError(response);
+    client->error(response);
 }

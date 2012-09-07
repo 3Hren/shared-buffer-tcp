@@ -18,5 +18,5 @@ void GetSignalDataResponseHandler::execute()
     const QVector<SignalData> &signalDatas = getSignalDataResponseProtocol->getSignalDatas();
     SignalDataResponse response(requestType, timeStamp, signalDatas);
 
-    client->notifySignalDatas(response);
+    client->signalDatasReceived(response);
 }

@@ -23,7 +23,6 @@ void ServerConnectionHandler::processRequest(RequestProtocol *requestProtocol)
         QScopedPointer<RequestHandler>handler(ServerSideRequestHandlerFactory::createHandler(requestProtocol, server, socket));
         handler->execute();
     } catch (ProtocolException &e) {
-        //#TODO: Make wrong type error!
         ErrorMessageRequestProtocol errorMessageRequest(requestProtocol->getType(), e.getErrorType(), e.getReason());
         const QByteArray &encodedMessage = errorMessageRequest.encode();
         socket->write(encodedMessage);

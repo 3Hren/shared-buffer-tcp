@@ -19,7 +19,7 @@ void ClientConnectionHandler::processRequest(RequestProtocol *requestProtocol)
         QScopedPointer<RequestHandler>handler(ClientSideRequestHandlerFactory::createHandler(requestProtocol, client, socket));
         handler->execute();
     } catch (ProtocolException &e) {
-        //#TODO: Make wrong type error!
+        //#TODO: Tell user about error
     }
 }
 

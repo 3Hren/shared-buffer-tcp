@@ -697,7 +697,7 @@ void CyclicBufferTest::testHighLoad()
     }
 }
 
-class ServerRunner : public QObject{
+class ServerRunner : public QObject {
     Q_OBJECT
     Server *server;
     quint16 bufferCount;
