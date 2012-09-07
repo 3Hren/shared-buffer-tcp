@@ -1,7 +1,8 @@
-QT       += core network
-QT       -= gui
+QT += core network
+QT -= gui
 
-TARGET = Reader
+TARGET = MultiThreadedReaderLoadTest
+DESTDIR = ../../../../bin/tests
 CONFIG   += console
 CONFIG   -= app_bundle
 
@@ -12,6 +13,9 @@ LIBRARY_PATH = ../../../../lib
 INCLUDEPATH += $$LIBRARY_PATH/headers
 DEPENDPATH += $LIBRARY_PATH/headers
 LIBS += -L$$LIBRARY_PATH -lbuffer
+
+OBJECTS_DIR = .obj/debug
+MOC_DIR = .moc/debug
 
 SOURCES += main.cpp
 

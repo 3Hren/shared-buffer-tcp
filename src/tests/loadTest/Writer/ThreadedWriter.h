@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QThread>
-#include <client/Client.h>
+#include <Client.h>
 
 #include <QTimer>
 #include <QDateTime>
@@ -20,8 +20,7 @@ protected:
     void run() {
         qsrand(QDateTime::currentDateTime().toTime_t());
         client = new Client;
-        qRegisterMetaType<Response>("Response");
-        qRegisterMetaType<BufferResponse>("BufferData");
+        qRegisterMetaType<BufferResponse>("ErrorResponse");
         connect(client,SIGNAL(error(ErrorResponse)),SLOT(showError(ErrorResponse)));
         client->blockingConnectToServer();
         QTimer::singleShot(TIMEOUT, this, SLOT(push()));

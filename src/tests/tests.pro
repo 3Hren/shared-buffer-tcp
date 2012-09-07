@@ -1,7 +1,7 @@
 TEMPLATE = subdirs
 
 SUBDIRS += \
-    libTest #\
-    #loadTest
+    libTest \
+    loadTest
 
 CONFIG += ordered

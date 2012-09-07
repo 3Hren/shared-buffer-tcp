@@ -1,6 +1,6 @@
 #include <QCoreApplication>
 
-#include <server/Server.h>
+#include <Server.h>
 
 static const int BUFFER_MAXIMUM_SIZE = 1024;
 static const int BUFFER_COUNT = 300;

@@ -1,14 +1,21 @@
-QT       += core
+QT       += core network
 QT       -= gui
 
-TARGET = Server
+TARGET = ServerForLoadTest
+DESTDIR = ../../../../bin/tests
+
 CONFIG   += console
 CONFIG   -= app_bundle
 
 TEMPLATE = app
 
-INCLUDEPATH += ../../../lib
-DEPENDPATH += ../../../lib
-LIBS += -L../../../../lib -lbuffer
+LIBRARY_PATH = ../../../../lib
+
+INCLUDEPATH += $$LIBRARY_PATH/headers
+DEPENDPATH += $LIBRARY_PATH/headers
+LIBS += -L$$LIBRARY_PATH -lbuffer
+
+OBJECTS_DIR = .obj/debug
+MOC_DIR = .moc/debug
 
 SOURCES += main.cpp
