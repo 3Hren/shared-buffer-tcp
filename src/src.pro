@@ -2,5 +2,6 @@ TEMPLATE = subdirs
 
 SUBDIRS += \
     lib \
-    tests \
-    tests/LoadTests
+    tests
+
+CONFIG += ordered

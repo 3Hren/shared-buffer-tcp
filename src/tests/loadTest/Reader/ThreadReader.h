@@ -23,6 +23,7 @@ protected:
         connect(client,SIGNAL(bufferReceived(BufferResponse)),SLOT(showBuffer(BufferResponse)));
         connect(client,SIGNAL(error(ErrorResponse)),SLOT(showError(ErrorResponse)));
         client->blockingConnectToServer();
+        qDebug() << (qint8)client->getSocketError().error;
         QTimer::singleShot(TIMEOUT, this, SLOT(readBuffer()));
         exec();
     }
@@ -30,8 +31,8 @@ protected:
 private slots:
     void readBuffer() {
         quint16 bufferId = qrand() % 300;
-        client->getBuffer(bufferId);
-        //qDebug() << client->blockingGetBuffer(bufferId).signalDatas.size() << client->thread();
+        //client->getBuffer(bufferId);
+        qDebug() << client->blockingGetBuffer(bufferId).signalDatas.size() << client->thread();
         QTimer::singleShot(TIMEOUT, this, SLOT(readBuffer()));
     }
 

@@ -13,6 +13,7 @@ public:
     void setBuffers(const BufferInfoMap &bufferInfoMap);
 
     QVector<TimeStamp> getTimeStamps() const;
+    QVector<TimeStamp> getTimeStampsForBuffer(quint16 bufferId) const;
     SignalData getSignalData(quint16 bufferId, TimeStamp timeStamp) const;
     void pushSignalDatas(const QVector<SignalData> &signalDatas, TimeStamp timeStamp);
 };

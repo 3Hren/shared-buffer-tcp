@@ -8,7 +8,7 @@
 #include "struct/ErrorResponse.h"
 #include "struct/SignalDataResponse.h"
 
-#include <QtNetwork/QAbstractSocket>
+#include <QAbstractSocket>
 
 class QTcpSocket;
 class ConnectionHandler;
@@ -41,6 +41,7 @@ public:
     BufferResponse blockingGetBuffer(quint16 bufferId, int timeout = 1500);
 
     struct SocketError {
+        SocketError() : error(QAbstractSocket::UnknownSocketError) {}
         QAbstractSocket::SocketError error;
         QString errorString;
     } socketError;

@@ -16,5 +16,6 @@ public:
     virtual void pushSignalDatas(const QVector<SignalData> &signalDatas, TimeStamp timeStamp) = 0;
 
     virtual QVector<TimeStamp> getTimeStamps() const = 0;
+    virtual QVector<TimeStamp> getTimeStampsForBuffer(quint16 bufferId) const = 0;
     virtual SignalData getSignalData(quint16 bufferId, TimeStamp timeStamp) const = 0;
 };

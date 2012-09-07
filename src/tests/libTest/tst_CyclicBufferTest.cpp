@@ -7,6 +7,7 @@
 #include "server/BufferManager.h"
 #include "exceptions/BufferNotFoundException.h"
 #include "exceptions/ClientNotConnectedException.h"
+#include "exceptions/ServerCouldNotStartException.h"
 
 #include "protocol/RequestProtocol.h"
 #include "protocol/PushRequestProtocol.h"
@@ -55,6 +56,7 @@ private Q_SLOTS:
     void testGetBufferResponseProtocolSerializing();
 
     void testServerIsListening();
+    void testServerAlreadyRunningError();
     void testClientConnectionToServer();
     void testClientConnectionToServerWithEmptyParameterList();
     void testInitializingBufferManager();
@@ -233,6 +235,18 @@ void CyclicBufferTest::testServerIsListening()
     QCOMPARE(server.getPort(), Server::getStandardPort());
 }
 
+void CyclicBufferTest::testServerAlreadyRunningError()
+{
+    Server server;
+    Server serverDublicate;
+
+    server.run();
+
+    QCOMPARE(server.isListening(), true);
+    QVERIFY_THROW(serverDublicate.run(), ServerCouldNotStartException);
+    QCOMPARE(serverDublicate.isListening(), false);
+}
+
 void CyclicBufferTest::testClientConnectionToServer()
 {
     Server server;
@@ -338,7 +352,7 @@ void CyclicBufferTest::tryPushWrongDataCountToServerAndCompareError(quint16 data
     QCOMPARE(arguments.at(0).canConvert<ErrorResponse>(), true);
     const ErrorResponse &response = arguments.at(0).value<ErrorResponse>();
     QCOMPARE(response.requestType, (quint8)ProtocolType::PushRequest);
-    QCOMPARE(response.errorType, (quint8)ProtocolError::WrongInputArraySize);
+    QCOMPARE(response.errorType, errorType);
 }
 
 
@@ -683,12 +697,39 @@ void CyclicBufferTest::testHighLoad()
     }
 }
 
-#include "ThreadedServer.h"
+class ServerRunner : public QObject{
+    Q_OBJECT
+    Server *server;
+    quint16 bufferCount;
+    quint16 bufferMaxSize;
+public:
+    ServerRunner(quint16 bufferCount, quint16 bufferMaxSize, QObject *parent = 0) :
+        QObject(parent),
+        bufferCount(bufferCount),
+        bufferMaxSize(bufferMaxSize)
+    {}    
+
+public Q_SLOTS:
+    void run() {
+        server = new Server(this);
+        BufferInfoMap map;
+        for (int i = 0; i < bufferCount; ++i)
+            map.insert(i, bufferMaxSize);
+
+        server->initializeBuffers(map);
+        server->run();
+    }
+};
+
 void CyclicBufferTest::testBlockingGetEmptyBuffer()
 {
-    ThreadedServer server;
-    server.start();
-    QTest::qWait(50); // Wait for thread starting and server is run.
+    QThread thread;
+    ServerRunner serverRunner(10, 10);
+    serverRunner.moveToThread(&thread);
+    thread.start();
+    connect(&thread,SIGNAL(started()),&serverRunner,SLOT(run()));
+
+    QTest::qWait(50); // Wait for thread is started and server run state.
 
     Client client;
     bool isConnected = client.blockingConnectToServer();
@@ -700,8 +741,8 @@ void CyclicBufferTest::testBlockingGetEmptyBuffer()
     QCOMPARE(response.timeStamps.size(), 0);
     QCOMPARE(response.signalDatas.size(), 0);
 
-    server.quit();
-    server.wait();
+    thread.quit();
+    thread.wait();
 }
 
 void CyclicBufferTest::testBlockingGetBufferClientNotConnectedError()

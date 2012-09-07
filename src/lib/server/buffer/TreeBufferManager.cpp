@@ -41,11 +41,25 @@ QVector<TimeStamp> TreeBufferManager::getTimeStamps() const
     return timeStamps.toVector();
 }
 
+QVector<TimeStamp> TreeBufferManager::getTimeStampsForBuffer(quint16 bufferId) const
+{
+    Buffer *buffer = getBuffer(bufferId);
+    QVector<TimeStamp> timeStamps;
+    quint16 offset = this->timeStamps.size() - buffer->size();
+    timeStamps.reserve(buffer->size());
+
+    for (int i = 0; i < buffer->size(); ++i)
+        timeStamps.append(offset + i);
+
+    return timeStamps;
+}
+
 SignalData TreeBufferManager::getSignalData(quint16 bufferId, TimeStamp timeStamp) const
 {
     const QQueue<TimeStamp> &timeStampsQueue = timeStamps.getData();
     Buffer *buffer = getBuffer(bufferId);
     quint16 signalDataId = std::distance(timeStampsQueue.begin(), qBinaryFind(timeStampsQueue, timeStamp));
+    signalDataId -= timeStampsQueue.size() - buffer->size();
 
     if (signalDataId >= buffer->size())
         throw WrongTimeStampException(timeStamp);

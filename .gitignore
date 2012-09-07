@@ -1,8 +1,9 @@
-bin/
-*.dll
-*.a
-*.so*
-coverage/
+bin/*
+lib/*.dll
+lib/headers/*
+lib/*.a
+lib/*.so*
+coverage/*
 
 .directory
 *.gcno

@@ -18,7 +18,8 @@
 Client::Client(QObject *parent) :
     QObject(parent),
     socket(new QTcpSocket(this)),
-    handler(new ClientConnectionHandler(socket, this))
+    handler(new ClientConnectionHandler(socket, this)),
+    socketError(SocketError())
 {
     connect(socket,SIGNAL(connected()),SIGNAL(connected()));
     connect(socket,SIGNAL(error(QAbstractSocket::SocketError)),SLOT(setSocketError(QAbstractSocket::SocketError)));
@@ -86,8 +87,8 @@ BufferResponse Client::blockingGetBuffer(quint16 bufferId, int timeout)
     sendRequest(&request);
 
     while (listener.isListening()) {
-        socket->waitForBytesWritten(timeout * 1 / 4);
-        socket->waitForReadyRead(timeout * 3 / 4);
+        socket->waitForBytesWritten(listener.getTimeout() * 1 / 4);
+        socket->waitForReadyRead(listener.getTimeout() * 3 / 4);
     }
 
     return listener.getBufferResponse();

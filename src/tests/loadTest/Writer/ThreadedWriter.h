@@ -18,6 +18,7 @@ public:
 
 protected:
     void run() {
+        qsrand(QDateTime::currentDateTime().toTime_t());
         client = new Client;
         qRegisterMetaType<Response>("Response");
         qRegisterMetaType<BufferResponse>("BufferData");
@@ -30,9 +31,11 @@ protected:
 private slots:
     void push() {
         QVector<SignalData> signalDatas;
-        signalDatas.reserve(BUFFER_COUNT);
+        signalDatas.reserve(BUFFER_COUNT);        
         for (int i = 0; i < BUFFER_COUNT; ++i) {
-            SignalData signalData(qrand() % 10000 / 100.0, qrand() % 2);
+            float randomValue = qrand() % (100 + i) * 10 / 100.0;
+            quint16 randomErrorCode = qrand() % 2;
+            SignalData signalData(randomValue, randomErrorCode);
             signalDatas.append(signalData);
         }
 

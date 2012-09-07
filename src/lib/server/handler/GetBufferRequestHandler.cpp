@@ -23,7 +23,7 @@ void GetBufferRequestHandler::execute()
     QVector<TimeStamp> bufferTimeStamps;
     QVector<SignalData> bufferData;
     try {
-        bufferTimeStamps = bufferManager->getTimeStamps();
+        bufferTimeStamps = bufferManager->getTimeStampsForBuffer(bufferId);
         Buffer *buffer = bufferManager->getBuffer(bufferId);
         bufferData = buffer->toVector();
     } catch (BufferException &exception) {
