@@ -80,8 +80,4 @@ SOURCES += \
     server/buffer/HashTableBufferManager.cpp \
     server/buffer/TreeBufferManager.cpp \
     client/listener/BlockingBufferListener.cpp \
-    client/struct/Response.cpp \
-    client/struct/BufferResponse.cpp \
-    client/struct/ErrorResponse.cpp \
-    client/struct/SignalDataResponse.cpp \
     protocol/ResponseProtocol.cpp

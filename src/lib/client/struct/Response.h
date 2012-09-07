@@ -3,7 +3,6 @@
 #include <QString>
 #include "Global.h"
 
-//#TODO: Унаследовать их от QSharedData
 struct Response {
     Response() :
         requestType(ProtocolType::UnknownType)

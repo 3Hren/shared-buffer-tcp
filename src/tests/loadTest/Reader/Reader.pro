@@ -7,9 +7,11 @@ CONFIG   -= app_bundle
 
 TEMPLATE = app
 
-INCLUDEPATH += ../../../lib
-DEPENDPATH += ../../../lib
-LIBS += -L../../../../lib -lbuffer
+LIBRARY_PATH = ../../../../lib
+
+INCLUDEPATH += $$LIBRARY_PATH/headers
+DEPENDPATH += $LIBRARY_PATH/headers
+LIBS += -L$$LIBRARY_PATH -lbuffer
 
 SOURCES += main.cpp
 

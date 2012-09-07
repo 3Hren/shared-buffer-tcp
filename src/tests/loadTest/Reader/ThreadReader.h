@@ -3,7 +3,7 @@
 #include <QThread>
 #include <QTimer>
 
-#include <client/Client.h>
+#include <Client.h>
 
 static const int TIMEOUT = 500;
 

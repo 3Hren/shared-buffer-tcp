@@ -4,3 +4,5 @@ SUBDIRS += \
     Server \
     Writer \
     Reader
+
+CONFIG += ordered

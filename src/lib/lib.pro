@@ -16,8 +16,15 @@ SOURCES += main.cpp
 OBJECTS_DIR = .obj/debug
 MOC_DIR = .moc/debug
 
-headers.path    = ../../lib/headers
-headers.files   += $$HEADERS
+client.path = ../../lib/headers/struct
+client.files += $$HEADERS
+client.files ~= s/^(?:(?!client.struct).+)//g
+
+headers.path = ../../lib/headers
+headers.files += $$HEADERS
+headers.files -= $$client.files
 INSTALLS       += headers
+
+INSTALLS += server client
 
 QMAKE_CLEAN +=
