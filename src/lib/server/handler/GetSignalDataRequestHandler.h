@@ -2,6 +2,7 @@
 
 #include "ServerSideRequestHandler.h"
 
+namespace BufferServer {
 class GetSignalDataRequestHandler : public ServerSideRequestHandler
 {
 public:
@@ -9,3 +10,4 @@ public:
 
     void execute();
 };
+}

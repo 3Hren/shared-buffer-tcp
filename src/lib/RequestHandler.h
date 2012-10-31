@@ -1,7 +1,9 @@
 #pragma once
 
-class RequestProtocol;
 class QTcpSocket;
+
+namespace BufferServer {
+class RequestProtocol;
 class RequestHandler
 {
 protected:
@@ -14,3 +16,4 @@ public:
 
     virtual void execute() = 0;
 };
+}

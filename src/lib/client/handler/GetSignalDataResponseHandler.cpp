@@ -4,6 +4,8 @@
 #include "../../protocol/GetSignalDataResponseProtocol.h"
 #include "../struct/SignalDataResponse.h"
 
+using namespace BufferServer;
+
 GetSignalDataResponseHandler::GetSignalDataResponseHandler(RequestProtocol *requestProtocol, Client *client, QTcpSocket *socket) :
     ClientSideResponseHandler(requestProtocol, client, socket)
 {

@@ -2,6 +2,7 @@
 
 #include <QDataStream>
 
+namespace BufferServer {
 class RequestProtocol;
 class RequestProtocolFactory
 {
@@ -10,3 +11,4 @@ public:
 
     RequestProtocol *createRequestProtocol(QDataStream *inputStream) const;
 };
+}

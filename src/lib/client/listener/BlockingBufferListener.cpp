@@ -4,6 +4,8 @@
 
 #include <QTimer>
 
+using namespace BufferServer;
+
 BlockingBufferListener::BlockingBufferListener(int timeout, Client *client, QObject *parent) :
     QObject(parent),
     timeout(timeout),

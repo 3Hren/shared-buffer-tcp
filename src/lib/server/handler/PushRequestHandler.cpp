@@ -5,6 +5,8 @@
 #include "../../protocol/PushRequestProtocol.h"
 #include "../../exceptions/BufferException.h"
 
+using namespace BufferServer;
+
 PushRequestHandler::PushRequestHandler(RequestProtocol *requestProtocol, Server *server, QTcpSocket *socket) :
     ServerSideRequestHandler(requestProtocol, server, socket)
 {    

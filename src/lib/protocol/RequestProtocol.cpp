@@ -1,5 +1,7 @@
 #include "RequestProtocol.h"
 
+using namespace BufferServer;
+
 RequestProtocol::RequestProtocol(quint8 type) :
     messageSize(0),
     type(type)

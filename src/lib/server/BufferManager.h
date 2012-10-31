@@ -5,6 +5,7 @@
 
 #include <QVector>
 
+namespace BufferServer {
 class BufferManager
 {       
 public:
@@ -19,3 +20,4 @@ public:
     virtual QVector<TimeStamp> getTimeStampsForBuffer(quint16 bufferId) const = 0;
     virtual SignalData getSignalData(quint16 bufferId, TimeStamp timeStamp) const = 0;
 };
+}

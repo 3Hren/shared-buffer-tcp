@@ -11,6 +11,8 @@
 #include <QAbstractSocket>
 
 class QTcpSocket;
+
+namespace BufferServer {
 class ConnectionHandler;
 class ErrorMessageResponseHandler;
 class GetSignalDataResponseHandler;
@@ -62,3 +64,4 @@ private:
 private Q_SLOTS:
     void setSocketError(QAbstractSocket::SocketError error);
 };
+}

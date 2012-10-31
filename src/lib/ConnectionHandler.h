@@ -5,6 +5,8 @@
 #include "Global.h"
 
 class QTcpSocket;
+
+namespace BufferServer {
 class RequestProtocol;
 class ConnectionHandler : public QObject
 {
@@ -23,3 +25,4 @@ protected:
 public Q_SLOTS:
     void readPendingData();
 };
+}

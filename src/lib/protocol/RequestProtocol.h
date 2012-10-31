@@ -3,6 +3,7 @@
 #include <QtAlgorithms>
 #include "Global.h"
 
+namespace BufferServer {
 class RequestProtocol
 {
     MessageSize messageSize;
@@ -20,3 +21,4 @@ protected:
     virtual void encodeData(QDataStream *out) const = 0;
     virtual void decodeData(QDataStream *in) = 0;
 };
+}

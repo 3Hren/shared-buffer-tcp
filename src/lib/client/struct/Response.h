@@ -3,6 +3,7 @@
 #include <QString>
 #include "Global.h"
 
+namespace BufferServer {
 struct Response {
     Response() :
         requestType(ProtocolType::UnknownType)
@@ -14,3 +15,4 @@ struct Response {
 
     quint8 requestType;
 };
+}

@@ -2,6 +2,7 @@
 
 #include "RequestProtocol.h"
 
+namespace BufferServer {
 class GetBufferRequestProtocol : public RequestProtocol
 {
     quint16 bufferId;
@@ -15,3 +16,4 @@ protected:
     void encodeData(QDataStream *out) const;
     void decodeData(QDataStream *in);
 };
+}

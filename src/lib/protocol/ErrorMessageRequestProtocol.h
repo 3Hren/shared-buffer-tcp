@@ -2,6 +2,7 @@
 
 #include "ResponseProtocol.h"
 
+namespace BufferServer {
 class ErrorMessageRequestProtocol : public ResponseProtocol
 {
     quint8 errorType;
@@ -17,3 +18,4 @@ protected:
     void encodeData(QDataStream *out) const;
     void decodeData(QDataStream *in);
 };
+}

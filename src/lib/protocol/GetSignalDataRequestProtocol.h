@@ -4,6 +4,7 @@
 
 #include <QVector>
 
+namespace BufferServer {
 class GetSignalDataRequestProtocol : public RequestProtocol
 {
     TimeStamp timeStamp;
@@ -18,3 +19,4 @@ protected:
     void encodeData(QDataStream *out) const;
     void decodeData(QDataStream *in);
 };
+}

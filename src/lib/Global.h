@@ -3,6 +3,7 @@
 #include <QMap>
 #include <QHash>
 
+namespace BufferServer {
 static const quint32 MAGIC = 9275623;
 
 namespace ProtocolType {
@@ -38,4 +39,4 @@ typedef QMap<quint16, quint16> BufferInfoMap;
 typedef quint32 MessageSize;
 typedef quint32 Magic;
 typedef quint32 TimeStamp;
-
+}

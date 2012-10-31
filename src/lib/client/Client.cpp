@@ -17,6 +17,8 @@
 
 #include <QDebug>
 
+using namespace BufferServer;
+
 Client::Client(QObject *parent) :
     QObject(parent),
     socket(new QTcpSocket(this)),

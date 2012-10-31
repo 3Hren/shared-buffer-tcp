@@ -1,5 +1,7 @@
 #include "ErrorMessageRequestProtocol.h"
 
+using namespace BufferServer;
+
 ErrorMessageRequestProtocol::ErrorMessageRequestProtocol() :
     ResponseProtocol(ProtocolType::ErrorMessageResponse, ProtocolType::UnknownType),
     errorType(ProtocolError::UnknownError)

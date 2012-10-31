@@ -4,6 +4,8 @@
 #include "../../exceptions/WrongPushedDataSizeException.h"
 #include "../../exceptions/WrongTimeStampException.h"
 
+using namespace BufferServer;
+
 HashTableBufferManager::~HashTableBufferManager()
 {
     qDeleteAll(buffers);

@@ -3,6 +3,7 @@
 #include "Response.h"
 #include "SignalData.h"
 
+namespace BufferServer {
 struct BufferResponse : public Response {
     BufferResponse() :
         Response(),
@@ -20,3 +21,4 @@ struct BufferResponse : public Response {
     QVector<TimeStamp> timeStamps;
     QVector<SignalData> signalDatas;
 };
+}

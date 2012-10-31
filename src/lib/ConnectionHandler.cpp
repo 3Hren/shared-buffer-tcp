@@ -6,6 +6,8 @@
 
 #include <QTcpSocket>
 
+using namespace BufferServer;
+
 ConnectionHandler::ConnectionHandler(QTcpSocket *socket, QObject *parent) :
     QObject(parent),
     socket(socket),

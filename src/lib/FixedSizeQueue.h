@@ -2,6 +2,7 @@
 
 #include <QQueue>
 
+namespace BufferServer {
 template<typename T>
 class FixedSizeQueue {
     quint16 maximumSize;
@@ -49,3 +50,4 @@ public:
         return queue.at(id);
     }
 };
+}

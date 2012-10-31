@@ -2,6 +2,7 @@
 
 #include "Response.h"
 
+namespace BufferServer {
 struct ErrorResponse : public Response
 {    
     ErrorResponse() :
@@ -18,3 +19,4 @@ struct ErrorResponse : public Response
     quint8 errorType;
     QString description;
 };
+}

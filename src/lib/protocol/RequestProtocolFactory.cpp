@@ -10,6 +10,8 @@
 
 #include <QDebug>
 
+using namespace BufferServer;
+
 RequestProtocolFactory::RequestProtocolFactory()
 {
 }

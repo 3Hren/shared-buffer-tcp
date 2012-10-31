@@ -4,6 +4,7 @@
 
 #include "SignalData.h"
 
+namespace BufferServer {
 class GetBufferResponseProtocol : public ResponseProtocol
 {
     quint16 bufferId;
@@ -21,3 +22,4 @@ protected:
     void encodeData(QDataStream *out) const;
     void decodeData(QDataStream *in);
 };
+}

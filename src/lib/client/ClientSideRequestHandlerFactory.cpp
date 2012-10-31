@@ -6,6 +6,8 @@
 #include "handler/GetSignalDataResponseHandler.h"
 #include "handler/GetBufferResponseHandler.h"
 
+using namespace BufferServer;
+
 RequestHandler *ClientSideRequestHandlerFactory::createHandler(RequestProtocol *requestProtocol, Client *client, QTcpSocket *socket)
 {
     quint8 type = requestProtocol->getType();

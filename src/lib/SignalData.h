@@ -5,6 +5,7 @@
 
 #include <QDebug>
 
+namespace BufferServer {
 struct SignalData {
     SignalData() :
         value(0.0),
@@ -37,4 +38,5 @@ inline QDataStream &operator >>(QDataStream &in, SignalData &signalData) {
 inline QDebug operator <<(QDebug debug, const SignalData &signalData) {
     debug.nospace() << QString("SignalData(%1, %2)").arg(signalData.value).arg(signalData.errorCode);
     return debug.space();
+}
 }

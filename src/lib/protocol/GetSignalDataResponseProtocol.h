@@ -6,6 +6,7 @@
 
 #include <QVector>
 
+namespace BufferServer {
 class GetSignalDataResponseProtocol : public ResponseProtocol
 {
     TimeStamp timeStamp;
@@ -21,3 +22,4 @@ protected:
     void encodeData(QDataStream *out) const;
     void decodeData(QDataStream *in);
 };
+}

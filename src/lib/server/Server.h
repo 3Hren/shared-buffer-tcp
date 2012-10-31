@@ -7,6 +7,8 @@
 #include <QHash>
 
 class QTcpServer;
+
+namespace BufferServer {
 class BufferManager;
 class Server : public Runnable
 {
@@ -34,3 +36,4 @@ public:
 private Q_SLOTS:
     void acceptConnection();
 };
+}

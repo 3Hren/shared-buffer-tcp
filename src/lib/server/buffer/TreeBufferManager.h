@@ -2,6 +2,7 @@
 
 #include "../BufferManager.h"
 
+namespace BufferServer {
 class TreeBufferManager : public BufferManager
 {    
     FixedSizeQueue<TimeStamp> timeStamps;
@@ -17,3 +18,4 @@ public:
     SignalData getSignalData(quint16 bufferId, TimeStamp timeStamp) const;
     void pushSignalDatas(const QVector<SignalData> &signalDatas, TimeStamp timeStamp);
 };
+}

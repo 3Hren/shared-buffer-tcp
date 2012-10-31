@@ -8,6 +8,8 @@
 
 #include <QTcpSocket>
 
+using namespace BufferServer;
+
 GetBufferRequestHandler::GetBufferRequestHandler(RequestProtocol *requestProtocol, Server *server, QTcpSocket *socket) :
     ServerSideRequestHandler(requestProtocol, server, socket)
 {

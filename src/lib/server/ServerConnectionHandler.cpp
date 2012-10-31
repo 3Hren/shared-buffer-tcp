@@ -10,6 +10,8 @@
 
 #include <QTcpSocket>
 
+using namespace BufferServer;
+
 ServerConnectionHandler::ServerConnectionHandler(QTcpSocket *socket, QObject *visitor) :
     ConnectionHandler(socket, socket),
     server(qobject_cast<Server *>(visitor))

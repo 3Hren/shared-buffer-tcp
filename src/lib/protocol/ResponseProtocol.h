@@ -2,6 +2,7 @@
 
 #include "RequestProtocol.h"
 
+namespace BufferServer {
 class ResponseProtocol : public RequestProtocol
 {
 protected:
@@ -12,3 +13,4 @@ public:
 
     quint8 getRequestType() const;
 };
+}

@@ -1,5 +1,7 @@
 #include "GetBufferResponseProtocol.h"
 
+using namespace BufferServer;
+
 GetBufferResponseProtocol::GetBufferResponseProtocol() :
     ResponseProtocol(ProtocolType::GetBufferResponse, ProtocolType::GetBufferRequest),
     bufferId(0)

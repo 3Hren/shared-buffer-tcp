@@ -4,6 +4,7 @@
 
 #include "Global.h"
 
+namespace BufferServer {
 class ProtocolException : public Exception {    
     TimeStamp timeStamp;
     quint8 inputRequestType;
@@ -36,3 +37,4 @@ public:
         return errorType;
     }
 };
+}

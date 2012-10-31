@@ -5,6 +5,7 @@
 #include <QTextStream>
 #include <QDebug>
 
+using namespace BufferServer;
 int main(int argc, char *argv[])
 {
     QTextStream out(stderr);

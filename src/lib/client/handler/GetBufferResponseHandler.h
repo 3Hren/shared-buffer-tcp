@@ -2,6 +2,7 @@
 
 #include "ClientSideResponseHandler.h"
 
+namespace BufferServer {
 class GetBufferResponseHandler : public ClientSideResponseHandler
 {
 public:
@@ -9,3 +10,4 @@ public:
 
     void execute();
 };
+}

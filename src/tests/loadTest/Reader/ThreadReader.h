@@ -7,6 +7,7 @@
 
 static const int TIMEOUT = 500;
 
+using namespace BufferServer;
 class ThreadReader : public QThread
 {
     Q_OBJECT

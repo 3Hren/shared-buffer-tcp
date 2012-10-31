@@ -3,6 +3,8 @@
 #include "../Client.h"
 #include "../../protocol/GetBufferResponseProtocol.h"
 
+using namespace BufferServer;
+
 GetBufferResponseHandler::GetBufferResponseHandler(RequestProtocol *requestProtocol, Client *client, QTcpSocket *socket) :
     ClientSideResponseHandler(requestProtocol, client, socket)
 {

@@ -4,6 +4,7 @@
 
 #include "SignalData.h"
 
+namespace BufferServer {
 struct SignalDataResponse : public Response
 {
     SignalDataResponse() : Response() {}
@@ -17,3 +18,4 @@ struct SignalDataResponse : public Response
     TimeStamp timeStamp;
     QVector<SignalData> signalDatas;
 };
+}

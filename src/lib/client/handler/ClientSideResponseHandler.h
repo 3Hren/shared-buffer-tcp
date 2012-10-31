@@ -3,6 +3,7 @@
 #include <QObject>
 #include "RequestHandler.h"
 
+namespace BufferServer {
 class Client;
 class ClientSideResponseHandler : public RequestHandler
 {
@@ -12,3 +13,4 @@ protected:
 public:
     ClientSideResponseHandler(RequestProtocol *requestProtocol, Client *client, QTcpSocket *socket);
 };
+}

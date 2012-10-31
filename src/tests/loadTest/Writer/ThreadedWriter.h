@@ -9,6 +9,7 @@
 static const int TIMEOUT = 1000;
 static const int BUFFER_COUNT = 13;
 
+using namespace BufferServer;
 class ThreadedWriter : public QThread
 {
     Q_OBJECT

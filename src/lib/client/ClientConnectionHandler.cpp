@@ -7,6 +7,8 @@
 
 #include <QDebug>
 
+using namespace BufferServer;
+
 ClientConnectionHandler::ClientConnectionHandler(QTcpSocket *socket, QObject *visitor) :
     ConnectionHandler(socket, visitor),
     client(qobject_cast<Client *>(visitor))

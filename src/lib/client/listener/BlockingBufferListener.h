@@ -6,6 +6,7 @@
 #include "../struct/BufferResponse.h"
 #include "../struct/ErrorResponse.h"
 
+namespace BufferServer {
 class Client;
 class BlockingBufferListener : public QObject
 {
@@ -31,3 +32,4 @@ public slots:
 signals:
     void readyLeaveLoop();
 };
+}

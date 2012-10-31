@@ -5,6 +5,8 @@
 
 #include <QDebug>
 
+using namespace BufferServer;
+
 ErrorMessageResponseHandler::ErrorMessageResponseHandler(RequestProtocol *requestProtocol, Client *client, QTcpSocket *socket) :
     ClientSideResponseHandler(requestProtocol, client, socket)
 {

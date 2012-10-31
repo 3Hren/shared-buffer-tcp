@@ -1,5 +1,7 @@
 #include "PushRequestProtocol.h"
 
+using namespace BufferServer;
+
 PushRequestProtocol::PushRequestProtocol() :
     RequestProtocol(ProtocolType::PushRequest)
 {

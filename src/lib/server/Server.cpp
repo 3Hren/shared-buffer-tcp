@@ -7,6 +7,8 @@
 
 #include <QTcpServer>
 
+using namespace BufferServer;
+
 Server::Server(QObject *parent) :
     Runnable(parent),
     server(new QTcpServer(this)),

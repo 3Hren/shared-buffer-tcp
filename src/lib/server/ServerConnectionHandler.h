@@ -2,6 +2,7 @@
 
 #include "ConnectionHandler.h"
 
+namespace BufferServer {
 class Server;
 class ServerConnectionHandler : public ConnectionHandler
 {
@@ -13,3 +14,4 @@ public:
 protected:
     void processRequest(RequestProtocol *requestProtocol);
 };
+}

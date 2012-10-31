@@ -31,6 +31,8 @@
 
 static const int WAIT_MSEC = 50;
 
+using namespace BufferServer;
+
 class CyclicBufferTest : public QObject
 {
     Q_OBJECT
