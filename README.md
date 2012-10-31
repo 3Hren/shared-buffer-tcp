@@ -15,4 +15,4 @@
 	QVector<SignalData> signalDatas;
 	... // Заполняем вектор
 	TimeStamp timeStamp = QDateTime::currentDateTime().toTime_t();
-        client->push(signalDatas, timeStamp);
+        client->push(signalDatas, timeStamp); 
