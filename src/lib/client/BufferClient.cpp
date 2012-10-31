@@ -14,6 +14,7 @@
 #include <QTcpSocket>
 #include <QHostAddress>
 #include <QDateTime>
+#include <QCoreApplication>
 
 #include <QDebug>
 
@@ -96,8 +97,8 @@ BufferResponse BufferClient::blockingGetBuffer(quint16 bufferId, int timeout)
     sendRequest(&request);
 
     while (listener.isListening()) {
-        socket->waitForBytesWritten(listener.getTimeout() * 1 / (float)4);
-        socket->waitForReadyRead(listener.getTimeout() * 3 / (float)4);
+        socket->waitForReadyRead(listener.getTimeout() / 10);
+        qApp->processEvents();
     }
 
     if (listener.getErrorResponse().errorType != ProtocolError::NoError)

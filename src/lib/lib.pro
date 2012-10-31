@@ -20,12 +20,12 @@ clientStruct.path = ../../lib/include/struct
 clientStruct.files += $$HEADERS
 clientStruct.files ~= s/^(?:(?!client.struct).+)//g
 
-truelove.path = ../../lib/include
-truelove.files += \
+headers.path = ../../lib/include
+headers.files += \
     BufferStorageGlobal.h \
     Runnable.h \
     SignalData.h \
     server/BufferServer.h \
     client/BufferClient.h \
 
-INSTALLS += clientStruct truelove
+INSTALLS += headers clientStruct
