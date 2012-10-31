@@ -14,7 +14,7 @@ LIB_SOURCE_DIR = ../../lib
 
 INCLUDEPATH += $$LIB_SOURCE_DIR
 DEPENDPATH += $$LIB_SOURCE_DIR
-include($$LIB_SOURCE_DIR/CyclicBufferServer.pri)
+include($$LIB_SOURCE_DIR/BufferStorage.pri)
 
 SOURCES += tst_CyclicBufferTest.cpp
 DEFINES += SRCDIR=\\\"$$PWD/\\\"

@@ -1,4 +1,4 @@
-TARGET = buffer
+TARGET = bufferstorage
 TEMPLATE = lib
 DESTDIR = ../../lib
 
@@ -9,16 +9,12 @@ CONFIG   += console static
 CONFIG   += debug_and_release build_all warn_on
 CONFIG   -= app_bundle
 
-include(CyclicBufferServer.pri)
+include(BufferStorage.pri)
 
 SOURCES += main.cpp
 
 OBJECTS_DIR = .obj/debug
 MOC_DIR = .moc/debug
-
-clientStruct.path = ../../lib/include/struct
-clientStruct.files += $$HEADERS
-clientStruct.files ~= s/^(?:(?!client.struct).+)//g
 
 headers.path = ../../lib/include
 headers.files += \
@@ -26,6 +22,12 @@ headers.files += \
     Runnable.h \
     SignalData.h \
     server/BufferServer.h \
-    client/BufferClient.h \
+    client/BufferClient.h \    
 
-INSTALLS += headers clientStruct
+client_struct.path = ../../lib/include/struct
+client_struct.files += client/struct/*
+
+exceptions.path = ../../lib/include/exceptions
+exceptions.files += exceptions/*
+
+INSTALLS += headers client_struct exceptions

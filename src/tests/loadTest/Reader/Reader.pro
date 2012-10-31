@@ -12,7 +12,7 @@ LIBRARY_PATH = ../../../../lib
 
 INCLUDEPATH += $$LIBRARY_PATH/include
 DEPENDPATH += $LIBRARY_PATH/include
-LIBS += -L$$LIBRARY_PATH -lbuffer
+LIBS += -L$$LIBRARY_PATH -lbufferstorage
 
 OBJECTS_DIR = .obj/debug
 MOC_DIR = .moc/debug
