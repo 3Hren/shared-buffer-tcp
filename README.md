@@ -3,6 +3,7 @@
 Включает в себя TCP-сервер и API для доступа к нему.
 
 #### Пример (асинхронная отправка сообщений)
+	:::java
 	using namespace BufferStorage;
 
 	// Где-то создаем экземпляр класса клиента и устанавливаем подключение к серверу
@@ -18,6 +19,7 @@
 	client->push(signalDatas, timeStamp); 
 
 #### Пример (блокирующее получение буфера)
+	:::java
 	BufferClient *client = new BuffetClient;
 	connect(client, SIGNAL(error(ErrorResponse)), SLOT(showError(ErrorResponse)));
 	client->blockingConnectToServer();
@@ -27,4 +29,10 @@
 	quint16 bufferId = 1;
 	const BufferResponse &response = client->blockingGetBuffer(bufferId);
 	qDebug() << response.timeStamps << response.signalDatas;
+
+В случае блокирующего запроса ответ возвращается прямо из функции. Если произойдет ошибка, то будет выброшено исключение.
+В случае неблокирующего запроса как ответ, так и возможные ошибки будут посланы как сигналы.
+
+
+
 

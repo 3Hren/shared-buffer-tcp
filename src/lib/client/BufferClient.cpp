@@ -73,7 +73,7 @@ qint64 BufferClient::push(const QVector<SignalData> &signalDatas, TimeStamp time
     return sendRequest(&request);
 }
 
-qint64 BufferClient::getSignalData(const QVector<quint16> bufferIds, TimeStamp timeStamp)
+qint64 BufferClient::getSignalData(const QVector<quint16> &bufferIds, TimeStamp timeStamp)
 {
     GetSignalDataRequestProtocol request(timeStamp, bufferIds);
     return sendRequest(&request);
@@ -91,7 +91,6 @@ BufferResponse BufferClient::blockingGetBuffer(quint16 bufferId, int timeout)
         throw ClientNotConnectedException();
 
     BlockingBufferListener listener(timeout, this);
-
 
     GetBufferRequestProtocol request(bufferId);
     sendRequest(&request);

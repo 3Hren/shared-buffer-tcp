@@ -38,7 +38,7 @@ public:
     qint64 push(const QVector<SignalData> &signalDatas);
     qint64 push(const QVector<SignalData> &signalDatas, TimeStamp timeStamp);
 
-    qint64 getSignalData(const QVector<quint16> bufferIds, TimeStamp timeStamp);
+    qint64 getSignalData(const QVector<quint16> &bufferIds, TimeStamp timeStamp);
 
     qint64 getBuffer(quint16 bufferId);
     BufferResponse blockingGetBuffer(quint16 bufferId, int timeout = 1500);
