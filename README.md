@@ -15,4 +15,16 @@
 	QVector<SignalData> signalDatas;
 	... // Заполняем вектор
 	TimeStamp timeStamp = QDateTime::currentDateTime().toTime_t();
-        client->push(signalDatas, timeStamp); 
+	client->push(signalDatas, timeStamp); 
+
+#### Пример (блокирующее получение буфера)
+	BufferClient *client = new BuffetClient;
+	connect(client, SIGNAL(error(ErrorResponse)), SLOT(showError(ErrorResponse)));
+	client->blockingConnectToServer();
+
+	...
+
+	quint16 bufferId = 1;
+	const BufferResponse &response = client->blockingGetBuffer(bufferId);
+	qDebug() << response.timeStamps << response.signalDatas;
+
