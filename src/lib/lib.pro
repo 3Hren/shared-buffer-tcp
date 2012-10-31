@@ -16,12 +16,16 @@ SOURCES += main.cpp
 OBJECTS_DIR = .obj/debug
 MOC_DIR = .moc/debug
 
-clientStruct.path = ../../lib/headers/struct
+clientStruct.path = ../../lib/include/struct
 clientStruct.files += $$HEADERS
 clientStruct.files ~= s/^(?:(?!client.struct).+)//g
 
-headers.path = ../../lib/headers
-headers.files += $$HEADERS
-headers.files -= $$client.files
+truelove.path = ../../lib/include
+truelove.files += \
+    BufferStorageGlobal.h \
+    Runnable.h \
+    SignalData.h \
+    server/BufferServer.h \
+    client/BufferClient.h \
 
-INSTALLS += clientStruct headers
+INSTALLS += clientStruct truelove

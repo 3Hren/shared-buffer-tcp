@@ -1,8 +1,5 @@
 bin/*
-lib/*.dll
-lib/headers/*
-lib/*.a
-lib/*.so*
+lib/*
 coverage/*
 
 .directory

@@ -1,13 +1,13 @@
 #include "PushRequestHandler.h"
 
-#include "../Server.h"
+#include "../BufferServer.h"
 #include "../BufferManager.h"
 #include "../../protocol/PushRequestProtocol.h"
 #include "../../exceptions/BufferException.h"
 
-using namespace BufferServer;
+using namespace BufferStorage;
 
-PushRequestHandler::PushRequestHandler(RequestProtocol *requestProtocol, Server *server, QTcpSocket *socket) :
+PushRequestHandler::PushRequestHandler(RequestProtocol *requestProtocol, BufferServer *server, QTcpSocket *socket) :
     ServerSideRequestHandler(requestProtocol, server, socket)
 {    
 }

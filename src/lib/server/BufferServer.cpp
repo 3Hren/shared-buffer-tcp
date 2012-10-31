@@ -1,4 +1,4 @@
-#include "Server.h"
+#include "BufferServer.h"
 
 #include "../exceptions/ServerCouldNotStartException.h"
 #include "buffer/HashTableBufferManager.h"
@@ -7,9 +7,9 @@
 
 #include <QTcpServer>
 
-using namespace BufferServer;
+using namespace BufferStorage;
 
-Server::Server(QObject *parent) :
+BufferServer::BufferServer(QObject *parent) :
     Runnable(parent),
     server(new QTcpServer(this)),
     bufferManager(new HashTableBufferManager)
@@ -17,58 +17,58 @@ Server::Server(QObject *parent) :
     connect(server,SIGNAL(newConnection()),SLOT(acceptConnection()));
 }
 
-Server::~Server()
+BufferServer::~BufferServer()
 {
     delete bufferManager;
 }
 
-quint16 Server::getStandardPort()
+quint16 BufferServer::getStandardPort()
 {
     return static_cast<quint16>(14690);
 }
 
-void Server::run(const QString &host, quint16 port)
+void BufferServer::run(const QString &host, quint16 port)
 {
     if (!server->listen(QHostAddress(host), port))
         throw ServerCouldNotStartException(host, port);
 }
 
-void Server::run(const QString &host)
+void BufferServer::run(const QString &host)
 {
     run(host, getStandardPort());
 }
 
-void Server::run()
+void BufferServer::run()
 {
     run(QHostAddress(QHostAddress::LocalHost).toString());
 }
 
-bool Server::isListening() const
+bool BufferServer::isListening() const
 {
     return server->isListening();
 }
 
-QString Server::getHost() const
+QString BufferServer::getHost() const
 {
     return server->serverAddress().toString();
 }
 
-quint16 Server::getPort() const
+quint16 BufferServer::getPort() const
 {
     return server->serverPort();
 }
 
-void Server::initializeBuffers(const BufferInfoMap &bufferInfoMap)
+void BufferServer::initializeBuffers(const BufferInfoMap &bufferInfoMap)
 {    
     bufferManager->setBuffers(bufferInfoMap);
 }
 
-BufferManager *Server::getBufferManager() const
+BufferManager *BufferServer::getBufferManager() const
 {
     return bufferManager;
 }
 
-void Server::acceptConnection()
+void BufferServer::acceptConnection()
 {
     QTcpSocket *socket = server->nextPendingConnection();     
     ConnectionHandler *requestHandler = new ServerConnectionHandler(socket, this);

@@ -1,9 +1,9 @@
 #pragma once
 
 #include <QString>
-#include "Global.h"
+#include "BufferStorageGlobal.h"
 
-namespace BufferServer {
+namespace BufferStorage {
 struct Response {
     Response() :
         requestType(ProtocolType::UnknownType)

@@ -6,8 +6,8 @@
 #include "../struct/BufferResponse.h"
 #include "../struct/ErrorResponse.h"
 
-namespace BufferServer {
-class Client;
+namespace BufferStorage {
+class BufferClient;
 class BlockingBufferListener : public QObject
 {
     Q_OBJECT
@@ -16,7 +16,7 @@ class BlockingBufferListener : public QObject
     BufferResponse bufferResponse;
     ErrorResponse errorResponse;
 public:
-    BlockingBufferListener(int timeout, Client *client, QObject *parent = 0);
+    BlockingBufferListener(int timeout, BufferClient *client, QObject *parent = 0);
 
     int getTimeout() const;
     bool isListening() const;

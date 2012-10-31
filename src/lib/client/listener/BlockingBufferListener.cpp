@@ -1,12 +1,12 @@
 #include "BlockingBufferListener.h"
 
-#include "../Client.h"
+#include "../BufferClient.h"
 
 #include <QTimer>
 
-using namespace BufferServer;
+using namespace BufferStorage;
 
-BlockingBufferListener::BlockingBufferListener(int timeout, Client *client, QObject *parent) :
+BlockingBufferListener::BlockingBufferListener(int timeout, BufferClient *client, QObject *parent) :
     QObject(parent),
     timeout(timeout),
     listening(true)

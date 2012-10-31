@@ -5,7 +5,7 @@
 
 #include <QDebug>
 
-namespace BufferServer {
+namespace BufferStorage {
 struct SignalData {
     SignalData() :
         value(0.0),

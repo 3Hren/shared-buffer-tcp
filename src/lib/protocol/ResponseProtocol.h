@@ -2,7 +2,7 @@
 
 #include "RequestProtocol.h"
 
-namespace BufferServer {
+namespace BufferStorage {
 class ResponseProtocol : public RequestProtocol
 {
 protected:

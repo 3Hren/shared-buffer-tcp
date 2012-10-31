@@ -2,10 +2,10 @@
 
 #include "Exception.h"
 
-namespace BufferServer {
+namespace BufferStorage {
 class ClientNotConnectedException : public Exception
 {
 public:
-    ClientNotConnectedException() : Exception(QObject::tr("Client is not connected to server")) {}
+    ClientNotConnectedException() : Exception(QObject::tr("BufferClient is not connected to server")) {}
 };
 }

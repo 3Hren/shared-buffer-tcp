@@ -3,21 +3,21 @@
 #include <QThread>
 #include <QTimer>
 
-#include <Client.h>
+#include <BufferClient.h>
 
 static const int TIMEOUT = 500;
 
-using namespace BufferServer;
+using namespace BufferStorage;
 class ThreadReader : public QThread
 {
     Q_OBJECT
-    Client *client;
+    BufferClient *client;
 public:
     ThreadReader(QObject *parent = 0) : QThread(parent) {}
 
 protected:
     void run() {
-        client = new Client;
+        client = new BufferClient;
         qRegisterMetaType<BufferResponse>("BufferResponse");
         qRegisterMetaType<ErrorResponse>("ErrorResponse");
         qRegisterMetaType<QAbstractSocket::SocketError>("QAbstractSocket::SocketError");

@@ -3,7 +3,7 @@
 #include <QMap>
 #include <QHash>
 
-namespace BufferServer {
+namespace BufferStorage {
 static const quint32 MAGIC = 9275623;
 
 namespace ProtocolType {

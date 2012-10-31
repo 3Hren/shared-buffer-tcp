@@ -2,7 +2,7 @@
 
 #include "RequestProtocol.h"
 
-namespace BufferServer {
+namespace BufferStorage {
 class GetBufferRequestProtocol : public RequestProtocol
 {
     quint16 bufferId;

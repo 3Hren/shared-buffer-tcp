@@ -2,11 +2,11 @@
 
 #include <QObject>
 
-#include "Global.h"
+#include "BufferStorageGlobal.h"
 
 class QTcpSocket;
 
-namespace BufferServer {
+namespace BufferStorage {
 class RequestProtocol;
 class ConnectionHandler : public QObject
 {

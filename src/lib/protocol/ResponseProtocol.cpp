@@ -1,6 +1,6 @@
 #include "ResponseProtocol.h"
 
-using namespace BufferServer;
+using namespace BufferStorage;
 
 ResponseProtocol::ResponseProtocol(quint8 type, quint8 requestType) :
     RequestProtocol(type),

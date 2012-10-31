@@ -4,7 +4,7 @@
 #include "../../exceptions/WrongPushedDataSizeException.h"
 #include "../../exceptions/WrongTimeStampException.h"
 
-using namespace BufferServer;
+using namespace BufferStorage;
 
 HashTableBufferManager::~HashTableBufferManager()
 {

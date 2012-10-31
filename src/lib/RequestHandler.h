@@ -2,7 +2,7 @@
 
 class QTcpSocket;
 
-namespace BufferServer {
+namespace BufferStorage {
 class RequestProtocol;
 class RequestHandler
 {

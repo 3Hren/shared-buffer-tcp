@@ -1,15 +1,15 @@
 #include "ServerSideRequestHandlerFactory.h"
 
-#include "../Global.h"
+#include "../BufferStorageGlobal.h"
 #include "../protocol/RequestProtocol.h"
 
 #include "handler/PushRequestHandler.h"
 #include "handler/GetSignalDataRequestHandler.h"
 #include "handler/GetBufferRequestHandler.h"
 
-using namespace BufferServer;
+using namespace BufferStorage;
 
-RequestHandler *ServerSideRequestHandlerFactory::createHandler(RequestProtocol *requestProtocol, Server *server, QTcpSocket *socket)
+RequestHandler *ServerSideRequestHandlerFactory::createHandler(RequestProtocol *requestProtocol, BufferServer *server, QTcpSocket *socket)
 {
     quint8 type = requestProtocol->getType();
     switch (type) {

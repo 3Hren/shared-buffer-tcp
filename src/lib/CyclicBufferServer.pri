@@ -7,7 +7,6 @@ HEADERS += \
     exceptions/ServerException.h \
     Runnable.h \
     server/BufferManager.h \
-    Global.h \
     Buffer.h \
     exceptions/BufferNotFoundException.h \
     exceptions/Exception.h \
@@ -21,8 +20,6 @@ HEADERS += \
     protocol/RequestProtocolFactory.h \
     protocol/RequestProtocol.h \
     protocol/ErrorMessageRequestProtocol.h \
-    server/Server.h \
-    client/Client.h \
     server/ServerConnectionHandler.h \
     client/ClientConnectionHandler.h \
     server/ServerSideRequestHandlerFactory.h \
@@ -50,7 +47,10 @@ HEADERS += \
     client/struct/ErrorResponse.h \
     client/struct/SignalDataResponse.h \
     protocol/ResponseProtocol.h \
-    exceptions/ClientNotConnectedException.h
+    exceptions/ClientNotConnectedException.h \
+    client/BufferClient.h \
+    server/BufferServer.h \
+    BufferStorageGlobal.h
 
 SOURCES += \
     ConnectionHandler.cpp \
@@ -61,8 +61,8 @@ SOURCES += \
     protocol/ErrorMessageRequestProtocol.cpp \
     server/ServerConnectionHandler.cpp \
     client/ClientConnectionHandler.cpp \
-    server/Server.cpp \
-    client/Client.cpp \
+    server/BufferServer.cpp \
+    client/BufferClient.cpp \
     server/ServerSideRequestHandlerFactory.cpp \
     client/ClientSideRequestHandlerFactory.cpp \
     protocol/GetSignalDataRequestProtocol.cpp \

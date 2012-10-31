@@ -2,8 +2,8 @@
 #include <QtTest>
 #include <QVariant>
 
-#include "server/Server.h"
-#include "client/Client.h"
+#include "server/BufferServer.h"
+#include "client/BufferClient.h"
 #include "server/BufferManager.h"
 #include "exceptions/BufferNotFoundException.h"
 #include "exceptions/ClientNotConnectedException.h"
@@ -31,7 +31,7 @@
 
 static const int WAIT_MSEC = 50;
 
-using namespace BufferServer;
+using namespace BufferStorage;
 
 class CyclicBufferTest : public QObject
 {
@@ -41,7 +41,7 @@ public:
     CyclicBufferTest();
 
 private:
-    void initializeBufferTable(Server *server, quint16 maximumIds, quint16 initialOffset, quint16 elementOffset, quint16 maximumBufferSize) const;
+    void initializeBufferTable(BufferServer *server, quint16 maximumIds, quint16 initialOffset, quint16 elementOffset, quint16 maximumBufferSize) const;
     RequestProtocol *getInputRequestThroughNetworkSendMock(RequestProtocol *outputRequest) const;
     void tryPushWrongDataCountToServerAndCompareError(quint16 dataCount, quint16 wrongDataCount, quint8 errorType) const;
     void compareBufferGetResults(QSignalSpy *spy, int spyCount, const QVector<TimeStamp> &bufferTimeStamps, const QVector<SignalData> &signalDatas) const;
@@ -91,7 +91,7 @@ CyclicBufferTest::CyclicBufferTest()
 {
 }
 
-void CyclicBufferTest::initializeBufferTable(Server *server, quint16 maximumIds = 10, quint16 initialOffset = 0, quint16 elementOffset = 1, quint16 maximumBufferSize = 1024) const
+void CyclicBufferTest::initializeBufferTable(BufferServer *server, quint16 maximumIds = 10, quint16 initialOffset = 0, quint16 elementOffset = 1, quint16 maximumBufferSize = 1024) const
 {
     BufferInfoMap bufferInfoMap;
     for (quint16 i = 0; i < maximumIds; ++i)
@@ -228,19 +228,19 @@ void CyclicBufferTest::testGetBufferResponseProtocolSerializing()
 
 void CyclicBufferTest::testServerIsListening()
 {
-    Server server;
+    BufferServer server;
 
     server.run();
 
     QCOMPARE(server.isListening(), true);
     QCOMPARE(server.getHost(), QString("127.0.0.1"));
-    QCOMPARE(server.getPort(), Server::getStandardPort());
+    QCOMPARE(server.getPort(), BufferServer::getStandardPort());
 }
 
 void CyclicBufferTest::testServerAlreadyRunningError()
 {
-    Server server;
-    Server serverDublicate;
+    BufferServer server;
+    BufferServer serverDublicate;
 
     server.run();
 
@@ -251,12 +251,12 @@ void CyclicBufferTest::testServerAlreadyRunningError()
 
 void CyclicBufferTest::testClientConnectionToServer()
 {
-    Server server;
-    Client client;
+    BufferServer server;
+    BufferClient client;
     QSignalSpy spy(&client, SIGNAL(connected()));
 
     server.run();
-    client.connectToServer("127.0.0.1", Server::getStandardPort());
+    client.connectToServer("127.0.0.1", BufferServer::getStandardPort());
     client.waitForConnected();
 
     QCOMPARE(client.isConnected(), true);
@@ -265,8 +265,8 @@ void CyclicBufferTest::testClientConnectionToServer()
 
 void CyclicBufferTest::testClientConnectionToServerWithEmptyParameterList()
 {
-    Server server;
-    Client client;
+    BufferServer server;
+    BufferClient client;
     QSignalSpy spy(&client, SIGNAL(connected()));
 
     server.run();
@@ -279,7 +279,7 @@ void CyclicBufferTest::testClientConnectionToServerWithEmptyParameterList()
 
 void CyclicBufferTest::testInitializingBufferManager()
 {
-    Server server;
+    BufferServer server;
     initializeBufferTable(&server, 3, 1000, 10, 40);
 
     BufferManager *bufferManager = server.getBufferManager();
@@ -291,7 +291,7 @@ void CyclicBufferTest::testInitializingBufferManager()
 
 void CyclicBufferTest::testBufferNotFoundInBufferManager()
 {
-    Server server;
+    BufferServer server;
 
     BufferManager *bufferManager = server.getBufferManager();
 
@@ -304,8 +304,8 @@ void CyclicBufferTest::testPushDataToServer()
     const int START_INDEX = 1000;
 
     // Initialize
-    Server server;
-    Client client;
+    BufferServer server;
+    BufferClient client;
     initializeBufferTable(&server, MAX_BUFFERS, START_INDEX);
     QVector<SignalData> data;
     data.fill(SignalData(55.5, 0), MAX_BUFFERS);
@@ -333,8 +333,8 @@ void CyclicBufferTest::tryPushWrongDataCountToServerAndCompareError(quint16 data
     qRegisterMetaType<ErrorResponse>("ErrorResponse");
 
     // Initialize
-    Server server;
-    Client client;
+    BufferServer server;
+    BufferClient client;
     QSignalSpy spy(&client, SIGNAL(error(ErrorResponse)));
 
     initializeBufferTable(&server, dataCount);
@@ -378,8 +378,8 @@ void CyclicBufferTest::testGetValueFromServer()
     qRegisterMetaType<SignalDataResponse>("SignalDataResponse");
 
     // Initialize
-    Server server;
-    Client client;
+    BufferServer server;
+    BufferClient client;
     QSignalSpy spy(&client, SIGNAL(signalDatasReceived(SignalDataResponse)));
 
     initializeBufferTable(&server, 4, 1000, 1, 1024);
@@ -417,8 +417,8 @@ void CyclicBufferTest::testGetValueFromServer()
 void CyclicBufferTest::testGetValuesFromServer()
 {
     // Initialize
-    Server server;
-    Client client;
+    BufferServer server;
+    BufferClient client;
     QSignalSpy spy(&client, SIGNAL(signalDatasReceived(SignalDataResponse)));
 
     initializeBufferTable(&server, 4, 1000, 1, 1024);
@@ -455,8 +455,8 @@ void CyclicBufferTest::testGetValuesFromServer()
 void CyclicBufferTest::testGetValuesWrongSomeIndexes()
 {
     // Initialize
-    Server server;
-    Client client;
+    BufferServer server;
+    BufferClient client;
     QSignalSpy spy(&client, SIGNAL(error(ErrorResponse)));
 
     initializeBufferTable(&server, 4, 1000, 1, 1024);
@@ -492,8 +492,8 @@ void CyclicBufferTest::testGetValuesWrongSomeIndexes()
 void CyclicBufferTest::testGetValuesWrongTimeStamp()
 {
     // Initialize
-    Server server;
-    Client client;
+    BufferServer server;
+    BufferClient client;
     QSignalSpy spy(&client, SIGNAL(error(ErrorResponse)));
 
     initializeBufferTable(&server, 4, 1000, 1, 1024);
@@ -546,8 +546,8 @@ void CyclicBufferTest::testGetBuffer()
     qRegisterMetaType<BufferResponse>("BufferResponse");
 
     // Initialize
-    Server server;
-    Client client;
+    BufferServer server;
+    BufferClient client;
     QSignalSpy spy(&client, SIGNAL(bufferReceived(BufferResponse)));
 
     // Fill buffer
@@ -591,8 +591,8 @@ void CyclicBufferTest::testGetBuffer()
 void CyclicBufferTest::testGetBufferWrongIndex()
 {
     // Init
-    Server server;
-    Client client;
+    BufferServer server;
+    BufferClient client;
     QSignalSpy spy(&client, SIGNAL(error(ErrorResponse)));
 
     // Run
@@ -613,8 +613,8 @@ void CyclicBufferTest::testGetBufferWrongIndex()
 
 void CyclicBufferTest::testTrySendRequestClientNotConnected()
 {
-    Server server;
-    Client client;
+    BufferServer server;
+    BufferClient client;
 
     server.run();
 
@@ -675,9 +675,9 @@ void CyclicBufferTest::testHighLoad()
     QSKIP("testHighLoad", SkipSingle);
     quint16 MAX_SIZE = 65535;
     // Initialize
-    Server server;
+    BufferServer server;
     initializeBufferTable(&server, MAX_SIZE, 0, 1, 100);
-    Client client;
+    BufferClient client;
     QVector<SignalData> data(MAX_SIZE);
 
     server.run();
@@ -694,7 +694,7 @@ void CyclicBufferTest::testHighLoad()
 
 class ServerRunner : public QObject {
     Q_OBJECT
-    Server *server;
+    BufferServer *server;
     quint16 bufferCount;
     quint16 bufferMaxSize;
 public:
@@ -706,7 +706,7 @@ public:
 
 public Q_SLOTS:
     void run() {
-        server = new Server(this);
+        server = new BufferServer(this);
         BufferInfoMap map;
         for (int i = 0; i < bufferCount; ++i)
             map.insert(i, bufferMaxSize);
@@ -726,7 +726,7 @@ void CyclicBufferTest::testBlockingGetEmptyBuffer()
 
     QTest::qWait(50); // Wait for thread is started and server run state.
 
-    Client client;
+    BufferClient client;
     bool isConnected = client.blockingConnectToServer();
     const BufferResponse &response = client.blockingGetBuffer(0);
 
@@ -742,9 +742,9 @@ void CyclicBufferTest::testBlockingGetEmptyBuffer()
 
 void CyclicBufferTest::testBlockingGetBufferClientNotConnectedError()
 {
-    Client client;
+    BufferClient client;
     bool isConnected = client.blockingConnectToServer();
-    Client::SocketError error = client.getSocketError();
+    BufferClient::SocketError error = client.getSocketError();
 
     QCOMPARE(isConnected, false);
     QVERIFY_THROW(client.blockingGetBuffer(0), ClientNotConnectedException);

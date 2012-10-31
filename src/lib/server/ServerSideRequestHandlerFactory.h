@@ -2,13 +2,13 @@
 
 class QTcpSocket;
 
-namespace BufferServer {
+namespace BufferStorage {
 class RequestHandler;
 class RequestProtocol;
-class Server;
+class BufferServer;
 class ServerSideRequestHandlerFactory
 {
 public:
-    static RequestHandler *createHandler(RequestProtocol *requestProtocol, Server *server, QTcpSocket *socket);
+    static RequestHandler *createHandler(RequestProtocol *requestProtocol, BufferServer *server, QTcpSocket *socket);
 };
 }

@@ -2,7 +2,7 @@
 
 #include "Response.h"
 
-namespace BufferServer {
+namespace BufferStorage {
 struct ErrorResponse : public Response
 {    
     ErrorResponse() :

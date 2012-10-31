@@ -1,17 +1,17 @@
 #include "ClientConnectionHandler.h"
 
-#include "Client.h"
+#include "BufferClient.h"
 #include "../RequestHandler.h"
 #include "ClientSideRequestHandlerFactory.h"
 #include "../exceptions/ProtocolException.h"
 
 #include <QDebug>
 
-using namespace BufferServer;
+using namespace BufferStorage;
 
 ClientConnectionHandler::ClientConnectionHandler(QTcpSocket *socket, QObject *visitor) :
     ConnectionHandler(socket, visitor),
-    client(qobject_cast<Client *>(visitor))
+    client(qobject_cast<BufferClient *>(visitor))
 {
 }
 

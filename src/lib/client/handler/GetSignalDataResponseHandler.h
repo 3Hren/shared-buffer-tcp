@@ -2,11 +2,11 @@
 
 #include "ClientSideResponseHandler.h"
 
-namespace BufferServer {
+namespace BufferStorage {
 class GetSignalDataResponseHandler : public ClientSideResponseHandler
 {
 public:
-    GetSignalDataResponseHandler(RequestProtocol *requestProtocol, Client *client, QTcpSocket *socket);
+    GetSignalDataResponseHandler(RequestProtocol *requestProtocol, BufferClient *client, QTcpSocket *socket);
 
     void execute();
 };

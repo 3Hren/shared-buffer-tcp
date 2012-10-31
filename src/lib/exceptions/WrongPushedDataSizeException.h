@@ -2,7 +2,7 @@
 
 #include "BufferException.h"
 
-namespace BufferServer {
+namespace BufferStorage {
 class WrongPushedDataSizeException : public BufferException {
 public:
     WrongPushedDataSizeException(quint16 arraySize, quint16 bufferSize) throw() :

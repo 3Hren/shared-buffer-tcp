@@ -3,7 +3,7 @@
 #include "Response.h"
 #include "SignalData.h"
 
-namespace BufferServer {
+namespace BufferStorage {
 struct BufferResponse : public Response {
     BufferResponse() :
         Response(),

@@ -2,7 +2,7 @@
 
 #include "BufferException.h"
 
-namespace BufferServer {
+namespace BufferStorage {
 class WrongTimeStampException : public BufferException {
 public:
     WrongTimeStampException(TimeStamp timeStamp) :

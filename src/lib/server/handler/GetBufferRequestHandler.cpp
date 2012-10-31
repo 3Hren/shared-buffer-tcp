@@ -1,6 +1,6 @@
 #include "GetBufferRequestHandler.h"
 
-#include "../Server.h"
+#include "../BufferServer.h"
 #include "../BufferManager.h"
 #include "../../protocol/GetBufferRequestProtocol.h"
 #include "../../protocol/GetBufferResponseProtocol.h"
@@ -8,9 +8,9 @@
 
 #include <QTcpSocket>
 
-using namespace BufferServer;
+using namespace BufferStorage;
 
-GetBufferRequestHandler::GetBufferRequestHandler(RequestProtocol *requestProtocol, Server *server, QTcpSocket *socket) :
+GetBufferRequestHandler::GetBufferRequestHandler(RequestProtocol *requestProtocol, BufferServer *server, QTcpSocket *socket) :
     ServerSideRequestHandler(requestProtocol, server, socket)
 {
 }

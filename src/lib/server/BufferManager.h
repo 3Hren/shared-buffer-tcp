@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Global.h"
+#include "BufferStorageGlobal.h"
 #include "Buffer.h"
 
 #include <QVector>
 
-namespace BufferServer {
+namespace BufferStorage {
 class BufferManager
 {       
 public:

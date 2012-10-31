@@ -2,7 +2,7 @@
 
 #include "../BufferManager.h"
 
-namespace BufferServer {
+namespace BufferStorage {
 class TreeBufferManager : public BufferManager
 {    
     FixedSizeQueue<TimeStamp> timeStamps;

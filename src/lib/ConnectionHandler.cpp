@@ -1,12 +1,12 @@
 #include "ConnectionHandler.h"
 
-#include "Global.h"
+#include "BufferStorageGlobal.h"
 #include "protocol/RequestProtocol.h"
 #include "protocol/RequestProtocolFactory.h"
 
 #include <QTcpSocket>
 
-using namespace BufferServer;
+using namespace BufferStorage;
 
 ConnectionHandler::ConnectionHandler(QTcpSocket *socket, QObject *parent) :
     QObject(parent),

@@ -2,7 +2,7 @@
 
 #include <QDataStream>
 
-namespace BufferServer {
+namespace BufferStorage {
 class RequestProtocol;
 class RequestProtocolFactory
 {

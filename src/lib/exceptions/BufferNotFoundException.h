@@ -2,7 +2,7 @@
 
 #include "BufferException.h"
 
-namespace BufferServer {
+namespace BufferStorage {
 class BufferNotFoundException : public BufferException {
 public:
     BufferNotFoundException(quint16 id) throw() :

@@ -2,7 +2,7 @@
 
 #include <QObject>
 
-#include "Global.h"
+#include "BufferStorageGlobal.h"
 #include "SignalData.h"
 #include "struct/BufferResponse.h"
 #include "struct/ErrorResponse.h"
@@ -12,12 +12,12 @@
 
 class QTcpSocket;
 
-namespace BufferServer {
+namespace BufferStorage {
 class ConnectionHandler;
 class ErrorMessageResponseHandler;
 class GetSignalDataResponseHandler;
 class RequestProtocol;
-class Client : public QObject
+class BufferClient : public QObject
 {        
     Q_OBJECT
     QTcpSocket *socket;
@@ -27,7 +27,7 @@ class Client : public QObject
     friend class GetSignalDataResponseHandler;
     friend class GetBufferResponseHandler;
 public:
-    explicit Client(QObject *parent = 0);
+    explicit BufferClient(QObject *parent = 0);
 
     bool isConnected() const;
     void connectToServer(const QString &host = "127.0.0.1", quint16 port = 14690);

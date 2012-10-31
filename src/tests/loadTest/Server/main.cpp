@@ -1,11 +1,11 @@
 #include <QCoreApplication>
 
-#include <Server.h>
+#include <BufferServer.h>
 
 #include <QTextStream>
 #include <QDebug>
 
-using namespace BufferServer;
+using namespace BufferStorage;
 int main(int argc, char *argv[])
 {
     QTextStream out(stderr);
@@ -28,13 +28,13 @@ int main(int argc, char *argv[])
     if (!ok)
         return -3;
 
-    qDebug() << QString("Server started at localhost:14690. Start address: %1. Buffer count: %2. All buffers has %3 maximum size.")
+    qDebug() << QString("BufferServer started at localhost:14690. Start address: %1. Buffer count: %2. All buffers has %3 maximum size.")
                 .arg(startAddress)
                 .arg(count)
                 .arg(maximumSize);
 
     QCoreApplication a(argc, argv);
-    Server server;
+    BufferServer server;
     BufferInfoMap map;
     for (int i = 0; i < count; ++i)
         map.insert(startAddress + 2 * i, maximumSize);

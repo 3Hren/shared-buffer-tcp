@@ -2,12 +2,12 @@
 
 #include "RequestProtocol.h"
 
-#include "Global.h"
+#include "BufferStorageGlobal.h"
 #include "SignalData.h"
 
 #include <QVector>
 
-namespace BufferServer {
+namespace BufferStorage {
 class PushRequestProtocol : public RequestProtocol
 {
     TimeStamp timeStamp;

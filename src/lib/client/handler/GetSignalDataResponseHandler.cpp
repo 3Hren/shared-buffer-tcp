@@ -1,12 +1,12 @@
 #include "GetSignalDataResponseHandler.h"
 
-#include "../Client.h"
+#include "../BufferClient.h"
 #include "../../protocol/GetSignalDataResponseProtocol.h"
 #include "../struct/SignalDataResponse.h"
 
-using namespace BufferServer;
+using namespace BufferStorage;
 
-GetSignalDataResponseHandler::GetSignalDataResponseHandler(RequestProtocol *requestProtocol, Client *client, QTcpSocket *socket) :
+GetSignalDataResponseHandler::GetSignalDataResponseHandler(RequestProtocol *requestProtocol, BufferClient *client, QTcpSocket *socket) :
     ClientSideResponseHandler(requestProtocol, client, socket)
 {
 }

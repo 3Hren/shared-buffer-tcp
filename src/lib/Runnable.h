@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QObject>
-namespace BufferServer {
+namespace BufferStorage {
 class Runnable : public QObject {
     Q_OBJECT
 public:

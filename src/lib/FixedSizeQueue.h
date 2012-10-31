@@ -2,7 +2,7 @@
 
 #include <QQueue>
 
-namespace BufferServer {
+namespace BufferStorage {
 template<typename T>
 class FixedSizeQueue {
     quint16 maximumSize;

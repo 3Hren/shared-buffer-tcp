@@ -4,7 +4,7 @@
 
 #include <QVector>
 
-namespace BufferServer {
+namespace BufferStorage {
 class GetSignalDataRequestProtocol : public RequestProtocol
 {
     TimeStamp timeStamp;

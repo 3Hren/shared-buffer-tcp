@@ -2,7 +2,7 @@
 
 #include "ProtocolException.h"
 
-namespace BufferServer {
+namespace BufferStorage {
 class WrongRequestTypeException : public ProtocolException {
 public:
     WrongRequestTypeException(quint8 type) :

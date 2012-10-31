@@ -2,7 +2,7 @@
 
 #include "ResponseProtocol.h"
 
-namespace BufferServer {
+namespace BufferStorage {
 class ErrorMessageRequestProtocol : public ResponseProtocol
 {
     quint8 errorType;

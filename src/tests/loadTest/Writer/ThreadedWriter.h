@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QThread>
-#include <Client.h>
+#include <BufferClient.h>
 
 #include <QTimer>
 #include <QDateTime>
@@ -9,18 +9,18 @@
 static const int TIMEOUT = 1000;
 static const int BUFFER_COUNT = 13;
 
-using namespace BufferServer;
+using namespace BufferStorage;
 class ThreadedWriter : public QThread
 {
     Q_OBJECT
-    Client *client;
+    BufferClient *client;
 public:
     ThreadedWriter(QObject *parent = 0) : QThread(parent) {}
 
 protected:
     void run() {
         qsrand(QDateTime::currentDateTime().toTime_t());
-        client = new Client;
+        client = new BufferClient;
         qRegisterMetaType<BufferResponse>("ErrorResponse");
         connect(client,SIGNAL(error(ErrorResponse)),SLOT(showError(ErrorResponse)));
         client->blockingConnectToServer();

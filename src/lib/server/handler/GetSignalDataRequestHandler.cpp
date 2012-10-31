@@ -1,6 +1,6 @@
 #include "GetSignalDataRequestHandler.h"
 
-#include "../Server.h"
+#include "../BufferServer.h"
 #include "../BufferManager.h"
 #include "../../protocol/GetSignalDataRequestProtocol.h"
 #include "../../protocol/GetSignalDataResponseProtocol.h"
@@ -8,9 +8,9 @@
 
 #include <QTcpSocket>
 
-using namespace BufferServer;
+using namespace BufferStorage;
 
-GetSignalDataRequestHandler::GetSignalDataRequestHandler(RequestProtocol *requestProtocol, Server *server, QTcpSocket *socket) :
+GetSignalDataRequestHandler::GetSignalDataRequestHandler(RequestProtocol *requestProtocol, BufferServer *server, QTcpSocket *socket) :
     ServerSideRequestHandler(requestProtocol, server, socket)
 {
 }

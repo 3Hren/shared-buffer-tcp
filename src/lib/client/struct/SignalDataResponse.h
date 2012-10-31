@@ -4,7 +4,7 @@
 
 #include "SignalData.h"
 
-namespace BufferServer {
+namespace BufferStorage {
 struct SignalDataResponse : public Response
 {
     SignalDataResponse() : Response() {}

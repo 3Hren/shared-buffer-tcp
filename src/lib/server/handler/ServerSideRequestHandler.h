@@ -2,14 +2,14 @@
 
 #include "RequestHandler.h"
 
-namespace BufferServer {
-class Server;
+namespace BufferStorage {
+class BufferServer;
 class ServerSideRequestHandler : public RequestHandler
 {
 protected:
-    Server *server;
+    BufferServer *server;
 
 public:
-    ServerSideRequestHandler(RequestProtocol *requestProtocol, Server *server, QTcpSocket *socket);
+    ServerSideRequestHandler(RequestProtocol *requestProtocol, BufferServer *server, QTcpSocket *socket);
 };
 }

@@ -2,12 +2,12 @@
 
 #include "ConnectionHandler.h"
 
-namespace BufferServer {
-class Server;
+namespace BufferStorage {
+class BufferServer;
 class ServerConnectionHandler : public ConnectionHandler
 {
     Q_OBJECT
-    Server *server;
+    BufferServer *server;
 public:
     ServerConnectionHandler(QTcpSocket *socket, QObject *visitor);
     

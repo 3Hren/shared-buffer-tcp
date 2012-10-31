@@ -1,9 +1,9 @@
 #pragma once
 
 #include <QtAlgorithms>
-#include "Global.h"
+#include "BufferStorageGlobal.h"
 
-namespace BufferServer {
+namespace BufferStorage {
 class RequestProtocol
 {
     MessageSize messageSize;

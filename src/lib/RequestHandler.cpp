@@ -1,6 +1,6 @@
 #include "RequestHandler.h"
 
-using namespace BufferServer;
+using namespace BufferStorage;
 
 RequestHandler::RequestHandler(RequestProtocol *requestProtocol, QTcpSocket *socket) :
     requestProtocol(requestProtocol),

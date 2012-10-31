@@ -1,13 +1,13 @@
 #include "ErrorMessageResponseHandler.h"
 
-#include "../Client.h"
+#include "../BufferClient.h"
 #include "../../protocol/ErrorMessageRequestProtocol.h"
 
 #include <QDebug>
 
-using namespace BufferServer;
+using namespace BufferStorage;
 
-ErrorMessageResponseHandler::ErrorMessageResponseHandler(RequestProtocol *requestProtocol, Client *client, QTcpSocket *socket) :
+ErrorMessageResponseHandler::ErrorMessageResponseHandler(RequestProtocol *requestProtocol, BufferClient *client, QTcpSocket *socket) :
     ClientSideResponseHandler(requestProtocol, client, socket)
 {
 }

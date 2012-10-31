@@ -2,7 +2,7 @@
 
 #include "ProtocolException.h"
 
-namespace BufferServer {
+namespace BufferStorage {
 class BufferException : public ProtocolException {
 public:
     BufferException(quint8 errorType, const QString &reason) throw() :

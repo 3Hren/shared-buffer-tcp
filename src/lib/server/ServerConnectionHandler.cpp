@@ -1,20 +1,20 @@
 #include "ServerConnectionHandler.h"
 
-#include "Server.h"
+#include "BufferServer.h"
 #include "ServerSideRequestHandlerFactory.h"
 #include "../RequestHandler.h"
 #include "../exceptions/WrongRequestTypeException.h"
 #include "../protocol/RequestProtocol.h"
 #include "../protocol/ErrorMessageRequestProtocol.h"
-#include "../Global.h"
+#include "../BufferStorageGlobal.h"
 
 #include <QTcpSocket>
 
-using namespace BufferServer;
+using namespace BufferStorage;
 
 ServerConnectionHandler::ServerConnectionHandler(QTcpSocket *socket, QObject *visitor) :
     ConnectionHandler(socket, socket),
-    server(qobject_cast<Server *>(visitor))
+    server(qobject_cast<BufferServer *>(visitor))
 {        
     connect(socket,SIGNAL(disconnected()),socket,SLOT(deleteLater()));
 }

@@ -10,8 +10,8 @@ TEMPLATE = app
 
 LIBRARY_PATH = ../../../../lib
 
-INCLUDEPATH += $$LIBRARY_PATH/headers
-DEPENDPATH += $LIBRARY_PATH/headers
+INCLUDEPATH += $$LIBRARY_PATH/include
+DEPENDPATH += $LIBRARY_PATH/include
 LIBS += -L$$LIBRARY_PATH -lbuffer
 
 OBJECTS_DIR = .obj/debug

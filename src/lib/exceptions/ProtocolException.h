@@ -2,9 +2,9 @@
 
 #include "Exception.h"
 
-#include "Global.h"
+#include "BufferStorageGlobal.h"
 
-namespace BufferServer {
+namespace BufferStorage {
 class ProtocolException : public Exception {    
     TimeStamp timeStamp;
     quint8 inputRequestType;

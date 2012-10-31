@@ -1,6 +1,6 @@
 #include "RequestProtocolFactory.h"
 
-#include "../Global.h"
+#include "../BufferStorageGlobal.h"
 #include "PushRequestProtocol.h"
 #include "GetSignalDataRequestProtocol.h"
 #include "GetSignalDataResponseProtocol.h"
@@ -10,7 +10,7 @@
 
 #include <QDebug>
 
-using namespace BufferServer;
+using namespace BufferStorage;
 
 RequestProtocolFactory::RequestProtocolFactory()
 {

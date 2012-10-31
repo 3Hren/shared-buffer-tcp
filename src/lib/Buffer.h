@@ -3,6 +3,6 @@
 #include "FixedSizeQueue.h"
 #include "SignalData.h"
 
-namespace BufferServer {
+namespace BufferStorage {
 typedef FixedSizeQueue<SignalData> Buffer;
 }

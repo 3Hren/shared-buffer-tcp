@@ -4,7 +4,7 @@
 
 #include "SignalData.h"
 
-namespace BufferServer {
+namespace BufferStorage {
 class GetBufferResponseProtocol : public ResponseProtocol
 {
     quint16 bufferId;

@@ -1,6 +1,6 @@
 #include "GetSignalDataRequestProtocol.h"
 
-using namespace BufferServer;
+using namespace BufferStorage;
 
 GetSignalDataRequestProtocol::GetSignalDataRequestProtocol() :
     RequestProtocol(ProtocolType::GetSignalDataRequest)

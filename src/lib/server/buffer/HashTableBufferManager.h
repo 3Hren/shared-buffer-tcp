@@ -3,7 +3,7 @@
 #include "../BufferManager.h"
 #include "FixedSizeQueue.h"
 
-namespace BufferServer {
+namespace BufferStorage {
 class HashTableBufferManager : public BufferManager
 {
     FixedSizeQueue<TimeStamp> timeStamps;

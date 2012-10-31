@@ -2,22 +2,22 @@
 
 #include "Runnable.h"
 
-#include "Global.h"
+#include "BufferStorageGlobal.h"
 
 #include <QHash>
 
 class QTcpServer;
 
-namespace BufferServer {
+namespace BufferStorage {
 class BufferManager;
-class Server : public Runnable
+class BufferServer : public Runnable
 {
     Q_OBJECT
     QTcpServer *server;
     BufferManager *bufferManager;
 public:
-    Server(QObject *parent = 0);
-    ~Server();
+    BufferServer(QObject *parent = 0);
+    ~BufferServer();
 
     static quint16 getStandardPort();
 
