@@ -7,7 +7,9 @@
 #include "../protocol/GetSignalDataRequestProtocol.h"
 #include "../protocol/GetBufferRequestProtocol.h"
 #include "listener/BlockingBufferListener.h"
-#include "../exceptions/ClientNotConnectedException.h"
+
+#include "exceptions/ClientNotConnectedException.h"
+#include "exceptions/BufferNotFoundException.h"
 
 #include <QTcpSocket>
 #include <QHostAddress>
@@ -31,20 +33,24 @@ bool Client::isConnected() const
     return socket->state() == QTcpSocket::ConnectedState;
 }
 
-void Client::connectToServer()
-{
-    connectToServer("127.0.0.1", 14690);
-}
-
 void Client::connectToServer(const QString &host, quint16 port)
 {
     socket->connectToHost(host, port);
 }
 
-bool Client::blockingConnectToServer(int timeout)
+bool Client::blockingConnectToServer(const QString &host, quint16 port, int timeout)
 {
-    connectToServer();
+    connectToServer(host, port);
     return waitForConnected(timeout);
+}
+
+bool Client::blockingDisconnectFromServer(int timeout)
+{    
+    socket->disconnectFromHost();    
+    if (socket->state() == QAbstractSocket::UnconnectedState)
+        return true;
+
+    return socket->waitForDisconnected(timeout);
 }
 
 bool Client::waitForConnected(int timeout) const
@@ -83,13 +89,17 @@ BufferResponse Client::blockingGetBuffer(quint16 bufferId, int timeout)
 
     BlockingBufferListener listener(timeout, this);
 
+
     GetBufferRequestProtocol request(bufferId);
     sendRequest(&request);
 
     while (listener.isListening()) {
-        socket->waitForBytesWritten(listener.getTimeout() * 1 / 4);
-        socket->waitForReadyRead(listener.getTimeout() * 3 / 4);
+        socket->waitForBytesWritten(listener.getTimeout() * 1 / (float)4);
+        socket->waitForReadyRead(listener.getTimeout() * 3 / (float)4);
     }
+
+    if (listener.getErrorResponse().errorType != ProtocolError::NoError)
+        throw BufferNotFoundException(bufferId);
 
     return listener.getBufferResponse();
 }

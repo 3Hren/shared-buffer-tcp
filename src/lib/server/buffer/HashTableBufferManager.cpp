@@ -60,8 +60,8 @@ SignalData HashTableBufferManager::getSignalData(quint16 bufferId, TimeStamp tim
 {
     const QQueue<TimeStamp> &timeStampsQueue = timeStamps.getData();
     Buffer *buffer = getBuffer(bufferId);    
-    quint16 signalDataId = std::distance(timeStampsQueue.begin(), qBinaryFind(timeStampsQueue, timeStamp));
-    signalDataId -= timeStampsQueue.size() - buffer->size();
+    quint16 signalDataId = std::distance(timeStampsQueue.begin(), qBinaryFind(timeStampsQueue, timeStamp));    
+    signalDataId -= timeStampsQueue.size() - buffer->size();    
 
     if (signalDataId >= buffer->size())
         throw WrongTimeStampException(timeStamp);

@@ -72,7 +72,7 @@ private Q_SLOTS:
     void testGetValuesWrongTimeStamp();
 
     void testGetBuffer();
-    void testGetBufferWrongIndex();    
+    void testGetBufferWrongIndex();
 
     void testTrySendRequestClientNotConnected();
 
@@ -128,7 +128,7 @@ void CyclicBufferTest::testPushRequestSerializing()
     QScopedPointer<RequestProtocol> inputRequest(getInputRequestThroughNetworkSendMock(&outputRequest));
 
     // Compare
-    QCOMPARE(inputRequest->getType(), (quint8)ProtocolType::PushRequest);    
+    QCOMPARE(inputRequest->getType(), (quint8)ProtocolType::PushRequest);
     PushRequestProtocol *decodedInputRequest = static_cast<PushRequestProtocol *>(inputRequest.data());
     QCOMPARE(decodedInputRequest->getTimeStamp(), timeStamp);
     QCOMPARE(decodedInputRequest->getSignalDataVector(), signalDatas);
@@ -146,7 +146,7 @@ void CyclicBufferTest::testGetSignalDataRequestSerializing()
     QScopedPointer<RequestProtocol> inputRequest(getInputRequestThroughNetworkSendMock(&outputRequest));
 
     // Compare
-    QCOMPARE(inputRequest->getType(), (quint8)ProtocolType::GetSignalDataRequest);    
+    QCOMPARE(inputRequest->getType(), (quint8)ProtocolType::GetSignalDataRequest);
     GetSignalDataRequestProtocol *decodedInputRequest = static_cast<GetSignalDataRequestProtocol *>(inputRequest.data());
     QCOMPARE(decodedInputRequest->getTimeStamp(), timeStamp);
     QCOMPARE(decodedInputRequest->getRequestedBufferIndexes(), bufferIds);
@@ -164,7 +164,7 @@ void CyclicBufferTest::testGetSignalDataResponseSerializing()
     QScopedPointer<RequestProtocol> inputRequest(getInputRequestThroughNetworkSendMock(&outputRequest));
 
     // Compare
-    QCOMPARE(inputRequest->getType(), (quint8)ProtocolType::GetSignalDataResponse);   
+    QCOMPARE(inputRequest->getType(), (quint8)ProtocolType::GetSignalDataResponse);
     GetSignalDataResponseProtocol *decodedInputRequest = static_cast<GetSignalDataResponseProtocol *>(inputRequest.data());
     QCOMPARE(decodedInputRequest->getTimeStamp(), timeStamp);
     QCOMPARE(decodedInputRequest->getSignalDatas(), signalDatas);
@@ -519,7 +519,7 @@ void CyclicBufferTest::testGetValuesWrongTimeStamp()
     QCOMPARE(arguments.at(0).canConvert<ErrorResponse>(), true);
 
     const ErrorResponse &response = arguments.at(0).value<ErrorResponse>();
-    QCOMPARE(response.requestType, (quint8)ProtocolType::GetSignalDataRequest);   
+    QCOMPARE(response.requestType, (quint8)ProtocolType::GetSignalDataRequest);
     QCOMPARE(response.errorType, (quint8)ProtocolError::WrongTimeStamp);
 }
 
@@ -533,7 +533,7 @@ void CyclicBufferTest::compareBufferGetResults(QSignalSpy *spy, int spyCount, co
     QCOMPARE(arguments.at(BUFFER_DATA_POS).canConvert<BufferResponse>(), true);
     const BufferResponse &response = arguments.at(BUFFER_DATA_POS).value<BufferResponse>();
 
-    QCOMPARE(response.requestType, (quint8)ProtocolType::GetBufferRequest);    
+    QCOMPARE(response.requestType, (quint8)ProtocolType::GetBufferRequest);
     QCOMPARE(response.timeStamps, bufferTimeStamps);
     QCOMPARE(response.signalDatas, signalDatas);
 }
@@ -668,13 +668,6 @@ void CyclicBufferTest::benchmarkTreeBufferManager()
     }
 }
 
-// Рефакторить тесты
-// Тестить невозможность иметь соединение одновременно двух писателей
-// Тестить ситуацию разрыва соединения: коннект был(проверить), потом он разорвался (проверить), потом вручную его восстановить и послать сообщение.
-// Внедрить диспетчеризацию на основе магических чисел
-// Рефакторить код
-// Сделать все #TODO:
-
 void CyclicBufferTest::testHighLoad()
 {
     QSKIP("testHighLoad", SkipSingle);
@@ -707,7 +700,7 @@ public:
         QObject(parent),
         bufferCount(bufferCount),
         bufferMaxSize(bufferMaxSize)
-    {}    
+    {}
 
 public Q_SLOTS:
     void run() {

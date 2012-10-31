@@ -1,7 +1,7 @@
 QT       += core network
 QT       -= gui
 
-TARGET = ServerForLoadTest
+TARGET = bufferServer
 DESTDIR = ../../../../bin/tests
 
 CONFIG   += console

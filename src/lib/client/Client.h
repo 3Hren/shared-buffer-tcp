@@ -16,20 +16,21 @@ class ErrorMessageResponseHandler;
 class GetSignalDataResponseHandler;
 class RequestProtocol;
 class Client : public QObject
-{    
-    friend class ErrorMessageResponseHandler;
-    friend class GetSignalDataResponseHandler;
-    friend class GetBufferResponseHandler;
+{        
     Q_OBJECT
     QTcpSocket *socket;
     ConnectionHandler *handler;
+
+    friend class ErrorMessageResponseHandler;
+    friend class GetSignalDataResponseHandler;
+    friend class GetBufferResponseHandler;
 public:
     explicit Client(QObject *parent = 0);
 
     bool isConnected() const;
-    void connectToServer();
-    void connectToServer(const QString &host, quint16 port);
-    bool blockingConnectToServer(int timeout = 1500);
+    void connectToServer(const QString &host = "127.0.0.1", quint16 port = 14690);
+    bool blockingConnectToServer(const QString &host = "127.0.0.1", quint16 port = 14690, int timeout = 1500);
+    bool blockingDisconnectFromServer(int timeout = 1500);
     bool waitForConnected(int timeout = 1500) const;
 
     qint64 push(const QVector<SignalData> &signalDatas);

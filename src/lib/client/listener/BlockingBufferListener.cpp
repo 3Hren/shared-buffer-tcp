@@ -14,6 +14,7 @@ BlockingBufferListener::BlockingBufferListener(int timeout, Client *client, QObj
     timer->start(timeout);
 
     connect(client,SIGNAL(error(ErrorResponse)),SLOT(stopListening()));
+    connect(client,SIGNAL(error(ErrorResponse)),SLOT(saveErrorResponse(ErrorResponse)));
     connect(client,SIGNAL(bufferReceived(BufferResponse)),SLOT(saveBufferResponse(BufferResponse)));
 }
 
@@ -32,9 +33,20 @@ BufferResponse BlockingBufferListener::getBufferResponse() const
     return bufferResponse;
 }
 
+ErrorResponse BlockingBufferListener::getErrorResponse()
+{
+    return errorResponse;
+}
+
 void BlockingBufferListener::saveBufferResponse(const BufferResponse &bufferResponse)
 {
     this->bufferResponse = bufferResponse;
+    stopListening();
+}
+
+void BlockingBufferListener::saveErrorResponse(const ErrorResponse &errorResponse)
+{
+    this->errorResponse = errorResponse;
     stopListening();
 }
 

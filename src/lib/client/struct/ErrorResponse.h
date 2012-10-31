@@ -4,7 +4,11 @@
 
 struct ErrorResponse : public Response
 {    
-    ErrorResponse() : Response() {}
+    ErrorResponse() :
+        Response(),
+        errorType(ProtocolError::NoError)
+    {}
+
     ErrorResponse(quint8 requestType, quint8 errorType, const QString &description) :
         Response(requestType),
         errorType(errorType),

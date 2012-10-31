@@ -8,7 +8,7 @@ coverage/*
 .directory
 *.gcno
 Makefile*
-*.pro.user
+*.pro.user*
 *.o
 *.gcda
 *.*~

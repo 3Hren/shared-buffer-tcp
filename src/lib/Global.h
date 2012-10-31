@@ -29,6 +29,7 @@ enum Type {
     WrongInputArraySize = 111,
     WrongTimeStamp = 112,
 
+    NoError = 254,
     UnknownError = 255
 };
 }

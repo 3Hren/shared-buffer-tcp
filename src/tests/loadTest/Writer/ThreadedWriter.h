@@ -7,7 +7,7 @@
 #include <QDateTime>
 
 static const int TIMEOUT = 1000;
-static const int BUFFER_COUNT = 300;
+static const int BUFFER_COUNT = 13;
 
 class ThreadedWriter : public QThread
 {
