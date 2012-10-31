@@ -1,12 +1,13 @@
 #include "GetBufferResponseHandler.h"
 
 #include "../BufferClient.h"
+#include "../BufferClientPrivate.h"
 #include "../../protocol/GetBufferResponseProtocol.h"
 
 using namespace BufferStorage;
 
-GetBufferResponseHandler::GetBufferResponseHandler(RequestProtocol *requestProtocol, BufferClient *client, QTcpSocket *socket) :
-    ClientSideResponseHandler(requestProtocol, client, socket)
+GetBufferResponseHandler::GetBufferResponseHandler(RequestProtocol *requestProtocol, BufferClientPrivate *clientPrivate, QTcpSocket *socket) :
+    ClientSideResponseHandler(requestProtocol, clientPrivate, socket)
 {
 }
 
@@ -21,5 +22,5 @@ void GetBufferResponseHandler::execute()
 
     BufferResponse response(requestType, id, timeStamps, datas);
 
-    client->bufferReceived(response);
+    clientPrivate->callBufferReceived(response);
 }

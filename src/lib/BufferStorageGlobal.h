@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QAbstractSocket>
 #include <QMap>
 #include <QHash>
 
@@ -34,6 +35,12 @@ enum Type {
     UnknownError = 255
 };
 }
+
+struct SocketError {
+    SocketError() : error(QAbstractSocket::UnknownSocketError) {}
+    QAbstractSocket::SocketError error;
+    QString errorString;
+};
 
 typedef QMap<quint16, quint16> BufferInfoMap;
 typedef quint32 MessageSize;

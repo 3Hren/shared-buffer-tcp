@@ -4,13 +4,13 @@
 #include "RequestHandler.h"
 
 namespace BufferStorage {
-class BufferClient;
+class BufferClientPrivate;
 class ClientSideResponseHandler : public RequestHandler
 {
 protected:
-    BufferClient *client;
+    BufferClientPrivate *clientPrivate;
 
 public:
-    ClientSideResponseHandler(RequestProtocol *requestProtocol, BufferClient *client, QTcpSocket *socket);
+    ClientSideResponseHandler(RequestProtocol *requestProtocol, BufferClientPrivate *clientPrivate, QTcpSocket *socket);
 };
 }

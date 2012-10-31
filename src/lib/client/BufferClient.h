@@ -13,21 +13,16 @@
 class QTcpSocket;
 
 namespace BufferStorage {
-class ConnectionHandler;
-class ErrorMessageResponseHandler;
-class GetSignalDataResponseHandler;
-class RequestProtocol;
+class BufferClientPrivate;
 class BufferClient : public QObject
 {        
     Q_OBJECT
-    QTcpSocket *socket;
-    ConnectionHandler *handler;
 
-    friend class ErrorMessageResponseHandler;
-    friend class GetSignalDataResponseHandler;
-    friend class GetBufferResponseHandler;
+    BufferClientPrivate * const d_ptr;
+    Q_DECLARE_PRIVATE(BufferClient)
 public:
     explicit BufferClient(QObject *parent = 0);
+    ~BufferClient();
 
     bool isConnected() const;
     void connectToServer(const QString &host = "127.0.0.1", quint16 port = 14690);
@@ -43,12 +38,6 @@ public:
     qint64 getBuffer(quint16 bufferId);
     BufferResponse blockingGetBuffer(quint16 bufferId, int timeout = 1500);
 
-    struct SocketError {
-        SocketError() : error(QAbstractSocket::UnknownSocketError) {}
-        QAbstractSocket::SocketError error;
-        QString errorString;
-    } socketError;
-
     SocketError getSocketError() const;
 
 Q_SIGNALS:
@@ -57,11 +46,5 @@ Q_SIGNALS:
     void error(const ErrorResponse &response);
     void signalDatasReceived(const SignalDataResponse &response);
     void bufferReceived(const BufferResponse &response);
-
-private:
-    qint64 sendRequest(RequestProtocol *request);
-
-private Q_SLOTS:
-    void setSocketError(QAbstractSocket::SocketError error);
 };
 }

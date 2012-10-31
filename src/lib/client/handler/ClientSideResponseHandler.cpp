@@ -2,8 +2,8 @@
 
 using namespace BufferStorage;
 
-ClientSideResponseHandler::ClientSideResponseHandler(RequestProtocol *requestProtocol, BufferClient *client, QTcpSocket *socket) :
+ClientSideResponseHandler::ClientSideResponseHandler(RequestProtocol *requestProtocol, BufferClientPrivate *clientPrivate, QTcpSocket *socket) :
     RequestHandler(requestProtocol, socket),
-    client(client)
+    clientPrivate(clientPrivate)
 {
 }

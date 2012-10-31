@@ -1,13 +1,14 @@
 #include "GetSignalDataResponseHandler.h"
 
 #include "../BufferClient.h"
+#include "../BufferClientPrivate.h"
 #include "../../protocol/GetSignalDataResponseProtocol.h"
 #include "../struct/SignalDataResponse.h"
 
 using namespace BufferStorage;
 
-GetSignalDataResponseHandler::GetSignalDataResponseHandler(RequestProtocol *requestProtocol, BufferClient *client, QTcpSocket *socket) :
-    ClientSideResponseHandler(requestProtocol, client, socket)
+GetSignalDataResponseHandler::GetSignalDataResponseHandler(RequestProtocol *requestProtocol, BufferClientPrivate *clientPrivate, QTcpSocket *socket) :
+    ClientSideResponseHandler(requestProtocol, clientPrivate, socket)
 {
 }
 
@@ -20,5 +21,5 @@ void GetSignalDataResponseHandler::execute()
     const QVector<SignalData> &signalDatas = getSignalDataResponseProtocol->getSignalDatas();
     SignalDataResponse response(requestType, timeStamp, signalDatas);
 
-    client->signalDatasReceived(response);
+    clientPrivate->callSignalDatasReceived(response);
 }

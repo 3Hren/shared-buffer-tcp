@@ -6,7 +6,7 @@ namespace BufferStorage {
 class ErrorMessageResponseHandler : public ClientSideResponseHandler
 {
 public:
-    ErrorMessageResponseHandler(RequestProtocol *requestProtocol, BufferClient *client, QTcpSocket *socket);
+    ErrorMessageResponseHandler(RequestProtocol *requestProtocol, BufferClientPrivate *clientPrivate, QTcpSocket *socket);
 
     void execute();
 };

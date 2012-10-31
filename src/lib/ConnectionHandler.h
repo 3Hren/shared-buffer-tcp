@@ -11,7 +11,6 @@ class RequestProtocol;
 class ConnectionHandler : public QObject
 {
     Q_OBJECT
-
 protected:
     QTcpSocket *socket;
     MessageSize requestSize;

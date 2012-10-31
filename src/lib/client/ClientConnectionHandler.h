@@ -3,11 +3,11 @@
 #include "ConnectionHandler.h"
 
 namespace BufferStorage {
-class BufferClient;
+class BufferClientPrivate;
 class ClientConnectionHandler : public ConnectionHandler
 {
     Q_OBJECT
-    BufferClient *client;
+    BufferClientPrivate *clientPrivate;
 public:
     ClientConnectionHandler(QTcpSocket *socket, QObject *visitor);
     

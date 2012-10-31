@@ -50,7 +50,8 @@ HEADERS += \
     exceptions/ClientNotConnectedException.h \
     client/BufferClient.h \
     server/BufferServer.h \
-    BufferStorageGlobal.h
+    BufferStorageGlobal.h \
+    client/BufferClientPrivate.h
 
 SOURCES += \
     ConnectionHandler.cpp \
@@ -80,4 +81,5 @@ SOURCES += \
     server/buffer/HashTableBufferManager.cpp \
     server/buffer/TreeBufferManager.cpp \
     client/listener/BlockingBufferListener.cpp \
-    protocol/ResponseProtocol.cpp
+    protocol/ResponseProtocol.cpp \
+    client/BufferClientPrivate.cpp

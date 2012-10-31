@@ -6,7 +6,7 @@ namespace BufferStorage {
 class GetSignalDataResponseHandler : public ClientSideResponseHandler
 {
 public:
-    GetSignalDataResponseHandler(RequestProtocol *requestProtocol, BufferClient *client, QTcpSocket *socket);
+    GetSignalDataResponseHandler(RequestProtocol *requestProtocol, BufferClientPrivate *clientPrivate, QTcpSocket *socket);
 
     void execute();
 };

@@ -1,6 +1,7 @@
 #include "ClientConnectionHandler.h"
 
 #include "BufferClient.h"
+#include "BufferClientPrivate.h"
 #include "../RequestHandler.h"
 #include "ClientSideRequestHandlerFactory.h"
 #include "../exceptions/ProtocolException.h"
@@ -11,17 +12,17 @@ using namespace BufferStorage;
 
 ClientConnectionHandler::ClientConnectionHandler(QTcpSocket *socket, QObject *visitor) :
     ConnectionHandler(socket, visitor),
-    client(qobject_cast<BufferClient *>(visitor))
+    clientPrivate(qobject_cast<BufferClientPrivate *>(visitor))
 {
 }
 
 void ClientConnectionHandler::processRequest(RequestProtocol *requestProtocol)
 {    
     try {
-        QScopedPointer<RequestHandler>handler(ClientSideRequestHandlerFactory::createHandler(requestProtocol, client, socket));
+        QScopedPointer<RequestHandler>handler(ClientSideRequestHandlerFactory::createHandler(requestProtocol, clientPrivate, socket));
         handler->execute();
     } catch (ProtocolException &e) {
-        //#TODO: Tell user about error
+        qCritical() << e.getReason();
     }
 }
 
