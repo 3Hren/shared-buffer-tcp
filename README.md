@@ -21,14 +21,15 @@
 #### Пример (блокирующее получение буфера)
 	:::java
 	BufferClient *client = new BuffetClient;
-	connect(client, SIGNAL(error(ErrorResponse)), SLOT(showError(ErrorResponse)));
 	client->blockingConnectToServer();
 
-	...
-
-	quint16 bufferId = 1;
-	const BufferResponse &response = client->blockingGetBuffer(bufferId);
-	qDebug() << response.timeStamps << response.signalDatas;
+	try {
+		quint16 bufferId = 1;
+		const BufferResponse &response = client->blockingGetBuffer(bufferId);
+		handleSignals(response.timeStamps, response.signalDatas);
+	} catch (ProtocolException &exception) {
+		// обработка ошибки
+	}
 
 В случае блокирующего запроса ответ возвращается прямо из функции. Если произойдет ошибка, то будет выброшено исключение.
 В случае неблокирующего запроса как ответ, так и возможные ошибки будут посланы как сигналы.
