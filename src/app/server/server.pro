@@ -1,15 +1,17 @@
+TEMPLATE = app
+TARGET = bufferServer
+
+ROOT = ../../..
+
+DESTDIR = $$ROOT/bin/app
+
 QT       += core network
 QT       -= gui
-
-TARGET = bufferServer
-DESTDIR = ../../../../bin/tests
 
 CONFIG   += console
 CONFIG   -= app_bundle
 
-TEMPLATE = app
-
-LIBRARY_PATH = ../../../../lib
+LIBRARY_PATH = $$ROOT/lib
 
 INCLUDEPATH += $$LIBRARY_PATH/include
 DEPENDPATH += $LIBRARY_PATH/include

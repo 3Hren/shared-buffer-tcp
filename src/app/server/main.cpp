@@ -6,27 +6,29 @@
 #include <QDebug>
 
 using namespace BufferStorage;
-int main(int argc, char *argv[])
-{
-    QTextStream out(stderr);
-    if (argc < 4) {
-        out << QString("Usage:\t\t%1 START_ADDRESS BUFFER_COUNT BUFFER_MAXIMUM_SIZE\n"
-                       "Exapmle:\t\t%1 1000 300 1024\n").arg(argv[0]);
-        return 0;
-    }
 
+void showHelp(char *argv[]) {
+    QTextStream out(stderr);
+    out << QString("Usage:").leftJustified(16, ' ') << QString("%1 START_ADDRESS BUFFER_COUNT BUFFER_MAXIMUM_SIZE\n").arg(argv[0]);
+    out << QString("Exapmle:").leftJustified(16, ' ') << QString("%1 1000 300 1024\n").arg(argv[0]);
+    exit(-1);
+}
+
+int main(int argc, char *argv[])
+{    
+    if (argc < 4)
+        showHelp(argv);
+
+    bool isEverythingOk = true;
     bool ok = false;
     int startAddress = QString(argv[1]).toInt(&ok);
-    if (!ok)
-        return -1;
-
+    isEverythingOk &= ok;
     int count = QString(argv[2]).toInt(&ok);
-    if (!ok)
-        return -2;
-
+    isEverythingOk &= ok;
     int maximumSize = QString(argv[3]).toInt(&ok);
-    if (!ok)
-        return -3;
+    isEverythingOk &= ok;
+    if (!isEverythingOk)
+        showHelp(argv);
 
     qDebug() << QString("BufferServer started at localhost:14690. Start address: %1. Buffer count: %2. All buffers has %3 maximum size.")
                 .arg(startAddress)
