@@ -2,15 +2,13 @@
 
 #include <BufferServer.h>
 
-#include <QTextStream>
 #include <QDebug>
 
 using namespace BufferStorage;
 
 void showHelp(char *argv[]) {
-    QTextStream out(stderr);
-    out << QString("Usage:").leftJustified(16, ' ') << QString("%1 START_ADDRESS BUFFER_COUNT BUFFER_MAXIMUM_SIZE\n").arg(argv[0]);
-    out << QString("Exapmle:").leftJustified(16, ' ') << QString("%1 1000 300 1024\n").arg(argv[0]);
+    qCritical() << QString("Usage:").leftJustified(16, ' ').toUtf8().constData() << QString("%1 START_ADDRESS BUFFER_COUNT BUFFER_MAXIMUM_SIZE\n").arg(argv[0]).toUtf8().constData();
+    qCritical() << QString("Exapmle:").leftJustified(16, ' ').toUtf8().constData() << QString("%1 1000 300 1024\n").arg(argv[0]).toUtf8().constData();
     exit(-1);
 }
 
@@ -33,7 +31,7 @@ int main(int argc, char *argv[])
     qDebug() << QString("BufferServer started at localhost:14690. Start address: %1. Buffer count: %2. All buffers has %3 maximum size.")
                 .arg(startAddress)
                 .arg(count)
-                .arg(maximumSize);
+                .arg(maximumSize).toUtf8().constData();
 
     QCoreApplication a(argc, argv);
     BufferServer server;
