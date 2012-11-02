@@ -7,7 +7,7 @@ QT       += network testlib
 QT       -= gui
 
 CONFIG   += console
-CONFIG   += debug_and_release build_all warn_on
+#CONFIG   += debug_and_release build_all warn_on
 CONFIG   -= app_bundle
 
 LIB_SOURCE_DIR = ../../lib

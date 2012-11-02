@@ -51,7 +51,8 @@ HEADERS += \
     client/BufferClient.h \
     server/BufferServer.h \
     BufferStorageGlobal.h \
-    client/BufferClientPrivate.h
+    client/BufferClientPrivate.h \
+    protocol/NormalMessageResponseProtocol.h
 
 SOURCES += \
     ConnectionHandler.cpp \
@@ -82,4 +83,5 @@ SOURCES += \
     server/buffer/TreeBufferManager.cpp \
     client/listener/BlockingBufferListener.cpp \
     protocol/ResponseProtocol.cpp \
-    client/BufferClientPrivate.cpp
+    client/BufferClientPrivate.cpp \
+    protocol/NormalMessageResponseProtocol.cpp

@@ -65,12 +65,6 @@ bool BufferClient::waitForConnected(int timeout) const
     return d->socket->waitForConnected(timeout);
 }
 
-qint64 BufferClient::push(const QVector<SignalData> &signalDatas)
-{
-    TimeStamp timeStamp = QDateTime::currentDateTime().toTime_t();
-    return push(signalDatas, timeStamp);
-}
-
 qint64 BufferClient::push(const QVector<SignalData> &signalDatas, TimeStamp timeStamp)
 {
     Q_D(BufferClient);

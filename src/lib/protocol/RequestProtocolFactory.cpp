@@ -7,6 +7,7 @@
 #include "GetBufferRequestProtocol.h"
 #include "GetBufferResponseProtocol.h"
 #include "ErrorMessageRequestProtocol.h"
+#include "NormalMessageResponseProtocol.h"
 
 #include <QDebug>
 
@@ -43,8 +44,11 @@ RequestProtocol *RequestProtocolFactory::createRequestProtocol(QDataStream *inpu
     case ErrorMessageResponse:
         requestProtocol = new ErrorMessageRequestProtocol();
         break;
+    case NormalMessageResponse:
+        requestProtocol = new NormalMessageResponseProtocol();
+        break;
     default:
-        Q_ASSERT(false);
+        Q_ASSERT_X(false, "protocol factory method", QString("can't find protocol with type %1").arg(type).toUtf8());
     }
 
     requestProtocol->decode(inputStream);

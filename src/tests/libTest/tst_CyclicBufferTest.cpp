@@ -53,6 +53,7 @@ private Q_SLOTS:
     void testGetSignalDataRequestSerializing();
     void testGetSignalDataResponseSerializing();
     void testErrorMessageRequestSerializing();
+    void testNormalMessageResponseProtocolClass();
     void testNormalMessageRequestSerializing();
     void testGetBufferRequestProtocolSerializing();
     void testGetBufferResponseProtocolSerializing();
@@ -65,6 +66,7 @@ private Q_SLOTS:
     void testBufferNotFoundInBufferManager();
 
     void testPushDataToServer();
+    void testBlockingPushDataToServer();
     void testPushDataToServerWithMoreDatasThanOnServer();
     void testPushDataToServerWithLessDatasThanOnServer();
 
@@ -191,9 +193,24 @@ void CyclicBufferTest::testErrorMessageRequestSerializing()
     QCOMPARE(decodedInputRequest->getErrorMessage(), errorMessage);
 }
 
+#include "protocol/NormalMessageResponseProtocol.h"
+void CyclicBufferTest::testNormalMessageResponseProtocolClass()
+{
+    NormalMessageResponseProtocol request(ProtocolType::PushRequest, "");
+    Q_UNUSED(request);
+}
+
 void CyclicBufferTest::testNormalMessageRequestSerializing()
 {
-    QSKIP("Not yet implemented", SkipSingle);
+    // Run
+    NormalMessageResponseProtocol request(ProtocolType::PushRequest, "Ok");
+    QScopedPointer<RequestProtocol> response(getInputRequestThroughNetworkSendMock(&request));
+
+    // Compare
+    QCOMPARE(response->getType(), (RequestType)ProtocolType::NormalMessageResponse);
+    NormalMessageResponseProtocol *decodedResponse = static_cast<NormalMessageResponseProtocol *>(response.data());
+    QCOMPARE(decodedResponse->getRequestType(), (RequestType)ProtocolType::PushRequest);
+    QCOMPARE(decodedResponse->getMessage(), QString("Ok"));
 }
 
 void CyclicBufferTest::testGetBufferRequestProtocolSerializing()
@@ -325,6 +342,34 @@ void CyclicBufferTest::testPushDataToServer()
         QCOMPARE(buffer->size(), (quint16)1);
         QCOMPARE(buffer->first(), data.at(i));
     }
+}
+
+void CyclicBufferTest::testBlockingPushDataToServer()
+{
+    QSKIP("implement me", SkipSingle);
+    /*const int MAX_BUFFERS = 10;
+    const int START_INDEX = 1000;
+
+    // Initialize
+    BufferServer server;
+    BufferClient client;
+    initializeBufferTable(&server, MAX_BUFFERS, START_INDEX);
+    QVector<SignalData> data;
+    data.fill(SignalData(55.5, 0), MAX_BUFFERS);
+
+    // Run
+    server.run();
+    client.blockingConnectToServer();
+    client.blockingPush(data);
+
+    // Compare
+    BufferManager *bM = server.getBufferManager();
+    for (int i = 0; i < MAX_BUFFERS; ++i) {
+        Buffer *buffer = bM->getBuffer(START_INDEX + i);
+        Q_ASSERT(buffer);
+        QCOMPARE(buffer->size(), (quint16)1);
+        QCOMPARE(buffer->first(), data.at(i));
+    }*/
 }
 
 Q_DECLARE_METATYPE(ErrorResponse)

@@ -8,7 +8,7 @@
 #include "struct/ErrorResponse.h"
 #include "struct/SignalDataResponse.h"
 
-#include <QAbstractSocket>
+#include <QDateTime>
 
 class QTcpSocket;
 
@@ -30,8 +30,7 @@ public:
     bool blockingDisconnectFromServer(int timeout = 1500);
     bool waitForConnected(int timeout = 1500) const;
 
-    qint64 push(const QVector<SignalData> &signalDatas);
-    qint64 push(const QVector<SignalData> &signalDatas, TimeStamp timeStamp);
+    qint64 push(const QVector<SignalData> &signalDatas, TimeStamp timeStamp = QDateTime::currentDateTime().toTime_t());
 
     qint64 getSignalData(const QVector<quint16> &bufferIds, TimeStamp timeStamp);
 

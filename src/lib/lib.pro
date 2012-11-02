@@ -6,7 +6,7 @@ QT       += core network
 QT       -= gui
 
 CONFIG   += console static
-CONFIG   += debug_and_release build_all warn_on
+#CONFIG   += debug_and_release build_all warn_on
 CONFIG   -= app_bundle
 
 include(BufferStorage.pri)

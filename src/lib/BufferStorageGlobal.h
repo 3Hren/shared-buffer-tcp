@@ -7,6 +7,8 @@
 namespace BufferStorage {
 static const quint32 MAGIC = 9275623;
 
+typedef quint8 RequestType;
+
 namespace ProtocolType {
 enum Type {
     PushRequest = 0,
@@ -16,6 +18,7 @@ enum Type {
     GetBufferResponse = 4,
 
     ErrorMessageResponse = 10,
+    NormalMessageResponse = 11,
 
     SocketError = 200,
 
