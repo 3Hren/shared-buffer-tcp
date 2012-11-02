@@ -3,7 +3,10 @@
 #include "../BufferServer.h"
 #include "../BufferManager.h"
 #include "../../protocol/PushRequestProtocol.h"
+#include "protocol/NormalMessageResponseProtocol.h"
 #include "../../exceptions/BufferException.h"
+
+#include <QTcpSocket>
 
 using namespace BufferStorage;
 
@@ -22,6 +25,8 @@ void PushRequestHandler::execute()
 
     try {
         bufferManager->pushSignalDatas(signalDatas, timeStamp);
+        NormalMessageResponseProtocol response(ProtocolType::PushRequest, "Ok");
+        socket->write(response.encode());
     } catch (BufferException &e) {
         throw e;
     }    

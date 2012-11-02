@@ -4,6 +4,7 @@
 #include "../protocol/RequestProtocol.h"
 
 #include "handler/ErrorMessageResponseHandler.h"
+#include "handler/NormalMessageResponseHandler.h"
 #include "handler/GetSignalDataResponseHandler.h"
 #include "handler/GetBufferResponseHandler.h"
 
@@ -15,6 +16,8 @@ RequestHandler *ClientSideRequestHandlerFactory::createHandler(RequestProtocol *
     switch (type) {
     case ProtocolType::ErrorMessageResponse:
         return new ErrorMessageResponseHandler(requestProtocol, clientPrivate, socket);
+    case ProtocolType::NormalMessageResponse:
+        return new NormalMessageResponseHandler(requestProtocol, clientPrivate, socket);
     case ProtocolType::GetSignalDataResponse:
         return new GetSignalDataResponseHandler(requestProtocol, clientPrivate, socket);
     case ProtocolType::GetBufferResponse:

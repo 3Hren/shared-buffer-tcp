@@ -78,8 +78,6 @@ private Q_SLOTS:
     void testGetBuffer();
     void testGetBufferWrongIndex();
 
-    void testTrySendRequestClientNotConnected();
-
     void benchmarkHashTableBufferManager();
     void benchmarkTreeBufferManager();
 
@@ -346,8 +344,7 @@ void CyclicBufferTest::testPushDataToServer()
 
 void CyclicBufferTest::testBlockingPushDataToServer()
 {
-    QSKIP("implement me", SkipSingle);
-    /*const int MAX_BUFFERS = 10;
+    const int MAX_BUFFERS = 10;
     const int START_INDEX = 1000;
 
     // Initialize
@@ -369,7 +366,7 @@ void CyclicBufferTest::testBlockingPushDataToServer()
         Q_ASSERT(buffer);
         QCOMPARE(buffer->size(), (quint16)1);
         QCOMPARE(buffer->first(), data.at(i));
-    }*/
+    }
 }
 
 Q_DECLARE_METATYPE(ErrorResponse)
@@ -654,17 +651,6 @@ void CyclicBufferTest::testGetBufferWrongIndex()
     const ErrorResponse &response = arguments.at(0).value<ErrorResponse>();
     QCOMPARE(response.requestType, (quint8)ProtocolType::GetBufferRequest);
     QCOMPARE(response.errorType, (quint8)ProtocolError::BufferNotFound);
-}
-
-void CyclicBufferTest::testTrySendRequestClientNotConnected()
-{
-    BufferServer server;
-    BufferClient client;
-
-    server.run();
-
-    QCOMPARE(client.isConnected(), false);
-    QCOMPARE(client.getBuffer(-1), (qint64)-1);
 }
 
 const int BUFFERS_COUNT = 30000;

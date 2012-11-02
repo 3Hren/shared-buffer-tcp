@@ -1,21 +1,14 @@
 #include "BufferClient.h"
 #include "BufferClientPrivate.h"
 
-#include "BufferStorageGlobal.h"
-#include "ConnectionHandler.h"
-
 #include "../protocol/PushRequestProtocol.h"
 #include "../protocol/GetSignalDataRequestProtocol.h"
 #include "../protocol/GetBufferRequestProtocol.h"
-#include "listener/BlockingBufferListener.h"
 
-#include "exceptions/ClientNotConnectedException.h"
-#include "exceptions/BufferNotFoundException.h"
+#include "listener/BlockingBufferListener.h"
+#include "listener/BlockingPushListener.h"
 
 #include <QTcpSocket>
-#include <QHostAddress>
-#include <QDateTime>
-#include <QCoreApplication>
 
 #include <QDebug>
 
@@ -65,11 +58,20 @@ bool BufferClient::waitForConnected(int timeout) const
     return d->socket->waitForConnected(timeout);
 }
 
-qint64 BufferClient::push(const QVector<SignalData> &signalDatas, TimeStamp timeStamp)
+void BufferClient::push(const QVector<SignalData> &signalDatas, TimeStamp timeStamp)
 {
     Q_D(BufferClient);
     PushRequestProtocol request(timeStamp, signalDatas);
-    return d->sendRequest(&request);
+    d->sendRequest(&request);
+}
+
+void BufferClient::blockingPush(const QVector<SignalData> &signalDatas, TimeStamp timeStamp, int timeout)
+{
+    Q_D(BufferClient);
+    d->checkConnection();
+    push(signalDatas, timeStamp);
+    BlockingPushListener listener(timeout, this);
+    d->waitForOperationDone(&listener, &QAbstractSocket::waitForBytesWritten);
 }
 
 qint64 BufferClient::getSignalData(const QVector<quint16> &bufferIds, TimeStamp timeStamp)
@@ -79,32 +81,20 @@ qint64 BufferClient::getSignalData(const QVector<quint16> &bufferIds, TimeStamp 
     return d->sendRequest(&request);
 }
 
-qint64 BufferClient::getBuffer(quint16 bufferId)
+void BufferClient::getBuffer(quint16 bufferId)
 {
     Q_D(BufferClient);
     GetBufferRequestProtocol request(bufferId);
-    return d->sendRequest(&request);
+    d->sendRequest(&request);
 }
 
 BufferResponse BufferClient::blockingGetBuffer(quint16 bufferId, int timeout)
 {    
     Q_D(BufferClient);
-    if (d->socket->state() != QAbstractSocket::ConnectedState)
-        throw ClientNotConnectedException();
-
-    BlockingBufferListener listener(timeout, this);
-
-    GetBufferRequestProtocol request(bufferId);
-    d->sendRequest(&request);
-
-    while (listener.isListening()) {
-        d->socket->waitForReadyRead(listener.getTimeout() / 10);
-        qApp->processEvents();
-    }
-
-    if (listener.getErrorResponse().errorType != ProtocolError::NoError)
-        throw BufferNotFoundException(bufferId);
-
+    d->checkConnection();
+    getBuffer(bufferId);
+    BlockingBufferListener listener(timeout, this);    
+    d->waitForOperationDone(&listener, &QAbstractSocket::waitForReadyRead);
     return listener.getBufferResponse();
 }
 

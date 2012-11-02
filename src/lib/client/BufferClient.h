@@ -3,14 +3,14 @@
 #include <QObject>
 
 #include "BufferStorageGlobal.h"
+
 #include "SignalData.h"
 #include "struct/BufferResponse.h"
 #include "struct/ErrorResponse.h"
+#include "struct/NormalResponse.h"
 #include "struct/SignalDataResponse.h"
 
 #include <QDateTime>
-
-class QTcpSocket;
 
 namespace BufferStorage {
 class BufferClientPrivate;
@@ -30,11 +30,12 @@ public:
     bool blockingDisconnectFromServer(int timeout = 1500);
     bool waitForConnected(int timeout = 1500) const;
 
-    qint64 push(const QVector<SignalData> &signalDatas, TimeStamp timeStamp = QDateTime::currentDateTime().toTime_t());
+    void push(const QVector<SignalData> &signalDatas, TimeStamp timeStamp = QDateTime::currentDateTime().toTime_t());
+    void blockingPush(const QVector<SignalData> &signalDatas, TimeStamp timeStamp = QDateTime::currentDateTime().toTime_t(), int timeout = 1500);
 
     qint64 getSignalData(const QVector<quint16> &bufferIds, TimeStamp timeStamp);
 
-    qint64 getBuffer(quint16 bufferId);
+    void getBuffer(quint16 bufferId);
     BufferResponse blockingGetBuffer(quint16 bufferId, int timeout = 1500);
 
     SocketError getSocketError() const;
@@ -45,5 +46,6 @@ Q_SIGNALS:
     void error(const ErrorResponse &response);
     void signalDatasReceived(const SignalDataResponse &response);
     void bufferReceived(const BufferResponse &response);
+    void normalResponseReceived(const NormalResponse &response);
 };
 }

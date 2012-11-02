@@ -4,7 +4,13 @@
 #include "ConnectionHandler.h"
 #include "ClientConnectionHandler.h"
 
+#include "listener/BlockingListener.h"
+
+#include "exceptions/ClientNotConnectedException.h"
+#include "exceptions/ProtocolException.h"
+
 #include <QTcpSocket>
+#include <QCoreApplication>
 
 using namespace BufferStorage;
 
@@ -28,11 +34,29 @@ qint64 BufferClientPrivate::sendRequest(RequestProtocol *request)
     return bytesWritten;
 }
 
+void BufferClientPrivate::checkConnection()
+{
+    if (socket->state() != QAbstractSocket::ConnectedState)
+        throw ClientNotConnectedException();
+}
+
+void BufferClientPrivate::waitForOperationDone(BlockingListener *listener, bool (QAbstractSocket::*wait)(int))
+{
+    while (listener->isListening()) {
+        (socket->*wait)(listener->getTimeout() / 10);
+        qApp->processEvents();
+    }
+
+    const ErrorResponse &errorResponse = listener->getErrorResponse();
+    if (errorResponse.errorType != ProtocolError::NoError)
+        throw ProtocolException(errorResponse.errorType, errorResponse.description);
+}
+
 void BufferClientPrivate::setSocketError(QAbstractSocket::SocketError abstractSocketError)
 {
     socketError.error = abstractSocketError;
     socketError.errorString = socket->errorString();
-    Q_EMIT error(ErrorResponse(ProtocolType::SocketError, socketError.error, socketError.errorString));
+    Q_EMIT error(ErrorResponse(ProtocolType::ErrorMessageResponse, socketError.error, socketError.errorString));
 }
 
 void BufferClientPrivate::callSignalDatasReceived(const SignalDataResponse &response)
@@ -48,4 +72,9 @@ void BufferClientPrivate::callBufferReceived(const BufferResponse &response)
 void BufferClientPrivate::callError(const ErrorResponse &response)
 {
     client->error(response);
+}
+
+void BufferClientPrivate::callNormalMessageReceived(const NormalResponse &response)
+{
+    client->normalResponseReceived(response);
 }
