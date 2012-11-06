@@ -6,13 +6,13 @@
 namespace BufferStorage {
 struct Response {
     Response() :
-        requestType(UNKNOWN)
+        requestType(UNKNOWN_PROTOCOL_TYPE)
     {}
 
-    Response(quint8 requestType) :
+    Response(ProtocolType requestType) :
         requestType(requestType)
     {}
 
-    quint8 requestType;
+    ProtocolType requestType;
 };
 }

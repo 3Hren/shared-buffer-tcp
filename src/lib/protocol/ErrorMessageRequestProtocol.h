@@ -5,13 +5,13 @@
 namespace BufferStorage {
 class ErrorMessageRequestProtocol : public ResponseProtocol
 {
-    quint8 errorType;
+    ErrorType errorType;
     QString errorMessage;    
 public:
     ErrorMessageRequestProtocol();
-    ErrorMessageRequestProtocol(ProtocolType requestType, quint8 errorType, const QString &errorMessage);
+    ErrorMessageRequestProtocol(ProtocolType requestType, ErrorType errorType, const QString &errorMessage);
 
-    quint8 getErrorType() const;
+    ErrorType getErrorType() const;
     QString getErrorMessage() const;
 
 protected:

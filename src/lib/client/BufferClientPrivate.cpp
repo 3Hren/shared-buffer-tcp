@@ -46,7 +46,7 @@ void BufferClientPrivate::waitForOperationDone(BlockingListener *listener)
         qApp->processEvents();
 
     const ErrorResponse &errorResponse = listener->getErrorResponse();
-    if (errorResponse.errorType != ProtocolError::NORMAL)
+    if (errorResponse.errorType != NORMAL)
         throw ProtocolException(errorResponse.requestType, errorResponse.errorType, errorResponse.description);
 }
 
@@ -54,7 +54,7 @@ void BufferClientPrivate::setSocketError(QAbstractSocket::SocketError abstractSo
 {
     socketError.error = abstractSocketError;
     socketError.errorString = socket->errorString();
-    Q_EMIT error(ErrorResponse(RESPONSE_ERROR, socketError.error, socketError.errorString));
+    Q_EMIT error(ErrorResponse(RESPONSE_ERROR, static_cast<ErrorType>(socketError.error), socketError.errorString));//! @todo: RESPONSE_ERROR неправильно
 }
 
 void BufferClientPrivate::callSignalDatasReceived(const SignalDataResponse &response)

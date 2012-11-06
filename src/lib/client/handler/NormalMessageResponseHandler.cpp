@@ -16,7 +16,7 @@ NormalMessageResponseHandler::NormalMessageResponseHandler(RequestProtocol *requ
 void NormalMessageResponseHandler::execute()
 {
     NormalMessageResponseProtocol *messageResponse = static_cast<NormalMessageResponseProtocol *>(requestProtocol);
-    const quint8 requestType = messageResponse->getRequestType();
+    const ProtocolType requestType = messageResponse->getRequestType();
     const QString &message = messageResponse->getMessage();
 
     NormalResponse response(requestType, message);    

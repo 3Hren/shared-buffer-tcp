@@ -7,16 +7,16 @@ struct ErrorResponse : public Response
 {    
     ErrorResponse() :
         Response(),
-        errorType(ProtocolError::NORMAL)
+        errorType(NORMAL)
     {}
 
-    ErrorResponse(quint8 requestType, quint8 errorType, const QString &description) :
+    ErrorResponse(ProtocolType requestType, ErrorType errorType, const QString &description) :
         Response(requestType),
         errorType(errorType),
         description(description)
     {}
 
-    quint8 errorType;
+    ErrorType errorType;
     QString description;
 };
 }

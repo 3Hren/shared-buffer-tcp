@@ -7,14 +7,14 @@
 #include <QDataStream>
 #define DECLARE_SERIALIZATION_FOR_ENUM(Type) \
     inline QDataStream &operator <<(QDataStream &out, const Type &t) { \
-        out << static_cast<quint8>(t); \
-        return out; \
+    out << static_cast<quint8>(t); \
+    return out; \
     } \
     inline QDataStream &operator >>(QDataStream &in, Type &t) { \
-        quint8 n = 0; \
-        in >> n; \
-        t = static_cast<Type>(n); \
-        return in; \
+    quint8 n = 0; \
+    in >> n; \
+    t = static_cast<Type>(n); \
+    return in; \
     }
 
 namespace BufferStorage {
@@ -31,22 +31,21 @@ enum ProtocolType {
     RESPONSE_GET_BUFFER = 100 + 2,
     RESPONSE_ERROR = 100 + 3,
 
-    UNKNOWN = 255
+    UNKNOWN_PROTOCOL_TYPE = 255
 };
 DECLARE_SERIALIZATION_FOR_ENUM(ProtocolType)
 
-namespace ProtocolError {
-enum Type {
+enum ErrorType {
     NORMAL = 0,
+            WRONG_REQUEST_TYPE = 100,
+            WRONG_BUFFER_ID = 110,
+            WRONG_INPUT_ARRAY_SIZE = 111,
+            WRONG_TIME_STAMP = 112,
+            SOCKET_ERROR = 200,
 
-    WRONG_REQUEST_TYPE = 100,
-    WRONG_BUFFER_ID = 110,
-    WRONG_INPUT_ARRAY_SIZE = 111,
-    WRONG_TIME_STAMP = 112,
-
-    UNKNOWN = 255
+            UNKNOWN_ERROR_TYPE = 255 //! @todo: ???
 };
-}
+DECLARE_SERIALIZATION_FOR_ENUM(ErrorType)
 
 struct SocketError {
     SocketError() : error(QAbstractSocket::UnknownSocketError) {}

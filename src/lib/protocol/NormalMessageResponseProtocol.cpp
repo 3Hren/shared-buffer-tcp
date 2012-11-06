@@ -3,7 +3,7 @@
 using namespace BufferStorage;
 
 NormalMessageResponseProtocol::NormalMessageResponseProtocol() :
-    ResponseProtocol(RESPONSE_PUSH, UNKNOWN)
+    ResponseProtocol(RESPONSE_PUSH, UNKNOWN_PROTOCOL_TYPE)
 {
 }
 

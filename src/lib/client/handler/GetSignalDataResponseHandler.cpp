@@ -16,7 +16,7 @@ void GetSignalDataResponseHandler::execute()
 {
     GetSignalDataResponseProtocol *getSignalDataResponseProtocol = static_cast<GetSignalDataResponseProtocol *>(requestProtocol);
 
-    const quint8 &requestType = getSignalDataResponseProtocol->getRequestType();
+    const ProtocolType &requestType = getSignalDataResponseProtocol->getRequestType();
     const TimeStamp &timeStamp = getSignalDataResponseProtocol->getTimeStamp();
     const QVector<SignalData> &signalDatas = getSignalDataResponseProtocol->getSignalDatas();
     SignalDataResponse response(requestType, timeStamp, signalDatas);
