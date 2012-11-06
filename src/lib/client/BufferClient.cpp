@@ -2,12 +2,13 @@
 #include "BufferClientPrivate.h"
 
 #include "protocol/PushRequest.h"
+#include "protocol/PushResponse.h"
 #include "protocol/GetSignalDataRequest.h"
+#include "protocol/GetSignalDataResponse.h"
 #include "protocol/GetBufferRequest.h"
 #include "protocol/GetBufferResponse.h"
 
-#include "listener/BlockingBufferListener.h"
-#include "listener/BlockingPushListener.h"
+#include "listener/BlockingListener.h"
 
 #include <QTcpSocket>
 
@@ -71,8 +72,9 @@ void BufferClient::blockingPush(const SignalValueVector &signalDatas, TimeStamp 
     Q_D(BufferClient);
     d->checkConnection();
     push(signalDatas, timeStamp);
-    BlockingPushListener listener(timeout, this);
-    d->waitForOperationDone(&listener);
+    BlockingListener listener(timeout, this);
+    d->waitForResponseReceived(&listener);
+    listener.getResponse<PushResponse *>();
 }
 
 qint64 BufferClient::getSignalData(const QVector<BufferId> &bufferIds, TimeStamp timeStamp)
@@ -94,8 +96,8 @@ SignalBuffer BufferClient::blockingGetBuffer(BufferId bufferId, int timeout)
     Q_D(BufferClient);
     d->checkConnection();
     getBuffer(bufferId);
-    BlockingBufferListener listener(timeout, this);
-    d->waitForOperationDone(&listener);
+    BlockingListener listener(timeout, this);
+    d->waitForResponseReceived(&listener);
     GetBufferResponse *response = listener.getResponse<GetBufferResponse *>();
     const SignalBuffer signalBuffer(response->getBufferTimeStamps(), response->getBufferData());
     return signalBuffer;

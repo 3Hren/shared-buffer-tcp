@@ -4,12 +4,7 @@
 
 #include "BufferStorageGlobal.h"
 #include "SignalBuffer.h"
-
 #include "SignalValue.h"
-#include "struct/BufferResponse.h"
-#include "struct/ErrorResponseStruct.h"
-#include "struct/NormalResponse.h"
-#include "struct/SignalDataResponse.h"
 
 #include <QDateTime>
 #include <QSharedPointer>
@@ -49,10 +44,6 @@ Q_SIGNALS:
     void responseReceived(QSharedPointer<Response> response);
     void errorReceived(QSharedPointer<ErrorResponse> errorResponse);
 
-    void stateChanged(QAbstractSocket::SocketState state);
-    void error(const ErrorResponseStruct &response); //! @todo: эти вот структуры можно пихнуть
-    void signalDatasReceived(const SignalDataResponse &response);
-    void bufferReceived(const BufferResponse &response);
-    void normalResponseReceived(const NormalResponse &response);
+    void stateChanged(QAbstractSocket::SocketState state);    
 };
 }

@@ -7,6 +7,7 @@
 #include "listener/BlockingListener.h"
 
 #include "protocol/Response.h"
+#include "protocol/ErrorResponse.h"
 
 #include "exceptions/ClientException.h"
 #include "exceptions/ProtocolException.h"
@@ -26,7 +27,6 @@ BufferClientPrivate::BufferClientPrivate(BufferClient *bufferClient) :
     connect(socket, SIGNAL(connected()), bufferClient, SIGNAL(connected()));
     connect(socket, SIGNAL(stateChanged(QAbstractSocket::SocketState)), bufferClient, SIGNAL(stateChanged(QAbstractSocket::SocketState)));
     connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), SLOT(setSocketError(QAbstractSocket::SocketError)));
-    connect(this, SIGNAL(error(ErrorResponseStruct)), bufferClient, SIGNAL(error(ErrorResponseStruct)));
 }
 
 qint64 BufferClientPrivate::sendRequest(Request *request)
@@ -42,41 +42,19 @@ void BufferClientPrivate::checkConnection()
         throw ClientNotConnectedException();
 }
 
-void BufferClientPrivate::waitForOperationDone(BlockingListener *listener)
+//! @todo: move to listener
+void BufferClientPrivate::waitForResponseReceived(BlockingListener *listener)
 {
     while (listener->isListening())
-        qApp->processEvents();
-
-    const ErrorResponseStruct &errorResponse = listener->getErrorResponse();
-    if (errorResponse.errorType != NORMAL)
-        throw ProtocolException(errorResponse.requestType, errorResponse.errorType, errorResponse.description);
+        qApp->processEvents();    
 }
 
 void BufferClientPrivate::setSocketError(QAbstractSocket::SocketError abstractSocketError)
 {
     socketError.error = abstractSocketError;
     socketError.errorString = socket->errorString();
-    Q_EMIT error(ErrorResponseStruct(RESPONSE_ERROR, static_cast<ErrorType>(socketError.error), socketError.errorString));
-}
-
-void BufferClientPrivate::callSignalDatasReceived(const SignalDataResponse &response)
-{
-    client->signalDatasReceived(response);
-}
-
-void BufferClientPrivate::callBufferReceived(const BufferResponse &response)
-{
-    client->bufferReceived(response);
-}
-
-void BufferClientPrivate::callError(const ErrorResponseStruct &response)
-{
-    client->error(response);
-}
-
-void BufferClientPrivate::callNormalMessageReceived(const NormalResponse &response)
-{
-    client->normalResponseReceived(response);
+    QSharedPointer<ErrorResponse> errorResponse(new ErrorResponse(RESPONSE_ERROR, static_cast<ErrorType>(socketError.error), socketError.errorString));
+    client->errorReceived(errorResponse);
 }
 
 void BufferClientPrivate::callResponseReceived(QSharedPointer<Response> response)

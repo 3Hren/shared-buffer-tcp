@@ -8,10 +8,10 @@ ErrorResponse::ErrorResponse() :
 {
 }
 
-ErrorResponse::ErrorResponse(ProtocolType requestType, ErrorType errorType, const QString &errorMessage) :
+ErrorResponse::ErrorResponse(ProtocolType requestType, ErrorType errorType, const QString &reason) :
     Response(RESPONSE_ERROR, requestType),
     errorType(errorType),
-    errorMessage(errorMessage)
+    reason(reason)
 {
 }
 
@@ -19,18 +19,17 @@ ErrorType ErrorResponse::getErrorType() const
 {
     return errorType;
 }
-//! @todo: rename to getReason
-QString ErrorResponse::getErrorMessage() const
+QString ErrorResponse::getReason() const
 {
-    return errorMessage;
+    return reason;
 }
 
 void ErrorResponse::encodeData(QDataStream *out) const
 {
-    *out << requestType << errorType << errorMessage;
+    *out << requestType << errorType << reason;
 }
 
 void ErrorResponse::decodeData(QDataStream *in)
 {
-    *in >> requestType >> errorType >> errorMessage;
+    *in >> requestType >> errorType >> reason;
 }

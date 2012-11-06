@@ -191,7 +191,7 @@ void CyclicBufferTest::testErrorMessageRequestSerializing()
     ErrorResponse *decodedInputRequest = static_cast<ErrorResponse *>(inputRequest.data());
     QCOMPARE(decodedInputRequest->getRequestType(), inputRequestType);
     QCOMPARE(decodedInputRequest->getErrorType(), errorType);
-    QCOMPARE(decodedInputRequest->getErrorMessage(), errorMessage);
+    QCOMPARE(decodedInputRequest->getReason(), errorMessage);
 }
 
 #include "protocol/PushResponse.h"
@@ -388,7 +388,6 @@ void CyclicBufferTest::testPushDataToServerWithLessDatasThanOnServer()
     tryPushWrongDataCountToServerAndCompareError(DATA_COUNT, WRONG_DATA_COUNT, WRONG_INPUT_ARRAY_SIZE);
 }
 
-Q_DECLARE_METATYPE(SignalDataResponse) //! @todo:
 void CyclicBufferTest::testGetValueFromServer()
 {
     qRegisterMetaType<QSharedPointer<Response> >("QSharedPointer<Response>");
@@ -555,7 +554,6 @@ void CyclicBufferTest::compareBufferGetResults(QSignalSpy *spy, int spyCount, co
     QCOMPARE(getBufferResponse->getBufferData(), signalDatas);
 }
 
-Q_DECLARE_METATYPE(BufferResponse)
 void CyclicBufferTest::testGetBuffer()
 {
     // Initialize

@@ -4,7 +4,6 @@
 #include "BufferClientPrivate.h"
 
 #include "RequestHandler.h"
-#include "ClientSideRequestHandlerFactory.h"
 
 #include "protocol/ErrorResponse.h"
 
@@ -18,16 +17,6 @@ ClientConnectionHandler::ClientConnectionHandler(QTcpSocket *socket, QObject *vi
     ConnectionHandler(socket, visitor),
     clientPrivate(qobject_cast<BufferClientPrivate *>(visitor))
 {
-}
-
-void ClientConnectionHandler::processRequest(Request *request)
-{        
-    /*try {
-        QScopedPointer<RequestHandler>handler(ClientSideRequestHandlerFactory::createHandler(request, clientPrivate, socket));
-        handler->execute();
-    } catch (ProtocolException &exception) {
-        qCritical() << exception.getReason();
-    }*/
 }
 
 void ClientConnectionHandler::processRequest(QSharedPointer<Request> request)

@@ -2,27 +2,20 @@
 
 #include "client/BufferClient.h"
 
-#include "client/struct/AbstractResponse.h"
-#include "client/struct/ErrorResponseStruct.h"
-
 #include <QTimer>
 
 using namespace BufferStorage;
 
 BlockingListener::BlockingListener(int timeout, BufferClient *client, QObject *parent) :
     QObject(parent),
-    timeout(timeout),
-    listening(true)
-{
+    timeout(timeout)
+{    
+    connect(client, SIGNAL(responseReceived(QSharedPointer<Response>)), SLOT(saveResponse(QSharedPointer<Response>)));
+    connect(client, SIGNAL(errorReceived(QSharedPointer<ErrorResponse>)), SLOT(saveErrorResponse(QSharedPointer<ErrorResponse>)));    
+
     QTimer *timer = new QTimer(this);
     connect(timer,SIGNAL(timeout()),SLOT(stopListening()));
     timer->start(timeout);
-
-    connect(client, SIGNAL(error(ErrorResponseStruct)), SLOT(saveErrorResponse(ErrorResponseStruct)));
-}
-
-BlockingListener::~BlockingListener()
-{
 }
 
 int BlockingListener::getTimeout() const
@@ -35,14 +28,15 @@ bool BlockingListener::isListening() const
     return listening;
 }
 
-ErrorResponseStruct BlockingListener::getErrorResponse() const
-{    
-    return errorResponse;
+void BlockingListener::saveResponse(QSharedPointer<Response> response)
+{
+    this->response = response;
+    stopListening();
 }
 
-void BlockingListener::saveErrorResponse(const ErrorResponseStruct &errorResponse)
-{    
-    this->errorResponse = errorResponse;
+void BlockingListener::saveErrorResponse(QSharedPointer<ErrorResponse> errorResponse)
+{
+    this->response = errorResponse;
     stopListening();
 }
 

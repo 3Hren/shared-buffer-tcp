@@ -29,7 +29,7 @@ void ConnectionHandler::readPendingData()
         in >> requestSize;
     }
 
-    // Don't read message until its completely delivered
+    //! @note: Don't read message until its completely delivered
     if (socket->bytesAvailable() < requestSize)
         return;    
 
@@ -41,7 +41,6 @@ void ConnectionHandler::readPendingData()
     }
 
     RequestFactory protocolFactory;
-    //QScopedPointer<Request> inputRequest(protocolFactory.createRequestProtocol(&in));
     QSharedPointer<Request> inputRequest(protocolFactory.createRequestProtocol(&in));
     processRequest(inputRequest);
 

@@ -21,7 +21,6 @@ public:
     ConnectionHandler(QTcpSocket *socket, QObject *parent = 0);
 
 protected:
-    virtual void processRequest(Request *request) = 0;
     virtual void processRequest(QSharedPointer<Request> request) = 0;
 
 public Q_SLOTS:
