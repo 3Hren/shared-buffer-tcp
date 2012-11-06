@@ -1,9 +1,10 @@
 #include "GetSignalDataResponseHandler.h"
 
-#include "../BufferClient.h"
-#include "../BufferClientPrivate.h"
-#include "../../protocol/GetSignalDataResponse.h"
-#include "../struct/SignalDataResponse.h"
+#include "client/BufferClient.h"
+#include "client/BufferClientPrivate.h"
+
+#include "protocol/GetSignalDataResponse.h"
+#include "client/struct/SignalDataResponse.h"
 
 using namespace BufferStorage;
 

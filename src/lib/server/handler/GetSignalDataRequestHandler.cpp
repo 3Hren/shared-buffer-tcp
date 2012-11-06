@@ -1,10 +1,12 @@
 #include "GetSignalDataRequestHandler.h"
 
-#include "../BufferServer.h"
-#include "../BufferManager.h"
-#include "../../protocol/GetSignalDataRequest.h"
-#include "../../protocol/GetSignalDataResponse.h"
-#include "../../exceptions/BufferException.h"
+#include "server/BufferServer.h"
+#include "server/BufferManager.h"
+
+#include "protocol/GetSignalDataRequest.h"
+#include "protocol/GetSignalDataResponse.h"
+
+#include "exceptions/BufferException.h"
 
 #include <QTcpSocket>
 

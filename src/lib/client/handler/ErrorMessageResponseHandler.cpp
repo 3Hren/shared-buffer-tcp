@@ -1,7 +1,8 @@
 #include "ErrorMessageResponseHandler.h"
 
-#include "../BufferClientPrivate.h"
-#include "../../protocol/ErrorMessageRequest.h"
+#include "client/BufferClientPrivate.h"
+
+#include "protocol/ErrorResponse.h"
 
 #include <QDebug>
 
@@ -14,11 +15,11 @@ ErrorMessageResponseHandler::ErrorMessageResponseHandler(Request *requestProtoco
 
 void ErrorMessageResponseHandler::execute()
 {
-    ErrorMessageRequest *error = static_cast<ErrorMessageRequest *>(requestProtocol);
+    ErrorResponse *error = static_cast<ErrorResponse *>(requestProtocol);
     const ProtocolType requestType = error->getRequestType();
     const ErrorType errorType = error->getErrorType();
     const QString &errorDescription = error->getErrorMessage();
 
-    ErrorResponse response(requestType, errorType, errorDescription);    
+    ErrorResponseStruct response(requestType, errorType, errorDescription);
     clientPrivate->callError(response);
 }

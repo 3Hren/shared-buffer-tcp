@@ -2,15 +2,16 @@
 
 #include "AbstractResponse.h"
 
+//! @todo: А нахера вообще эти классы???
 namespace BufferStorage {
-struct ErrorResponse : public AbstractResponse
+struct ErrorResponseStruct : public AbstractResponse
 {    
-    ErrorResponse() :
+    ErrorResponseStruct() :
         AbstractResponse(),
         errorType(NORMAL)
     {}
 
-    ErrorResponse(ProtocolType requestType, ErrorType errorType, const QString &description) :
+    ErrorResponseStruct(ProtocolType requestType, ErrorType errorType, const QString &description) :
         AbstractResponse(requestType),
         errorType(errorType),
         description(description)
@@ -20,3 +21,5 @@ struct ErrorResponse : public AbstractResponse
     QString description;
 };
 }
+
+Q_DECLARE_METATYPE(BufferStorage::ErrorResponseStruct)

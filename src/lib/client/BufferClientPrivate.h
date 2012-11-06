@@ -4,7 +4,7 @@
 
 #include "BufferStorageGlobal.h"
 
-#include "struct/ErrorResponse.h"
+#include "struct/ErrorResponseStruct.h"
 #include "struct/NormalResponse.h"
 #include "struct/SignalDataResponse.h"
 #include "struct/BufferResponse.h"
@@ -42,11 +42,11 @@ public:
 
     void callSignalDatasReceived(const SignalDataResponse &response);
     void callBufferReceived(const BufferResponse &response);
-    void callError(const ErrorResponse &response);
+    void callError(const ErrorResponseStruct &response);
     void callNormalMessageReceived(const NormalResponse &response);
 
 Q_SIGNALS:
-    void error(const ErrorResponse &response);
+    void error(const ErrorResponseStruct &response);
 
 };
 }

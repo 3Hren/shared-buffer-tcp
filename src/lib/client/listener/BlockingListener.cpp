@@ -3,7 +3,7 @@
 #include "client/BufferClient.h"
 
 #include "client/struct/AbstractResponse.h"
-#include "client/struct/ErrorResponse.h"
+#include "client/struct/ErrorResponseStruct.h"
 
 #include <QTimer>
 
@@ -18,7 +18,7 @@ BlockingListener::BlockingListener(int timeout, BufferClient *client, QObject *p
     connect(timer,SIGNAL(timeout()),SLOT(stopListening()));
     timer->start(timeout);
 
-    connect(client, SIGNAL(error(ErrorResponse)), SLOT(saveErrorResponse(ErrorResponse)));
+    connect(client, SIGNAL(error(ErrorResponseStruct)), SLOT(saveErrorResponse(ErrorResponseStruct)));
 }
 
 BlockingListener::~BlockingListener()
@@ -35,12 +35,12 @@ bool BlockingListener::isListening() const
     return listening;
 }
 
-ErrorResponse BlockingListener::getErrorResponse() const
+ErrorResponseStruct BlockingListener::getErrorResponse() const
 {    
     return errorResponse;
 }
 
-void BlockingListener::saveErrorResponse(const ErrorResponse &errorResponse)
+void BlockingListener::saveErrorResponse(const ErrorResponseStruct &errorResponse)
 {    
     this->errorResponse = errorResponse;
     stopListening();

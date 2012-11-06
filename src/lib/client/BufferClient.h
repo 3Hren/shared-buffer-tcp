@@ -6,7 +6,7 @@
 
 #include "SignalData.h"
 #include "struct/BufferResponse.h"
-#include "struct/ErrorResponse.h"
+#include "struct/ErrorResponseStruct.h"
 #include "struct/NormalResponse.h"
 #include "struct/SignalDataResponse.h"
 
@@ -43,7 +43,7 @@ public:
 Q_SIGNALS:
     void connected();
     void stateChanged(QAbstractSocket::SocketState state);
-    void error(const ErrorResponse &response);
+    void error(const ErrorResponseStruct &response);
     void signalDatasReceived(const SignalDataResponse &response);
     void bufferReceived(const BufferResponse &response);
     void normalResponseReceived(const NormalResponse &response);

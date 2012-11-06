@@ -3,13 +3,13 @@
 #include "Response.h"
 
 namespace BufferStorage {
-class ErrorMessageRequest : public Response
+class ErrorResponse : public Response
 {
     ErrorType errorType;
     QString errorMessage;    
 public:
-    ErrorMessageRequest();
-    ErrorMessageRequest(ProtocolType requestType, ErrorType errorType, const QString &errorMessage);
+    ErrorResponse();
+    ErrorResponse(ProtocolType requestType, ErrorType errorType, const QString &errorMessage);
 
     ErrorType getErrorType() const;
     QString getErrorMessage() const;

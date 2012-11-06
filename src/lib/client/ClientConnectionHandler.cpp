@@ -2,9 +2,11 @@
 
 #include "BufferClient.h"
 #include "BufferClientPrivate.h"
-#include "../RequestHandler.h"
+
+#include "RequestHandler.h"
 #include "ClientSideRequestHandlerFactory.h"
-#include "../exceptions/ProtocolException.h"
+
+#include "exceptions/ProtocolException.h"
 
 #include <QDebug>
 

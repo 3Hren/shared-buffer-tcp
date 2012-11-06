@@ -1,12 +1,13 @@
 #include "RequestFactory.h"
 
-#include "../BufferStorageGlobal.h"
+#include "BufferStorageGlobal.h"
+
 #include "PushRequest.h"
 #include "GetSignalDataRequest.h"
 #include "GetSignalDataResponse.h"
 #include "GetBufferRequest.h"
 #include "GetBufferResponse.h"
-#include "ErrorMessageRequest.h"
+#include "ErrorResponse.h"
 #include "NormalMessageResponse.h"
 
 #include <QDebug>
@@ -41,7 +42,7 @@ Request *RequestFactory::createRequestProtocol(QDataStream *inputStream) const
         requestProtocol = new GetBufferResponse();
         break;
     case RESPONSE_ERROR:
-        requestProtocol = new ErrorMessageRequest();
+        requestProtocol = new ErrorResponse();
         break;
     case RESPONSE_PUSH:
         requestProtocol = new NormalMessageResponse();

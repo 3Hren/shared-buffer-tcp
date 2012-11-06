@@ -1,8 +1,9 @@
 #include "GetBufferResponseHandler.h"
 
-#include "../BufferClient.h"
-#include "../BufferClientPrivate.h"
-#include "../../protocol/GetBufferResponse.h"
+#include "client/BufferClient.h"
+#include "client/BufferClientPrivate.h"
+
+#include "protocol/GetBufferResponse.h"
 
 using namespace BufferStorage;
 

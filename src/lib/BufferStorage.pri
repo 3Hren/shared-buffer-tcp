@@ -25,7 +25,6 @@ HEADERS += \
     FixedSizeQueue.h \
     client/listener/BlockingBufferListener.h \
     client/struct/BufferResponse.h \
-    client/struct/ErrorResponse.h \
     client/struct/SignalDataResponse.h \
     client/BufferClient.h \
     server/BufferServer.h \
@@ -44,15 +43,15 @@ HEADERS += \
     protocol/GetSignalDataRequest.h \
     protocol/GetBufferResponse.h \
     protocol/GetBufferRequest.h \
-    protocol/ErrorMessageRequest.h \
     protocol/Request.h \
     protocol/RequestFactory.h \
-    client/struct/AbstractResponse.h
+    client/struct/AbstractResponse.h \
+    protocol/ErrorResponse.h \
+    client/struct/ErrorResponseStruct.h
 
 SOURCES += \
     ConnectionHandler.cpp \
     RequestHandler.cpp \
-    protocol/ErrorMessageRequest.cpp \
     server/ServerConnectionHandler.cpp \
     client/ClientConnectionHandler.cpp \
     server/BufferServer.cpp \
@@ -82,4 +81,5 @@ SOURCES += \
     protocol/Response.cpp \
     protocol/RequestFactory.cpp \
     protocol/NormalMessageResponse.cpp \
-    protocol/GetSignalDataResponse.cpp
+    protocol/GetSignalDataResponse.cpp \
+    protocol/ErrorResponse.cpp

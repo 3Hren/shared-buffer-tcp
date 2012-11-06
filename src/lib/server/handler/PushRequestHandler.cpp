@@ -1,10 +1,12 @@
 #include "PushRequestHandler.h"
 
-#include "../BufferServer.h"
-#include "../BufferManager.h"
-#include "../../protocol/PushRequest.h"
+#include "server/BufferServer.h"
+#include "server/BufferManager.h"
+
+#include "protocol/PushRequest.h"
 #include "protocol/NormalMessageResponse.h"
-#include "../../exceptions/BufferException.h"
+
+#include "exceptions/BufferException.h"
 
 #include <QTcpSocket>
 

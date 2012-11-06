@@ -14,7 +14,7 @@
 #include "protocol/PushRequest.h"
 #include "protocol/GetSignalDataRequest.h"
 #include "protocol/GetSignalDataResponse.h"
-#include "protocol/ErrorMessageRequest.h"
+#include "protocol/ErrorResponse.h"
 #include "protocol/GetBufferRequest.h"
 #include "protocol/RequestFactory.h"
 #include "protocol/GetBufferResponse.h"
@@ -183,12 +183,12 @@ void CyclicBufferTest::testErrorMessageRequestSerializing()
     const QString errorMessage = tr("This is error message. Intended that it should be push error message. Type: %1. ErrorType: %2").arg(inputRequestType).arg(errorType);
 
     // Run
-    ErrorMessageRequest outputRequest(inputRequestType, errorType, errorMessage);
+    ErrorResponse outputRequest(inputRequestType, errorType, errorMessage);
     QScopedPointer<Request> inputRequest(getInputRequestThroughNetworkSendMock(&outputRequest));
 
     // Compare
     QCOMPARE(inputRequest->getType(), RESPONSE_ERROR);
-    ErrorMessageRequest *decodedInputRequest = static_cast<ErrorMessageRequest *>(inputRequest.data());
+    ErrorResponse *decodedInputRequest = static_cast<ErrorResponse *>(inputRequest.data());
     QCOMPARE(decodedInputRequest->getRequestType(), inputRequestType);
     QCOMPARE(decodedInputRequest->getErrorType(), errorType);
     QCOMPARE(decodedInputRequest->getErrorMessage(), errorMessage);
@@ -348,12 +348,12 @@ void CyclicBufferTest::testPushDataToServer()
 Q_DECLARE_METATYPE(ErrorResponse)
 void CyclicBufferTest::tryPushWrongDataCountToServerAndCompareError(quint16 dataCount, quint16 wrongDataCount, ErrorType errorType) const
 {
-    qRegisterMetaType<ErrorResponse>("ErrorResponse");
+    qRegisterMetaType<ErrorResponseStruct>("ErrorResponseStruct");
 
     // Initialize
     BufferServer server;
     BufferClient client;
-    QSignalSpy spy(&client, SIGNAL(error(ErrorResponse)));
+    QSignalSpy spy(&client, SIGNAL(error(ErrorResponseStruct)));
 
     initializeBufferTable(&server, dataCount);
     QVector<SignalData> data;
@@ -369,12 +369,11 @@ void CyclicBufferTest::tryPushWrongDataCountToServerAndCompareError(quint16 data
 
     QCOMPARE(spy.count(), 1);
     QVariantList arguments = spy.takeFirst();
-    QCOMPARE(arguments.at(0).canConvert<ErrorResponse>(), true);
-    const ErrorResponse &response = arguments.at(0).value<ErrorResponse>();
+    QCOMPARE(arguments.at(0).canConvert<ErrorResponseStruct>(), true);
+    const ErrorResponseStruct &response = arguments.at(0).value<ErrorResponseStruct>();
     QCOMPARE(response.requestType, REQUEST_PUSH);
     QCOMPARE(response.errorType, errorType);
 }
-
 
 void CyclicBufferTest::testPushDataToServerWithMoreDatasThanOnServer()
 {
@@ -475,7 +474,7 @@ void CyclicBufferTest::testGetValuesWrongSomeIndexes()
     // Initialize
     BufferServer server;
     BufferClient client;
-    QSignalSpy spy(&client, SIGNAL(error(ErrorResponse)));
+    QSignalSpy spy(&client, SIGNAL(error(ErrorResponseStruct)));
 
     initializeBufferTable(&server, 4, 1000, 1, 1024);
     QMap<quint16, SignalData> data;
@@ -500,9 +499,9 @@ void CyclicBufferTest::testGetValuesWrongSomeIndexes()
     // Compare
     QCOMPARE(spy.count(), 1);
     QVariantList arguments = spy.takeFirst();
-    QCOMPARE(arguments.at(0).canConvert<ErrorResponse>(), true);
+    QCOMPARE(arguments.at(0).canConvert<ErrorResponseStruct>(), true);
 
-    const ErrorResponse &response = arguments.at(0).value<ErrorResponse>();
+    const ErrorResponseStruct &response = arguments.at(0).value<ErrorResponseStruct>();
     QCOMPARE(response.requestType, REQUEST_GET_SIGNAL_DATA);
     QCOMPARE(response.errorType, WRONG_BUFFER_ID);
 }
@@ -512,7 +511,7 @@ void CyclicBufferTest::testGetValuesWrongTimeStamp()
     // Initialize
     BufferServer server;
     BufferClient client;
-    QSignalSpy spy(&client, SIGNAL(error(ErrorResponse)));
+    QSignalSpy spy(&client, SIGNAL(error(ErrorResponseStruct)));
 
     initializeBufferTable(&server, 4, 1000, 1, 1024);
     QMap<quint16, SignalData> data;
@@ -536,9 +535,9 @@ void CyclicBufferTest::testGetValuesWrongTimeStamp()
     // Compare
     QCOMPARE(spy.count(), 1);
     QVariantList arguments = spy.takeFirst();
-    QCOMPARE(arguments.at(0).canConvert<ErrorResponse>(), true);
+    QCOMPARE(arguments.at(0).canConvert<ErrorResponseStruct>(), true);
 
-    const ErrorResponse &response = arguments.at(0).value<ErrorResponse>();
+    const ErrorResponseStruct &response = arguments.at(0).value<ErrorResponseStruct>();
     QCOMPARE(response.requestType, REQUEST_GET_SIGNAL_DATA);
     QCOMPARE(response.errorType, WRONG_TIME_STAMP);
 }
@@ -611,7 +610,7 @@ void CyclicBufferTest::testGetBufferWrongIndex()
     // Init
     BufferServer server;
     BufferClient client;
-    QSignalSpy spy(&client, SIGNAL(error(ErrorResponse)));
+    QSignalSpy spy(&client, SIGNAL(error(ErrorResponseStruct)));
 
     // Run
     server.run();
@@ -622,9 +621,9 @@ void CyclicBufferTest::testGetBufferWrongIndex()
     // Compare
     QCOMPARE(spy.count(), 1);
     const QVariantList &arguments = spy.takeFirst();
-    QCOMPARE(arguments.at(0).canConvert<ErrorResponse>(), true);
+    QCOMPARE(arguments.at(0).canConvert<ErrorResponseStruct>(), true);
 
-    const ErrorResponse &response = arguments.at(0).value<ErrorResponse>();
+    const ErrorResponseStruct &response = arguments.at(0).value<ErrorResponseStruct>();
     QCOMPARE(response.requestType, REQUEST_GET_BUFFER);
     QCOMPARE(response.errorType, WRONG_BUFFER_ID);
 }

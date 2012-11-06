@@ -1,6 +1,6 @@
 #include "BlockingBufferListener.h"
 
-#include "../BufferClient.h"
+#include "client/BufferClient.h"
 
 #include <QTimer>
 

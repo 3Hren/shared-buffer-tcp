@@ -1,9 +1,9 @@
 #include "BufferClient.h"
 #include "BufferClientPrivate.h"
 
-#include "../protocol/PushRequest.h"
-#include "../protocol/GetSignalDataRequest.h"
-#include "../protocol/GetBufferRequest.h"
+#include "protocol/PushRequest.h"
+#include "protocol/GetSignalDataRequest.h"
+#include "protocol/GetBufferRequest.h"
 
 #include "listener/BlockingBufferListener.h"
 #include "listener/BlockingPushListener.h"

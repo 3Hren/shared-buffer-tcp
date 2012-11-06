@@ -1,7 +1,7 @@
 #include "ServerSideRequestHandlerFactory.h"
 
-#include "../BufferStorageGlobal.h"
-#include "../protocol/Request.h"
+#include "BufferStorageGlobal.h"
+#include "protocol/Request.h"
 
 #include "handler/PushRequestHandler.h"
 #include "handler/GetSignalDataRequestHandler.h"

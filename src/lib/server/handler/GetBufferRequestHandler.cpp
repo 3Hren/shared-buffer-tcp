@@ -1,10 +1,12 @@
 #include "GetBufferRequestHandler.h"
 
-#include "../BufferServer.h"
-#include "../BufferManager.h"
-#include "../../protocol/GetBufferRequest.h"
-#include "../../protocol/GetBufferResponse.h"
-#include "../../exceptions/BufferException.h"
+#include "server/BufferServer.h"
+#include "server/BufferManager.h"
+
+#include "protocol/GetBufferRequest.h"
+#include "protocol/GetBufferResponse.h"
+
+#include "exceptions/BufferException.h"
 
 #include <QTcpSocket>
 

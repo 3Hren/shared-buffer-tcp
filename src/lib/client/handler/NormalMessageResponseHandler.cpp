@@ -1,10 +1,10 @@
 #include "NormalMessageResponseHandler.h"
 
-#include "../BufferClientPrivate.h"
+#include "client/BufferClientPrivate.h"
 
 #include "protocol/NormalMessageResponse.h"
 
-#include "../struct/NormalResponse.h"
+#include "client/struct/NormalResponse.h"
 
 using namespace BufferStorage;
 
