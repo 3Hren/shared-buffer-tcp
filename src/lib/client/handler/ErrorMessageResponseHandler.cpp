@@ -19,7 +19,7 @@ void ErrorMessageResponseHandler::execute()
     const quint8 errorType = error->getErrorType();
     const QString &errorDescription = error->getErrorMessage();
 
-    ErrorResponse response(requestType, errorType, errorDescription);
+    ErrorResponse response(requestType, errorType, errorDescription);    
 
     clientPrivate->callError(response);
 }

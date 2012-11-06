@@ -19,7 +19,7 @@ void NormalMessageResponseHandler::execute()
     const quint8 requestType = messageResponse->getRequestType();
     const QString &message = messageResponse->getMessage();
 
-    NormalResponse response(requestType, message);
+    NormalResponse response(requestType, message);    
 
     clientPrivate->callNormalMessageReceived(response);
 }

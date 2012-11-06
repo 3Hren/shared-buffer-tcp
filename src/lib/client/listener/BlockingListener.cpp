@@ -36,12 +36,12 @@ bool BlockingListener::isListening() const
 }
 
 ErrorResponse BlockingListener::getErrorResponse() const
-{
+{    
     return errorResponse;
 }
 
 void BlockingListener::saveErrorResponse(const ErrorResponse &errorResponse)
-{
+{    
     this->errorResponse = errorResponse;
     stopListening();
 }

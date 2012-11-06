@@ -36,7 +36,7 @@ public:
 
     qint64 sendRequest(RequestProtocol *request);
     void checkConnection();
-    void waitForOperationDone(BlockingListener *listener, bool (QAbstractSocket::*wait)(int));
+    void waitForOperationDone(BlockingListener *listener);
 
     Q_SLOT void setSocketError(QAbstractSocket::SocketError abstractSocketError);        
 

@@ -40,16 +40,14 @@ void BufferClientPrivate::checkConnection()
         throw ClientNotConnectedException();
 }
 
-void BufferClientPrivate::waitForOperationDone(BlockingListener *listener, bool (QAbstractSocket::*wait)(int))
+void BufferClientPrivate::waitForOperationDone(BlockingListener *listener)
 {
-    while (listener->isListening()) {
-        (socket->*wait)(listener->getTimeout() / 10);
+    while (listener->isListening())
         qApp->processEvents();
-    }
 
     const ErrorResponse &errorResponse = listener->getErrorResponse();
     if (errorResponse.errorType != ProtocolError::NoError)
-        throw ProtocolException(errorResponse.errorType, errorResponse.description);
+        throw ProtocolException(errorResponse.requestType, errorResponse.errorType, errorResponse.description);
 }
 
 void BufferClientPrivate::setSocketError(QAbstractSocket::SocketError abstractSocketError)

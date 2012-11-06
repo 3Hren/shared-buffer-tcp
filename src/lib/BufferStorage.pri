@@ -9,7 +9,6 @@ HEADERS += \
     server/BufferManager.h \
     Buffer.h \
     exceptions/BufferNotFoundException.h \
-    exceptions/Exception.h \
     exceptions/BufferException.h \
     SignalData.h \
     exceptions/WrongRequestTypeException.h \
@@ -56,7 +55,8 @@ HEADERS += \
     client/listener/BlockingListener.h \
     client/listener/BlockingPushListener.h \
     client/struct/NormalResponse.h \
-    client/handler/NormalMessageResponseHandler.h
+    client/handler/NormalMessageResponseHandler.h \
+    exceptions/Exception.h
 
 SOURCES += \
     ConnectionHandler.cpp \

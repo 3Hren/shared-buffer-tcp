@@ -65,8 +65,7 @@ private Q_SLOTS:
     void testInitializingBufferManager();
     void testBufferNotFoundInBufferManager();
 
-    void testPushDataToServer();
-    void testBlockingPushDataToServer();
+    void testPushDataToServer();    
     void testPushDataToServerWithMoreDatasThanOnServer();
     void testPushDataToServerWithLessDatasThanOnServer();
 
@@ -76,14 +75,17 @@ private Q_SLOTS:
     void testGetValuesWrongTimeStamp();
 
     void testGetBuffer();
-    void testGetBufferWrongIndex();
+    void testGetBufferWrongIndex();    
 
     void benchmarkHashTableBufferManager();
     void benchmarkTreeBufferManager();
 
     void testHighLoad();
 
+    void testBlockingPushDataToServer();
+
     void testBlockingGetEmptyBuffer();
+    void testBlockingGetBufferWrongIndex();
     void testBlockingGetBufferClientNotConnectedError();
 };
 
@@ -331,33 +333,6 @@ void CyclicBufferTest::testPushDataToServer()
     client.waitForConnected();
     client.push(data);
     QTest::qWait(WAIT_MSEC);
-
-    // Compare
-    BufferManager *bM = server.getBufferManager();
-    for (int i = 0; i < MAX_BUFFERS; ++i) {
-        Buffer *buffer = bM->getBuffer(START_INDEX + i);
-        Q_ASSERT(buffer);
-        QCOMPARE(buffer->size(), (quint16)1);
-        QCOMPARE(buffer->first(), data.at(i));
-    }
-}
-
-void CyclicBufferTest::testBlockingPushDataToServer()
-{
-    const int MAX_BUFFERS = 10;
-    const int START_INDEX = 1000;
-
-    // Initialize
-    BufferServer server;
-    BufferClient client;
-    initializeBufferTable(&server, MAX_BUFFERS, START_INDEX);
-    QVector<SignalData> data;
-    data.fill(SignalData(55.5, 0), MAX_BUFFERS);
-
-    // Run
-    server.run();
-    client.blockingConnectToServer();
-    client.blockingPush(data);
 
     // Compare
     BufferManager *bM = server.getBufferManager();
@@ -747,6 +722,33 @@ public Q_SLOTS:
     }
 };
 
+void CyclicBufferTest::testBlockingPushDataToServer()
+{
+    const int MAX_BUFFERS = 10;
+    const int START_INDEX = 1000;
+
+    // Initialize
+    BufferServer server;
+    BufferClient client;
+    initializeBufferTable(&server, MAX_BUFFERS, START_INDEX);
+    QVector<SignalData> data;
+    data.fill(SignalData(55.5, 0), MAX_BUFFERS);
+
+    // Run
+    server.run();
+    client.blockingConnectToServer();
+    client.blockingPush(data);
+
+    // Compare
+    BufferManager *bM = server.getBufferManager();
+    for (int i = 0; i < MAX_BUFFERS; ++i) {
+        Buffer *buffer = bM->getBuffer(START_INDEX + i);
+        Q_ASSERT(buffer);
+        QCOMPARE(buffer->size(), (quint16)1);
+        QCOMPARE(buffer->first(), data.at(i));
+    }
+}
+
 void CyclicBufferTest::testBlockingGetEmptyBuffer()
 {
     QThread thread;
@@ -769,6 +771,30 @@ void CyclicBufferTest::testBlockingGetEmptyBuffer()
 
     thread.quit();
     thread.wait();
+}
+
+void CyclicBufferTest::testBlockingGetBufferWrongIndex()
+{
+    qWarning() << "While testing BLOCKING requests server MUST be started in separate thread or process";
+    QThread thread;
+    ServerRunner serverRunner(10, 10);
+    serverRunner.moveToThread(&thread);
+    thread.start();
+    connect(&thread,SIGNAL(started()),&serverRunner,SLOT(run()));
+    QTest::qWait(50); // Wait for thread is started and server run state.
+
+    BufferClient client;
+    client.blockingConnectToServer();
+    try {
+        client.blockingGetBuffer(500);
+        QFAIL("failed");
+    } catch (ProtocolException &e) {
+        QCOMPARE(e.getInputRequestType(), (quint8)ProtocolType::GetBufferRequest);
+        QCOMPARE(e.getErrorType(), (quint8)ProtocolError::BufferNotFound);
+
+        thread.quit();
+        thread.wait();
+    }
 }
 
 void CyclicBufferTest::testBlockingGetBufferClientNotConnectedError()

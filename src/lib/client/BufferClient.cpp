@@ -71,7 +71,7 @@ void BufferClient::blockingPush(const QVector<SignalData> &signalDatas, TimeStam
     d->checkConnection();
     push(signalDatas, timeStamp);
     BlockingPushListener listener(timeout, this);
-    d->waitForOperationDone(&listener, &QAbstractSocket::waitForBytesWritten);
+    d->waitForOperationDone(&listener);
 }
 
 qint64 BufferClient::getSignalData(const QVector<quint16> &bufferIds, TimeStamp timeStamp)
@@ -88,13 +88,16 @@ void BufferClient::getBuffer(quint16 bufferId)
     d->sendRequest(&request);
 }
 
+#include <QCoreApplication>
+#include "exceptions/ProtocolException.h"
+#include "exceptions/ClientNotConnectedException.h"
 BufferResponse BufferClient::blockingGetBuffer(quint16 bufferId, int timeout)
 {    
     Q_D(BufferClient);
     d->checkConnection();
     getBuffer(bufferId);
-    BlockingBufferListener listener(timeout, this);    
-    d->waitForOperationDone(&listener, &QAbstractSocket::waitForReadyRead);
+    BlockingBufferListener listener(timeout, this);
+    d->waitForOperationDone(&listener);
     return listener.getBufferResponse();
 }
 

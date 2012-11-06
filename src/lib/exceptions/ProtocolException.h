@@ -17,6 +17,13 @@ public:
         errorType(errorType)
     {}
 
+    ProtocolException(quint8 inputRequestType, quint8 errorType, const QString &reason) throw() :
+        Exception(reason),
+        timeStamp(0),
+        inputRequestType(inputRequestType),
+        errorType(errorType)
+    {}
+
     TimeStamp getTimeStamp() const {
         return timeStamp;
     }
