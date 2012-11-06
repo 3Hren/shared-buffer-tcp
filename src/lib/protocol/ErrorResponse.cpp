@@ -19,7 +19,7 @@ ErrorType ErrorResponse::getErrorType() const
 {
     return errorType;
 }
-
+//! @todo: rename to getReason
 QString ErrorResponse::getErrorMessage() const
 {
     return errorMessage;

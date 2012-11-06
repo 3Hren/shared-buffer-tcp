@@ -45,9 +45,9 @@ private:
     void initializeBufferTable(BufferServer *server, quint16 maximumIds, quint16 initialOffset, quint16 elementOffset, quint16 maximumBufferSize) const;
     Request *getInputRequestThroughNetworkSendMock(Request *outputRequest) const;
     void tryPushWrongDataCountToServerAndCompareError(quint16 dataCount, quint16 wrongDataCount, ErrorType errorType) const;
-    void compareBufferGetResults(QSignalSpy *spy, int spyCount, const QVector<TimeStamp> &bufferTimeStamps, const QVector<SignalData> &signalDatas) const;
+    void compareBufferGetResults(QSignalSpy *spy, int spyCount, const TimeStampVector &bufferTimeStamps, const SignalValueVector &signalDatas) const;
     void createBuffers(BufferManager *bufferManager) const;
-    QVector<SignalData> createSignalDatas() const;
+    SignalValueVector createSignalDatas() const;
 
 private Q_SLOTS:
     void testPushRequestSerializing();
@@ -125,8 +125,8 @@ void CyclicBufferTest::testPushRequestSerializing()
 {
     // Initialize
     TimeStamp timeStamp = QDateTime::currentDateTime().toTime_t();
-    QVector<SignalData> signalDatas;
-    signalDatas.fill(SignalData(10.0, 0), 10);
+    SignalValueVector signalDatas;
+    signalDatas.fill(SignalValue(10.0, 0), 10);
 
     // Run
     PushRequest outputRequest(timeStamp, signalDatas);
@@ -161,8 +161,8 @@ void CyclicBufferTest::testGetSignalDataResponseSerializing()
 {
     // Initialize
     TimeStamp timeStamp = QDateTime::currentDateTime().addSecs(-5).toTime_t();
-    QVector<SignalData> signalDatas;
-    signalDatas << SignalData(1.0, 0) << SignalData(2.5, 1) << SignalData(3.0, 2) << SignalData(-235.23, 0);
+    SignalValueVector signalDatas;
+    signalDatas << SignalValue(1.0, 0) << SignalValue(2.5, 1) << SignalValue(3.0, 2) << SignalValue(-235.23, 0);
 
     // Run
     GetSignalDataResponse outputRequest(timeStamp, signalDatas);
@@ -230,9 +230,9 @@ void CyclicBufferTest::testGetBufferResponseProtocolSerializing()
 {
     TimeStamp timeStamp = QDateTime::currentDateTime().toTime_t();
     quint16 bufferId = 8;
-    QVector<TimeStamp> timeStamps;
+    TimeStampVector timeStamps;
     timeStamps << timeStamp << timeStamp + 1 << timeStamp + 2;
-    QVector<SignalData> datas;
+    SignalValueVector datas;
 
     GetBufferResponse outputRequest(bufferId, timeStamps, datas);
     QScopedPointer<Request> inputRequest(getInputRequestThroughNetworkSendMock(&outputRequest));
@@ -325,8 +325,8 @@ void CyclicBufferTest::testPushDataToServer()
     BufferServer server;
     BufferClient client;
     initializeBufferTable(&server, MAX_BUFFERS, START_INDEX);
-    QVector<SignalData> data;
-    data.fill(SignalData(55.5, 0), MAX_BUFFERS);
+    SignalValueVector data;
+    data.fill(SignalValue(55.5, 0), MAX_BUFFERS);
 
     // Run
     server.run();
@@ -345,19 +345,18 @@ void CyclicBufferTest::testPushDataToServer()
     }
 }
 
-Q_DECLARE_METATYPE(ErrorResponse)
 void CyclicBufferTest::tryPushWrongDataCountToServerAndCompareError(quint16 dataCount, quint16 wrongDataCount, ErrorType errorType) const
 {
-    qRegisterMetaType<ErrorResponseStruct>("ErrorResponseStruct");
+    qRegisterMetaType<QSharedPointer<ErrorResponse> >("QSharedPointer<ErrorResponse>");
 
     // Initialize
     BufferServer server;
     BufferClient client;
-    QSignalSpy spy(&client, SIGNAL(error(ErrorResponseStruct)));
+    QSignalSpy spy(&client, SIGNAL(errorReceived(QSharedPointer<ErrorResponse>)));
 
     initializeBufferTable(&server, dataCount);
-    QVector<SignalData> data;
-    data.fill(SignalData(1.0, 0), wrongDataCount);
+    SignalValueVector data;
+    data.fill(SignalValue(1.0, 0), wrongDataCount);
     TimeStamp timeStamp = QDateTime::currentDateTime().toTime_t();
 
     // Run
@@ -369,10 +368,10 @@ void CyclicBufferTest::tryPushWrongDataCountToServerAndCompareError(quint16 data
 
     QCOMPARE(spy.count(), 1);
     QVariantList arguments = spy.takeFirst();
-    QCOMPARE(arguments.at(0).canConvert<ErrorResponseStruct>(), true);
-    const ErrorResponseStruct &response = arguments.at(0).value<ErrorResponseStruct>();
-    QCOMPARE(response.requestType, REQUEST_PUSH);
-    QCOMPARE(response.errorType, errorType);
+    QCOMPARE(arguments.at(0).canConvert<QSharedPointer<ErrorResponse> >(), true);
+    QSharedPointer<ErrorResponse> response = arguments.at(0).value<QSharedPointer<ErrorResponse> >();
+    QCOMPARE(response->getRequestType(), REQUEST_PUSH);
+    QCOMPARE(response->getErrorType(), errorType);
 }
 
 void CyclicBufferTest::testPushDataToServerWithMoreDatasThanOnServer()
@@ -389,22 +388,22 @@ void CyclicBufferTest::testPushDataToServerWithLessDatasThanOnServer()
     tryPushWrongDataCountToServerAndCompareError(DATA_COUNT, WRONG_DATA_COUNT, WRONG_INPUT_ARRAY_SIZE);
 }
 
-Q_DECLARE_METATYPE(SignalDataResponse)
+Q_DECLARE_METATYPE(SignalDataResponse) //! @todo:
 void CyclicBufferTest::testGetValueFromServer()
 {
-    qRegisterMetaType<SignalDataResponse>("SignalDataResponse");
+    qRegisterMetaType<QSharedPointer<Response> >("QSharedPointer<Response>");
 
     // Initialize
     BufferServer server;
     BufferClient client;
-    QSignalSpy spy(&client, SIGNAL(signalDatasReceived(SignalDataResponse)));
+    QSignalSpy spy(&client, SIGNAL(responseReceived(QSharedPointer<Response>)));
 
     initializeBufferTable(&server, 4, 1000, 1, 1024);
-    QMap<quint16, SignalData> data;
-    data.insert(1000, SignalData(100.0, 0));
-    data.insert(1001, SignalData(120.0, 0));
-    data.insert(1002, SignalData(-20.5, 1));
-    data.insert(1003, SignalData(300.1, 1));
+    QMap<quint16, SignalValue> data;
+    data.insert(1000, SignalValue(100.0, 0));
+    data.insert(1001, SignalValue(120.0, 0));
+    data.insert(1002, SignalValue(-20.5, 1));
+    data.insert(1003, SignalValue(300.1, 1));
     QDateTime pushCurrentDateTime = QDateTime::currentDateTime();
     TimeStamp pushTimeStamp = pushCurrentDateTime.toTime_t();
 
@@ -420,15 +419,15 @@ void CyclicBufferTest::testGetValueFromServer()
     QTest::qWait(WAIT_MSEC);
 
     // Compare
-    QCOMPARE(spy.count(), 1);
-    QVariantList arguments = spy.takeFirst();
-    QCOMPARE(arguments.at(0).canConvert<SignalDataResponse>(), true);
-
-    const SignalDataResponse &response = arguments.at(0).value<SignalDataResponse>();
-    QCOMPARE(response.requestType, REQUEST_GET_SIGNAL_DATA);
-    QCOMPARE(response.timeStamp, pushTimeStamp);
-    QCOMPARE(response.signalDatas.size(), 1);
-    QCOMPARE(response.signalDatas.at(0), SignalData(100.0, 0));
+    QCOMPARE(spy.count(), 2);
+    QVariantList arguments = spy.takeAt(1);
+    QCOMPARE(arguments.at(0).canConvert<QSharedPointer<Response> >(), true);
+    QSharedPointer<Response> response = arguments.at(0).value<QSharedPointer<Response> >();
+    QCOMPARE(response->getType(), RESPONSE_GET_SIGNAL_DATA);
+    GetSignalDataResponse *getSignalDataResponse = static_cast<GetSignalDataResponse *>(response.data());
+    QCOMPARE(getSignalDataResponse->getTimeStamp(), pushTimeStamp);
+    QCOMPARE(getSignalDataResponse->getSignalDatas().size(), 1);
+    QCOMPARE(getSignalDataResponse->getSignalDatas().at(0), SignalValue(100.0, 0));
 }
 
 void CyclicBufferTest::testGetValuesFromServer()
@@ -436,14 +435,14 @@ void CyclicBufferTest::testGetValuesFromServer()
     // Initialize
     BufferServer server;
     BufferClient client;
-    QSignalSpy spy(&client, SIGNAL(signalDatasReceived(SignalDataResponse)));
+    QSignalSpy spy(&client, SIGNAL(responseReceived(QSharedPointer<Response>)));
 
     initializeBufferTable(&server, 4, 1000, 1, 1024);
-    QMap<quint16, SignalData> data;
-    data.insert(1000, SignalData(100.0, 0));
-    data.insert(1001, SignalData(120.0, 0));
-    data.insert(1002, SignalData(-20.5, 1));
-    data.insert(1003, SignalData(300.1, 1));
+    QMap<quint16, SignalValue> data;
+    data.insert(1000, SignalValue(100.0, 0));
+    data.insert(1001, SignalValue(120.0, 0));
+    data.insert(1002, SignalValue(-20.5, 1));
+    data.insert(1003, SignalValue(300.1, 1));
     QDateTime pushCurrentDateTime = QDateTime::currentDateTime();
     TimeStamp pushTimeStamp = pushCurrentDateTime.toTime_t();
 
@@ -458,15 +457,16 @@ void CyclicBufferTest::testGetValuesFromServer()
     QTest::qWait(WAIT_MSEC);
 
     // Compare
-    QCOMPARE(spy.count(), 1);
-    QVariantList arguments = spy.takeFirst();
-    QCOMPARE(arguments.at(0).canConvert<SignalDataResponse>(), true);
+    QCOMPARE(spy.count(), 2);
+    QVariantList arguments = spy.takeAt(1);
+    QCOMPARE(arguments.at(0).canConvert<QSharedPointer<Response> >(), true);
 
-    const SignalDataResponse &response = arguments.at(0).value<SignalDataResponse>();
-    QCOMPARE(response.requestType, REQUEST_GET_SIGNAL_DATA);
-    QCOMPARE(response.timeStamp, pushTimeStamp);
-    QCOMPARE(response.signalDatas.size(), data.size());
-    QCOMPARE(response.signalDatas, data.values().toVector());
+    QSharedPointer<Response> response = arguments.at(0).value<QSharedPointer<Response> >();
+    QCOMPARE(response->getRequestType(), REQUEST_GET_SIGNAL_DATA);
+    GetSignalDataResponse *getSignalDataResponse = static_cast<GetSignalDataResponse *>(response.data());
+    QCOMPARE(getSignalDataResponse->getTimeStamp(), pushTimeStamp);
+    QCOMPARE(getSignalDataResponse->getSignalDatas().size(), data.size());
+    QCOMPARE(getSignalDataResponse->getSignalDatas(), data.values().toVector());
 }
 
 void CyclicBufferTest::testGetValuesWrongSomeIndexes()
@@ -474,14 +474,14 @@ void CyclicBufferTest::testGetValuesWrongSomeIndexes()
     // Initialize
     BufferServer server;
     BufferClient client;
-    QSignalSpy spy(&client, SIGNAL(error(ErrorResponseStruct)));
+    QSignalSpy spy(&client, SIGNAL(errorReceived(QSharedPointer<ErrorResponse>)));
 
     initializeBufferTable(&server, 4, 1000, 1, 1024);
-    QMap<quint16, SignalData> data;
-    data.insert(1000, SignalData(100.0, 0));
-    data.insert(1001, SignalData(120.0, 0));
-    data.insert(1002, SignalData(-20.5, 1));
-    data.insert(1003, SignalData(300.1, 1));
+    QMap<quint16, SignalValue> data;
+    data.insert(1000, SignalValue(100.0, 0));
+    data.insert(1001, SignalValue(120.0, 0));
+    data.insert(1002, SignalValue(-20.5, 1));
+    data.insert(1003, SignalValue(300.1, 1));
     QDateTime pushCurrentDateTime = QDateTime::currentDateTime();
     TimeStamp pushTimeStamp = pushCurrentDateTime.toTime_t();
 
@@ -499,11 +499,11 @@ void CyclicBufferTest::testGetValuesWrongSomeIndexes()
     // Compare
     QCOMPARE(spy.count(), 1);
     QVariantList arguments = spy.takeFirst();
-    QCOMPARE(arguments.at(0).canConvert<ErrorResponseStruct>(), true);
+    QCOMPARE(arguments.at(0).canConvert<QSharedPointer<ErrorResponse> >(), true);
 
-    const ErrorResponseStruct &response = arguments.at(0).value<ErrorResponseStruct>();
-    QCOMPARE(response.requestType, REQUEST_GET_SIGNAL_DATA);
-    QCOMPARE(response.errorType, WRONG_BUFFER_ID);
+    QSharedPointer<ErrorResponse> response = arguments.at(0).value<QSharedPointer<ErrorResponse> >();
+    QCOMPARE(response->getRequestType(), REQUEST_GET_SIGNAL_DATA);
+    QCOMPARE(response->getErrorType(), WRONG_BUFFER_ID);
 }
 
 void CyclicBufferTest::testGetValuesWrongTimeStamp()
@@ -511,14 +511,14 @@ void CyclicBufferTest::testGetValuesWrongTimeStamp()
     // Initialize
     BufferServer server;
     BufferClient client;
-    QSignalSpy spy(&client, SIGNAL(error(ErrorResponseStruct)));
+    QSignalSpy spy(&client, SIGNAL(errorReceived(QSharedPointer<ErrorResponse>)));
 
     initializeBufferTable(&server, 4, 1000, 1, 1024);
-    QMap<quint16, SignalData> data;
-    data.insert(1000, SignalData(100.0, 0));
-    data.insert(1001, SignalData(120.0, 0));
-    data.insert(1002, SignalData(-20.5, 1));
-    data.insert(1003, SignalData(300.1, 1));
+    QMap<quint16, SignalValue> data;
+    data.insert(1000, SignalValue(100.0, 0));
+    data.insert(1001, SignalValue(120.0, 0));
+    data.insert(1002, SignalValue(-20.5, 1));
+    data.insert(1003, SignalValue(300.1, 1));
     QDateTime pushCurrentDateTime = QDateTime::currentDateTime();
     TimeStamp pushTimeStamp = pushCurrentDateTime.toTime_t();
 
@@ -535,61 +535,57 @@ void CyclicBufferTest::testGetValuesWrongTimeStamp()
     // Compare
     QCOMPARE(spy.count(), 1);
     QVariantList arguments = spy.takeFirst();
-    QCOMPARE(arguments.at(0).canConvert<ErrorResponseStruct>(), true);
+    QCOMPARE(arguments.at(0).canConvert<QSharedPointer<ErrorResponse> >(), true);
 
-    const ErrorResponseStruct &response = arguments.at(0).value<ErrorResponseStruct>();
-    QCOMPARE(response.requestType, REQUEST_GET_SIGNAL_DATA);
-    QCOMPARE(response.errorType, WRONG_TIME_STAMP);
+    QSharedPointer<ErrorResponse> response = arguments.at(0).value<QSharedPointer<ErrorResponse> >();
+    QCOMPARE(response->getRequestType(), REQUEST_GET_SIGNAL_DATA);
+    QCOMPARE(response->getErrorType(), WRONG_TIME_STAMP);
 }
 
-void CyclicBufferTest::compareBufferGetResults(QSignalSpy *spy, int spyCount, const QVector<TimeStamp> &bufferTimeStamps, const QVector<SignalData> &signalDatas) const
+void CyclicBufferTest::compareBufferGetResults(QSignalSpy *spy, int spyCount, const TimeStampVector &bufferTimeStamps, const SignalValueVector &signalDatas) const
 {
-    const int BUFFER_DATA_POS = 0;
-
     QCOMPARE(spy->count(), spyCount);
-    const QVariantList &arguments = spy->takeFirst();
+    const QVariantList &arguments = spy->takeLast();
 
-    QCOMPARE(arguments.at(BUFFER_DATA_POS).canConvert<BufferResponse>(), true);
-    const BufferResponse &response = arguments.at(BUFFER_DATA_POS).value<BufferResponse>();
-
-    QCOMPARE(response.requestType, REQUEST_GET_BUFFER);
-    QCOMPARE(response.timeStamps, bufferTimeStamps);
-    QCOMPARE(response.signalDatas, signalDatas);
+    QCOMPARE(arguments.at(0).canConvert<QSharedPointer<Response> >(), true);
+    QSharedPointer<Response> response = arguments.at(0).value<QSharedPointer<Response> >();
+    GetBufferResponse *getBufferResponse = static_cast<GetBufferResponse *>(response.data());
+    QCOMPARE(getBufferResponse->getRequestType(), REQUEST_GET_BUFFER);
+    QCOMPARE(getBufferResponse->getBufferTimeStamps(), bufferTimeStamps);
+    QCOMPARE(getBufferResponse->getBufferData(), signalDatas);
 }
 
 Q_DECLARE_METATYPE(BufferResponse)
 void CyclicBufferTest::testGetBuffer()
 {
-    qRegisterMetaType<BufferResponse>("BufferResponse");
-
     // Initialize
     BufferServer server;
     BufferClient client;
-    QSignalSpy spy(&client, SIGNAL(bufferReceived(BufferResponse)));
+    QSignalSpy spy(&client, SIGNAL(responseReceived(QSharedPointer<Response>)));
 
     // Fill buffer
     initializeBufferTable(&server, 2);
     TimeStamp currentTimeStamp = QDateTime::currentDateTime().toTime_t();
-    QVector<TimeStamp> bufferTimeStamps;
+    TimeStampVector bufferTimeStamps;
     bufferTimeStamps << currentTimeStamp
                      << currentTimeStamp + 1
                      << currentTimeStamp + 2;
 
-    QVector<SignalData> bufferSignalDatas_0;
-    bufferSignalDatas_0 << SignalData(10.0, 0)
-                        << SignalData(10.5, 1)
-                        << SignalData(122.5, 0);
+    SignalValueVector bufferSignalDatas_0;
+    bufferSignalDatas_0 << SignalValue(10.0, 0)
+                        << SignalValue(10.5, 1)
+                        << SignalValue(122.5, 0);
 
-    QVector<SignalData> bufferSignalDatas_1;
-    bufferSignalDatas_1 << SignalData(10.0, 0)
-                        << SignalData(12.0, 1)
-                        << SignalData(15.5, 0);
+    SignalValueVector bufferSignalDatas_1;
+    bufferSignalDatas_1 << SignalValue(10.0, 0)
+                        << SignalValue(12.0, 1)
+                        << SignalValue(15.5, 0);
 
     // Run
     server.run();
     client.blockingConnectToServer();
     for (int i = 0; i < 3; ++i) {
-        QVector<SignalData> vec;
+        SignalValueVector vec;
         vec << bufferSignalDatas_0.at(i) << bufferSignalDatas_1.at(i);
         client.push(vec, bufferTimeStamps.at(i));
         QTest::qWait(WAIT_MSEC);
@@ -598,11 +594,11 @@ void CyclicBufferTest::testGetBuffer()
     // Compare
     client.getBuffer(0);
     QTest::qWait(WAIT_MSEC);
-    compareBufferGetResults(&spy, 1, bufferTimeStamps, bufferSignalDatas_0);
+    compareBufferGetResults(&spy, 4, bufferTimeStamps, bufferSignalDatas_0);
 
     client.getBuffer(1);
     QTest::qWait(WAIT_MSEC);
-    compareBufferGetResults(&spy, 1, bufferTimeStamps, bufferSignalDatas_1);
+    compareBufferGetResults(&spy, 4, bufferTimeStamps, bufferSignalDatas_1);
 }
 
 void CyclicBufferTest::testGetBufferWrongIndex()
@@ -610,7 +606,7 @@ void CyclicBufferTest::testGetBufferWrongIndex()
     // Init
     BufferServer server;
     BufferClient client;
-    QSignalSpy spy(&client, SIGNAL(error(ErrorResponseStruct)));
+    QSignalSpy spy(&client, SIGNAL(errorReceived(QSharedPointer<ErrorResponse>)));
 
     // Run
     server.run();
@@ -621,11 +617,11 @@ void CyclicBufferTest::testGetBufferWrongIndex()
     // Compare
     QCOMPARE(spy.count(), 1);
     const QVariantList &arguments = spy.takeFirst();
-    QCOMPARE(arguments.at(0).canConvert<ErrorResponseStruct>(), true);
+    QCOMPARE(arguments.at(0).canConvert<QSharedPointer<ErrorResponse> >(), true);
 
-    const ErrorResponseStruct &response = arguments.at(0).value<ErrorResponseStruct>();
-    QCOMPARE(response.requestType, REQUEST_GET_BUFFER);
-    QCOMPARE(response.errorType, WRONG_BUFFER_ID);
+    QSharedPointer<ErrorResponse> response = arguments.at(0).value<QSharedPointer<ErrorResponse> >();
+    QCOMPARE(response->getRequestType(), REQUEST_GET_BUFFER);
+    QCOMPARE(response->getErrorType(), WRONG_BUFFER_ID);
 }
 
 const int BUFFERS_COUNT = 30000;
@@ -640,12 +636,12 @@ void CyclicBufferTest::createBuffers(BufferManager *bufferManager) const
     bufferManager->setBuffers(map);
 }
 
-QVector<SignalData> CyclicBufferTest::createSignalDatas() const
+SignalValueVector CyclicBufferTest::createSignalDatas() const
 {
-    QVector<SignalData> signalDatas;
+    SignalValueVector signalDatas;
     signalDatas.reserve(BUFFERS_COUNT);
     for (int i = 0; i < BUFFERS_COUNT; ++i) {
-        SignalData signalData(qrand() % 10000 / 100.0, qrand() % 2);
+        SignalValue signalData(qrand() % 10000 / 100.0, qrand() % 2);
         signalDatas.append(signalData);
     }
 
@@ -656,7 +652,7 @@ void CyclicBufferTest::benchmarkHashTableBufferManager()
 {
     HashTableBufferManager bufferManager;
     createBuffers(&bufferManager);
-    QVector<SignalData> signalDatas = createSignalDatas();
+    SignalValueVector signalDatas = createSignalDatas();
 
     TimeStamp tS = 0;
     QBENCHMARK {
@@ -668,7 +664,7 @@ void CyclicBufferTest::benchmarkTreeBufferManager()
 {
     TreeBufferManager bM;
     createBuffers(&bM);
-    QVector<SignalData> sD = createSignalDatas();
+    SignalValueVector sD = createSignalDatas();
 
     TimeStamp tS = 0;
     QBENCHMARK {
@@ -684,14 +680,14 @@ void CyclicBufferTest::testHighLoad()
     BufferServer server;
     initializeBufferTable(&server, MAX_SIZE, 0, 1, 100);
     BufferClient client;
-    QVector<SignalData> data(MAX_SIZE);
+    SignalValueVector data(MAX_SIZE);
 
     server.run();
     client.blockingConnectToServer();
 
     for (int times = 0; times < 10; ++times) {
         for (quint16 i = 0; i < MAX_SIZE; ++i)
-            data.replace(i, SignalData(qrand() % 100 / 10, 0));
+            data.replace(i, SignalValue(qrand() % 100 / 10, 0));
         TimeStamp timeStamp = QDateTime::currentDateTime().toTime_t();
         client.push(data, timeStamp);
         QTest::qWait(WAIT_MSEC);
@@ -731,8 +727,8 @@ void CyclicBufferTest::testBlockingPushDataToServer()
     BufferServer server;
     BufferClient client;
     initializeBufferTable(&server, MAX_BUFFERS, START_INDEX);
-    QVector<SignalData> data;
-    data.fill(SignalData(55.5, 0), MAX_BUFFERS);
+    SignalValueVector data;
+    data.fill(SignalValue(55.5, 0), MAX_BUFFERS);
 
     // Run
     server.run();
@@ -761,13 +757,11 @@ void CyclicBufferTest::testBlockingGetEmptyBuffer()
 
     BufferClient client;
     bool isConnected = client.blockingConnectToServer();
-    const BufferResponse &response = client.blockingGetBuffer(0);
+    const SignalBuffer &response = client.blockingGetBuffer(0);
 
     QCOMPARE(isConnected, true);
-    QCOMPARE(response.bufferId, (quint16)0);
-    QCOMPARE(response.requestType, REQUEST_GET_BUFFER);
-    QCOMPARE(response.timeStamps.size(), 0);
-    QCOMPARE(response.signalDatas.size(), 0);
+    QCOMPARE(response.timeStampVector.size(), 0);
+    QCOMPARE(response.signalValueVector.size(), 0);
 
     thread.quit();
     thread.wait();

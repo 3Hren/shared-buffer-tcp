@@ -10,18 +10,18 @@
 
 using namespace BufferStorage;
 
-RequestHandler *ClientSideRequestHandlerFactory::createHandler(Request *requestProtocol, BufferClientPrivate *clientPrivate, QTcpSocket *socket)
+RequestHandler *ClientSideRequestHandlerFactory::createHandler(Request *request, BufferClientPrivate *clientPrivate, QTcpSocket *socket)
 {
-    quint8 type = requestProtocol->getType();
+    quint8 type = request->getType();
     switch (type) {
     case RESPONSE_ERROR:
-        return new ErrorMessageResponseHandler(requestProtocol, clientPrivate, socket);
+        return new ErrorMessageResponseHandler(request, clientPrivate, socket);
     case RESPONSE_PUSH:
-        return new NormalMessageResponseHandler(requestProtocol, clientPrivate, socket);
+        return new NormalMessageResponseHandler(request, clientPrivate, socket);
     case RESPONSE_GET_SIGNAL_DATA:
-        return new GetSignalDataResponseHandler(requestProtocol, clientPrivate, socket);
+        return new GetSignalDataResponseHandler(request, clientPrivate, socket);
     case RESPONSE_GET_BUFFER:
-        return new GetBufferResponseHandler(requestProtocol, clientPrivate, socket);
+        return new GetBufferResponseHandler(request, clientPrivate, socket);
     default:
         Q_ASSERT(false);
     }

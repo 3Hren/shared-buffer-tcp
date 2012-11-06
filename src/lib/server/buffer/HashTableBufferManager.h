@@ -15,9 +15,9 @@ public:
     Buffer *getBuffer(BufferId id) const;
     void setBuffers(const BufferInfoTable &bufferInfoMap);
 
-    QVector<TimeStamp> getTimeStamps() const;
-    QVector<TimeStamp> getTimeStampsForBuffer(BufferId bufferId) const;
-    SignalData getSignalData(BufferId bufferId, TimeStamp timeStamp) const;
-    void pushSignalDatas(const QVector<SignalData> &signalDatas, TimeStamp timeStamp);
+    TimeStampVector getTimeStamps() const;
+    TimeStampVector getTimeStampsForBuffer(BufferId bufferId) const;
+    SignalValue getSignalData(BufferId bufferId, TimeStamp timeStamp) const;
+    void pushSignalDatas(const SignalValueVector &signalDatas, TimeStamp timeStamp);
 };
 }

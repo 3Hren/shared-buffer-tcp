@@ -5,6 +5,7 @@
 #include "protocol/RequestFactory.h"
 
 #include <QTcpSocket>
+#include <QSharedPointer>
 
 using namespace BufferStorage;
 
@@ -40,8 +41,9 @@ void ConnectionHandler::readPendingData()
     }
 
     RequestFactory protocolFactory;
-    QScopedPointer<Request> inputRequest(protocolFactory.createRequestProtocol(&in));    
-    processRequest(inputRequest.data());
+    //QScopedPointer<Request> inputRequest(protocolFactory.createRequestProtocol(&in));
+    QSharedPointer<Request> inputRequest(protocolFactory.createRequestProtocol(&in));
+    processRequest(inputRequest);
 
     requestSize = 0;
 }

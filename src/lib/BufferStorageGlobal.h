@@ -22,8 +22,10 @@ typedef quint32 MessageSize;
 typedef quint32 Magic;
 typedef quint16 BufferId;
 typedef quint16 BufferSize;
+typedef quint16 ErrorCode;
 typedef QMap<BufferId, BufferSize> BufferInfoTable;
 typedef quint32 TimeStamp;
+typedef QVector<TimeStamp> TimeStampVector;
 
 static const Magic MAGIC = 927932743;
 enum ProtocolType {

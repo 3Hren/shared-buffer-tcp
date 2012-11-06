@@ -19,7 +19,7 @@ void GetSignalDataResponseHandler::execute()
 
     const ProtocolType &requestType = getSignalDataResponseProtocol->getRequestType();
     const TimeStamp &timeStamp = getSignalDataResponseProtocol->getTimeStamp();
-    const QVector<SignalData> &signalDatas = getSignalDataResponseProtocol->getSignalDatas();
+    const SignalValueVector &signalDatas = getSignalDataResponseProtocol->getSignalDatas();
     SignalDataResponse response(requestType, timeStamp, signalDatas);
 
     clientPrivate->callSignalDatasReceived(response);

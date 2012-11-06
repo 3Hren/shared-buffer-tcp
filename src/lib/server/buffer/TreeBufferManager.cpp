@@ -36,15 +36,15 @@ void TreeBufferManager::setBuffers(const BufferInfoTable &bufferInfoMap)
     timeStamps.setMaximumSize(timeStampsQueueSize);
 }
 
-QVector<TimeStamp> TreeBufferManager::getTimeStamps() const
+TimeStampVector TreeBufferManager::getTimeStamps() const
 {
     return timeStamps.toVector();
 }
 
-QVector<TimeStamp> TreeBufferManager::getTimeStampsForBuffer(BufferId bufferId) const
+TimeStampVector TreeBufferManager::getTimeStampsForBuffer(BufferId bufferId) const
 {
     Buffer *buffer = getBuffer(bufferId);
-    QVector<TimeStamp> timeStamps;
+    TimeStampVector timeStamps;
     quint16 offset = this->timeStamps.size() - buffer->size();
     timeStamps.reserve(buffer->size());
 
@@ -54,7 +54,7 @@ QVector<TimeStamp> TreeBufferManager::getTimeStampsForBuffer(BufferId bufferId) 
     return timeStamps;
 }
 
-SignalData TreeBufferManager::getSignalData(BufferId bufferId, TimeStamp timeStamp) const
+SignalValue TreeBufferManager::getSignalData(BufferId bufferId, TimeStamp timeStamp) const
 {
     const QQueue<TimeStamp> &timeStampsQueue = timeStamps.getData();
     Buffer *buffer = getBuffer(bufferId);
@@ -67,7 +67,7 @@ SignalData TreeBufferManager::getSignalData(BufferId bufferId, TimeStamp timeSta
     return buffer->at(signalDataId);
 }
 
-void TreeBufferManager::pushSignalDatas(const QVector<SignalData> &signalDatas, TimeStamp timeStamp)
+void TreeBufferManager::pushSignalDatas(const SignalValueVector &signalDatas, TimeStamp timeStamp)
 {
     if (signalDatas.size() != buffers.size())
         throw WrongPushedDataSizeException(signalDatas.size(), buffers.size());

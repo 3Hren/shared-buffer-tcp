@@ -6,6 +6,8 @@
 #include "RequestHandler.h"
 #include "ClientSideRequestHandlerFactory.h"
 
+#include "protocol/ErrorResponse.h"
+
 #include "exceptions/ProtocolException.h"
 
 #include <QDebug>
@@ -18,13 +20,24 @@ ClientConnectionHandler::ClientConnectionHandler(QTcpSocket *socket, QObject *vi
 {
 }
 
-void ClientConnectionHandler::processRequest(Request *requestProtocol)
-{    
-    try {
-        QScopedPointer<RequestHandler>handler(ClientSideRequestHandlerFactory::createHandler(requestProtocol, clientPrivate, socket));
+void ClientConnectionHandler::processRequest(Request *request)
+{        
+    /*try {
+        QScopedPointer<RequestHandler>handler(ClientSideRequestHandlerFactory::createHandler(request, clientPrivate, socket));
         handler->execute();
-    } catch (ProtocolException &e) {
-        qCritical() << e.getReason();
+    } catch (ProtocolException &exception) {
+        qCritical() << exception.getReason();
+    }*/
+}
+
+void ClientConnectionHandler::processRequest(QSharedPointer<Request> request)
+{
+    if (request->getType() == RESPONSE_ERROR) {
+        QSharedPointer<ErrorResponse> errorResponse = request.staticCast<ErrorResponse>();
+        clientPrivate->callErrorReceived(errorResponse);
+    } else {
+        QSharedPointer<Response> response = request.staticCast<Response>();
+        clientPrivate->callResponseReceived(response);
     }
 }
 

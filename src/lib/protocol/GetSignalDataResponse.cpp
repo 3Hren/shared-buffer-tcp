@@ -7,7 +7,7 @@ GetSignalDataResponse::GetSignalDataResponse() :
 {
 }
 
-GetSignalDataResponse::GetSignalDataResponse(TimeStamp timeStamp, const QVector<SignalData> &signalDatas) :
+GetSignalDataResponse::GetSignalDataResponse(TimeStamp timeStamp, const SignalValueVector &signalDatas) :
     Response(RESPONSE_GET_SIGNAL_DATA, REQUEST_GET_SIGNAL_DATA),
     timeStamp(timeStamp),
     signalDatas(signalDatas)
@@ -19,7 +19,7 @@ TimeStamp GetSignalDataResponse::getTimeStamp() const
     return timeStamp;
 }
 
-QVector<SignalData> GetSignalDataResponse::getSignalDatas() const
+SignalValueVector GetSignalDataResponse::getSignalDatas() const
 {
     return signalDatas;
 }

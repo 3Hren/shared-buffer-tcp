@@ -20,7 +20,7 @@ headers.path = ../../lib/include
 headers.files += \
     BufferStorageGlobal.h \
     Runnable.h \
-    SignalData.h \
+    SignalValue.h \
     server/BufferServer.h \
     client/BufferClient.h \    
 

@@ -6,6 +6,8 @@
 
 #include "listener/BlockingListener.h"
 
+#include "protocol/Response.h"
+
 #include "exceptions/ClientException.h"
 #include "exceptions/ProtocolException.h"
 
@@ -75,4 +77,14 @@ void BufferClientPrivate::callError(const ErrorResponseStruct &response)
 void BufferClientPrivate::callNormalMessageReceived(const NormalResponse &response)
 {
     client->normalResponseReceived(response);
+}
+
+void BufferClientPrivate::callResponseReceived(QSharedPointer<Response> response)
+{
+    client->responseReceived(response);
+}
+
+void BufferClientPrivate::callErrorReceived(QSharedPointer<ErrorResponse> errorResponse)
+{
+    client->errorReceived(errorResponse);
 }

@@ -3,16 +3,20 @@
 #include <QObject>
 
 #include "BufferStorageGlobal.h"
+#include "SignalBuffer.h"
 
-#include "SignalData.h"
+#include "SignalValue.h"
 #include "struct/BufferResponse.h"
 #include "struct/ErrorResponseStruct.h"
 #include "struct/NormalResponse.h"
 #include "struct/SignalDataResponse.h"
 
 #include <QDateTime>
+#include <QSharedPointer>
 
 namespace BufferStorage {
+class Response;
+class ErrorResponse;
 class BufferClientPrivate;
 class BufferClient : public QObject
 {        
@@ -30,18 +34,21 @@ public:
     bool blockingDisconnectFromServer(int timeout = 1500);
     bool waitForConnected(int timeout = 1500) const;
 
-    void push(const QVector<SignalData> &signalDatas, TimeStamp timeStamp = QDateTime::currentDateTime().toTime_t());
-    void blockingPush(const QVector<SignalData> &signalDatas, TimeStamp timeStamp = QDateTime::currentDateTime().toTime_t(), int timeout = 1500);
+    void push(const SignalValueVector &signalDatas, TimeStamp timeStamp = QDateTime::currentDateTime().toTime_t());
+    void blockingPush(const SignalValueVector &signalDatas, TimeStamp timeStamp = QDateTime::currentDateTime().toTime_t(), int timeout = 1500);
 
     qint64 getSignalData(const QVector<BufferId> &bufferIds, TimeStamp timeStamp);
 
     void getBuffer(BufferId bufferId);
-    BufferResponse blockingGetBuffer(BufferId bufferId, int timeout = 1500);
+    SignalBuffer blockingGetBuffer(BufferId bufferId, int timeout = 1500);
 
     SocketError getSocketError() const;
 
 Q_SIGNALS:
     void connected();
+    void responseReceived(QSharedPointer<Response> response);
+    void errorReceived(QSharedPointer<ErrorResponse> errorResponse);
+
     void stateChanged(QAbstractSocket::SocketState state);
     void error(const ErrorResponseStruct &response); //! @todo: эти вот структуры можно пихнуть
     void signalDatasReceived(const SignalDataResponse &response);

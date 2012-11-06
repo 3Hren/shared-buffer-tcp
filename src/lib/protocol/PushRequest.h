@@ -3,7 +3,7 @@
 #include "Request.h"
 
 #include "BufferStorageGlobal.h"
-#include "SignalData.h"
+#include "SignalValue.h"
 
 #include <QVector>
 
@@ -11,13 +11,13 @@ namespace BufferStorage {
 class PushRequest : public Request
 {
     TimeStamp timeStamp;
-    QVector<SignalData> signalDatas;
+    SignalValueVector signalDatas;
 public:
     PushRequest();
-    PushRequest(TimeStamp timeStamp, const QVector<SignalData> &signalDatas);
+    PushRequest(TimeStamp timeStamp, const SignalValueVector &signalDatas);
 
     TimeStamp getTimeStamp() const;
-    QVector<SignalData> getSignalDataVector() const;
+    SignalValueVector getSignalDataVector() const;
 
 protected:
     void encodeData(QDataStream *out) const;

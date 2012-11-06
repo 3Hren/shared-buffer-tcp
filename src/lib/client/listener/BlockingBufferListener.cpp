@@ -8,17 +8,19 @@ using namespace BufferStorage;
 
 BlockingBufferListener::BlockingBufferListener(int timeout, BufferClient *client, QObject *parent) :
     BlockingListener(timeout, client, parent)
-{
-    connect(client,SIGNAL(bufferReceived(BufferResponse)),SLOT(saveBufferResponse(BufferResponse)));
+{    
+    connect(client, SIGNAL(responseReceived(QSharedPointer<Response>)), SLOT(saveResponse(QSharedPointer<Response>)));
+    connect(client, SIGNAL(errorReceived(QSharedPointer<ErrorResponse>)), SLOT(saveErrorResponse(QSharedPointer<ErrorResponse>)));
 }
 
-BufferResponse BlockingBufferListener::getBufferResponse() const
+void BlockingBufferListener::saveResponse(QSharedPointer<Response> response)
 {
-    return bufferResponse;
+    this->response = response;
+    stopListening();
 }
 
-void BlockingBufferListener::saveBufferResponse(const BufferResponse &bufferResponse)
+void BlockingBufferListener::saveErrorResponse(QSharedPointer<ErrorResponse> errorResponse)
 {
-    this->bufferResponse = bufferResponse;
+    this->response = errorResponse;
     stopListening();
 }

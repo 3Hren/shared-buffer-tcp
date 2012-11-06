@@ -9,7 +9,7 @@ GetBufferResponse::GetBufferResponse() :
 }
 
 
-GetBufferResponse::GetBufferResponse(BufferId bufferId, const QVector<TimeStamp> &bufferTimeStamps, const QVector<SignalData> &bufferData) :
+GetBufferResponse::GetBufferResponse(BufferId bufferId, const TimeStampVector &bufferTimeStamps, const SignalValueVector &bufferData) :
     Response(RESPONSE_GET_BUFFER, REQUEST_GET_BUFFER),
     bufferId(bufferId),
     bufferTimeStamps(bufferTimeStamps),
@@ -22,12 +22,12 @@ BufferId GetBufferResponse::getBufferId() const
     return bufferId;
 }
 
-QVector<TimeStamp> GetBufferResponse::getBufferTimeStamps() const
+TimeStampVector GetBufferResponse::getBufferTimeStamps() const
 {
     return bufferTimeStamps;
 }
 
-QVector<SignalData> GetBufferResponse::getBufferData() const
+SignalValueVector GetBufferResponse::getBufferData() const
 {
     return bufferData;
 }

@@ -4,5 +4,5 @@ CONFIG += ordered
 
 SUBDIRS += \
     lib \
-    app \
+    #app \
     tests

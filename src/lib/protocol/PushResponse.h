@@ -17,3 +17,5 @@ protected:
     void decodeData(QDataStream *in);
 };
 }
+
+Q_DECLARE_METATYPE(BufferStorage::PushResponse*)

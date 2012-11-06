@@ -2,7 +2,7 @@
 
 #include "Response.h"
 
-#include "SignalData.h"
+#include "SignalValue.h"
 
 #include <QVector>
 
@@ -10,16 +10,18 @@ namespace BufferStorage {
 class GetSignalDataResponse : public Response
 {
     TimeStamp timeStamp;
-    QVector<SignalData> signalDatas;
+    SignalValueVector signalDatas;
 public:
     GetSignalDataResponse();
-    GetSignalDataResponse(TimeStamp timeStamp, const QVector<SignalData> &signalDatas);
+    GetSignalDataResponse(TimeStamp timeStamp, const SignalValueVector &signalDatas);
 
     TimeStamp getTimeStamp() const;
-    QVector<SignalData> getSignalDatas() const;
+    SignalValueVector getSignalDatas() const;
 
 protected:
     void encodeData(QDataStream *out) const;
     void decodeData(QDataStream *in);
 };
 }
+
+Q_DECLARE_METATYPE(BufferStorage::GetSignalDataResponse*)

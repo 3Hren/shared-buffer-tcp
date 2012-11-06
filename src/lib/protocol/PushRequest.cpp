@@ -7,7 +7,7 @@ PushRequest::PushRequest() :
 {
 }
 
-PushRequest::PushRequest(TimeStamp timeStamp, const QVector<SignalData> &signalDatas) :
+PushRequest::PushRequest(TimeStamp timeStamp, const SignalValueVector &signalDatas) :
     Request(REQUEST_PUSH),
     timeStamp(timeStamp),
     signalDatas(signalDatas)
@@ -19,7 +19,8 @@ TimeStamp PushRequest::getTimeStamp() const
     return timeStamp;
 }
 
-QVector<SignalData> PushRequest::getSignalDataVector() const
+//! @todo: rename
+SignalValueVector PushRequest::getSignalDataVector() const
 {
     return signalDatas;
 }

@@ -9,6 +9,6 @@ class BufferClientPrivate;
 class ClientSideRequestHandlerFactory
 {
 public:
-    static RequestHandler *createHandler(Request *requestProtocol, BufferClientPrivate *clientPrivate, QTcpSocket *socket);
+    static RequestHandler *createHandler(Request *request, BufferClientPrivate *clientPrivate, QTcpSocket *socket);
 };
 }

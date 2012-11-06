@@ -2,24 +2,27 @@
 
 #include "Response.h"
 
-#include "SignalData.h"
+#include "SignalValue.h"
 
 namespace BufferStorage {
 class GetBufferResponse : public Response
 {
     BufferId bufferId;
-    QVector<TimeStamp> bufferTimeStamps;
-    QVector<SignalData> bufferData;
+    TimeStampVector bufferTimeStamps;
+    SignalValueVector bufferData;
 public:
     GetBufferResponse();
-    GetBufferResponse(BufferId bufferId, const QVector<TimeStamp> &bufferTimeStamps, const QVector<SignalData> &bufferData);
+    GetBufferResponse(BufferId bufferId, const TimeStampVector &bufferTimeStamps, const SignalValueVector &bufferData);
 
     BufferId getBufferId() const;
-    QVector<TimeStamp> getBufferTimeStamps() const;
-    QVector<SignalData> getBufferData() const;
+    TimeStampVector getBufferTimeStamps() const;
+    SignalValueVector getBufferData() const;
 
 protected:
     void encodeData(QDataStream *out) const;
     void decodeData(QDataStream *in);
 };
 }
+
+#include <QSharedPointer>
+Q_DECLARE_METATYPE(QSharedPointer<BufferStorage::GetBufferResponse>)

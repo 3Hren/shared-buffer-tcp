@@ -4,6 +4,7 @@
 #include "protocol/PushRequest.h"
 #include "protocol/GetSignalDataRequest.h"
 #include "protocol/GetBufferRequest.h"
+#include "protocol/GetBufferResponse.h"
 
 #include "listener/BlockingBufferListener.h"
 #include "listener/BlockingPushListener.h"
@@ -58,14 +59,14 @@ bool BufferClient::waitForConnected(int timeout) const
     return d->socket->waitForConnected(timeout);
 }
 
-void BufferClient::push(const QVector<SignalData> &signalDatas, TimeStamp timeStamp)
+void BufferClient::push(const SignalValueVector &signalDatas, TimeStamp timeStamp)
 {
     Q_D(BufferClient);
     PushRequest request(timeStamp, signalDatas);
     d->sendRequest(&request);
 }
 
-void BufferClient::blockingPush(const QVector<SignalData> &signalDatas, TimeStamp timeStamp, int timeout)
+void BufferClient::blockingPush(const SignalValueVector &signalDatas, TimeStamp timeStamp, int timeout)
 {
     Q_D(BufferClient);
     d->checkConnection();
@@ -88,14 +89,16 @@ void BufferClient::getBuffer(BufferId bufferId)
     d->sendRequest(&request);
 }
 
-BufferResponse BufferClient::blockingGetBuffer(BufferId bufferId, int timeout)
+SignalBuffer BufferClient::blockingGetBuffer(BufferId bufferId, int timeout)
 {    
     Q_D(BufferClient);
     d->checkConnection();
     getBuffer(bufferId);
     BlockingBufferListener listener(timeout, this);
     d->waitForOperationDone(&listener);
-    return listener.getBufferResponse();
+    GetBufferResponse *response = listener.getResponse<GetBufferResponse *>();
+    const SignalBuffer signalBuffer(response->getBufferTimeStamps(), response->getBufferData());
+    return signalBuffer;
 }
 
 SocketError BufferClient::getSocketError() const

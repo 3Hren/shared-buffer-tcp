@@ -24,7 +24,7 @@ void GetSignalDataRequestHandler::execute()
 
     const QVector<quint16> &bufferIds = getSignalDataRequestProtocol->getRequestedBufferIndexes();
     TimeStamp timeStamp = getSignalDataRequestProtocol->getTimeStamp();
-    QVector<SignalData> signalDatas;
+    SignalValueVector signalDatas;
     signalDatas.reserve(bufferIds.size());
 
     try {

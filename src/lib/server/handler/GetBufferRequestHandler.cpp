@@ -24,8 +24,8 @@ void GetBufferRequestHandler::execute()
 
     BufferId bufferId = getBufferRequestProtocol->getBufferId();
 
-    QVector<TimeStamp> bufferTimeStamps;
-    QVector<SignalData> bufferData;
+    TimeStampVector bufferTimeStamps;
+    SignalValueVector bufferData;
     try {
         bufferTimeStamps = bufferManager->getTimeStampsForBuffer(bufferId);
         Buffer *buffer = bufferManager->getBuffer(bufferId);

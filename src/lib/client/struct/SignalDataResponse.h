@@ -2,19 +2,19 @@
 
 #include "AbstractResponse.h"
 
-#include "SignalData.h"
+#include "SignalValue.h"
 
 namespace BufferStorage {
 struct SignalDataResponse : public AbstractResponse
 {
     SignalDataResponse() : AbstractResponse() {}
-    SignalDataResponse(ProtocolType requestType, TimeStamp timeStamp, const QVector<SignalData> &signalDatas) :
+    SignalDataResponse(ProtocolType requestType, TimeStamp timeStamp, const SignalValueVector &signalDatas) :
         AbstractResponse(requestType),
         timeStamp(timeStamp),
         signalDatas(signalDatas)
     {}
 
     TimeStamp timeStamp;
-    QVector<SignalData> signalDatas;
+    SignalValueVector signalDatas;//! @todo: rename
 };
 }

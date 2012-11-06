@@ -38,15 +38,15 @@ void HashTableBufferManager::setBuffers(const BufferInfoTable &bufferInfoMap)
     timeStamps.setMaximumSize(timeStampsQueueSize);
 }
 
-QVector<TimeStamp> HashTableBufferManager::getTimeStamps() const
+TimeStampVector HashTableBufferManager::getTimeStamps() const
 {
     return timeStamps.toVector();
 }
 
-QVector<TimeStamp> HashTableBufferManager::getTimeStampsForBuffer(BufferId bufferId) const
+TimeStampVector HashTableBufferManager::getTimeStampsForBuffer(BufferId bufferId) const
 {
     Buffer *buffer = getBuffer(bufferId);
-    QVector<TimeStamp> timeStamps;
+    TimeStampVector timeStamps;
     quint16 offset = this->timeStamps.size() - buffer->size();
     timeStamps.reserve(buffer->size());
 
@@ -56,7 +56,7 @@ QVector<TimeStamp> HashTableBufferManager::getTimeStampsForBuffer(BufferId buffe
     return timeStamps;
 }
 
-SignalData HashTableBufferManager::getSignalData(BufferId bufferId, TimeStamp timeStamp) const
+SignalValue HashTableBufferManager::getSignalData(BufferId bufferId, TimeStamp timeStamp) const
 {
     const QQueue<TimeStamp> &timeStampsQueue = timeStamps.getData();
     Buffer *buffer = getBuffer(bufferId);    
@@ -69,14 +69,14 @@ SignalData HashTableBufferManager::getSignalData(BufferId bufferId, TimeStamp ti
     return buffer->at(signalDataId);
 }
 
-void HashTableBufferManager::pushSignalDatas(const QVector<SignalData> &signalDatas, TimeStamp timeStamp)
+void HashTableBufferManager::pushSignalDatas(const SignalValueVector &signalDatas, TimeStamp timeStamp)
 {
     if (signalDatas.size() != buffersVector.size())
         throw WrongPushedDataSizeException(signalDatas.size(), buffersVector.size());
 
     for (int id = 0; id < buffersVector.size(); ++id) {
         Buffer *buffer = buffersVector.at(id);
-        const SignalData &signalData = signalDatas.at(id);
+        const SignalValue &signalData = signalDatas.at(id);
         buffer->enqueue(signalData);
     }
 

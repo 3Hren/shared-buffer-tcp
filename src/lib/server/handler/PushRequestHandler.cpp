@@ -22,7 +22,7 @@ void PushRequestHandler::execute()
     BufferManager *bufferManager = server->getBufferManager();
     PushRequest *pushRequestProtocol = static_cast<PushRequest *>(requestProtocol);
 
-    const QVector<SignalData> &signalDatas = pushRequestProtocol->getSignalDataVector();
+    const SignalValueVector &signalDatas = pushRequestProtocol->getSignalDataVector();
     const TimeStamp &timeStamp = pushRequestProtocol->getTimeStamp();
 
     try {

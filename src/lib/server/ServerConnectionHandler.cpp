@@ -20,14 +20,19 @@ ServerConnectionHandler::ServerConnectionHandler(QTcpSocket *socket, QObject *vi
     connect(socket,SIGNAL(disconnected()),socket,SLOT(deleteLater()));
 }
 
-void ServerConnectionHandler::processRequest(Request *requestProtocol)
+void ServerConnectionHandler::processRequest(Request *request)
 {        
     try {        
-        QScopedPointer<RequestHandler>handler(ServerSideRequestHandlerFactory::createHandler(requestProtocol, server, socket));
+        QScopedPointer<RequestHandler>handler(ServerSideRequestHandlerFactory::createHandler(request, server, socket));
         handler->execute();
     } catch (ProtocolException &e) {
-        ErrorResponse errorMessageRequest(requestProtocol->getType(), e.getErrorType(), e.getReason());
+        ErrorResponse errorMessageRequest(request->getType(), e.getErrorType(), e.getReason());
         const QByteArray &encodedMessage = errorMessageRequest.encode();
         socket->write(encodedMessage);
     }
+}
+
+void ServerConnectionHandler::processRequest(QSharedPointer<Request> request)
+{
+    processRequest(request.data());
 }

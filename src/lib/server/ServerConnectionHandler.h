@@ -12,6 +12,7 @@ public:
     ServerConnectionHandler(QTcpSocket *socket, QObject *visitor);
     
 protected:
-    void processRequest(Request *requestProtocol);
+    void processRequest(Request *request);
+    void processRequest(QSharedPointer<Request> request);
 };
 }

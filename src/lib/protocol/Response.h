@@ -14,3 +14,6 @@ public:
     ProtocolType getRequestType() const;
 };
 }
+
+#include <QSharedPointer>
+Q_DECLARE_METATYPE(QSharedPointer<BufferStorage::Response>)

@@ -4,7 +4,6 @@ HEADERS += \
     server/BufferManager.h \
     Buffer.h \
     exceptions/BufferException.h \
-    SignalData.h \
     exceptions/ProtocolException.h \
     ConnectionHandler.h \
     RequestHandler.h \
@@ -47,7 +46,9 @@ HEADERS += \
     client/struct/AbstractResponse.h \
     protocol/ErrorResponse.h \
     client/struct/ErrorResponseStruct.h \
-    protocol/PushResponse.h
+    protocol/PushResponse.h \
+    ../../lib/SignalBuffer.h \
+    ../../lib/SignalValue.h
 
 SOURCES += \
     ConnectionHandler.cpp \

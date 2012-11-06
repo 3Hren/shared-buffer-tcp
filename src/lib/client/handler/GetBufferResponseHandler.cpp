@@ -17,9 +17,9 @@ void GetBufferResponseHandler::execute()
     GetBufferResponse *getBufferResponseProtocol = static_cast<GetBufferResponse *>(requestProtocol);
 
     const ProtocolType requestType = getBufferResponseProtocol->getRequestType();
-    const quint16 id = getBufferResponseProtocol->getBufferId();
-    const QVector<TimeStamp> &timeStamps = getBufferResponseProtocol->getBufferTimeStamps();
-    const QVector<SignalData> &datas = getBufferResponseProtocol->getBufferData();
+    const BufferId id = getBufferResponseProtocol->getBufferId();
+    const TimeStampVector &timeStamps = getBufferResponseProtocol->getBufferTimeStamps();
+    const SignalValueVector &datas = getBufferResponseProtocol->getBufferData();
 
     BufferResponse response(requestType, id, timeStamps, datas);
 

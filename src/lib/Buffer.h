@@ -1,8 +1,8 @@
 #pragma once
 
 #include "FixedSizeQueue.h"
-#include "SignalData.h"
+#include "SignalValue.h"
 
 namespace BufferStorage {
-typedef FixedSizeQueue<SignalData> Buffer;
+typedef FixedSizeQueue<SignalValue> Buffer;
 }
