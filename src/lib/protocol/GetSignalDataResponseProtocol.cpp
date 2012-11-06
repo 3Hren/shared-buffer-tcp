@@ -3,12 +3,12 @@
 using namespace BufferStorage;
 
 GetSignalDataResponseProtocol::GetSignalDataResponseProtocol() :
-    ResponseProtocol(ProtocolType::GetSignalDataResponse, ProtocolType::GetSignalDataRequest)
+    ResponseProtocol(RESPONSE_GET_SIGNAL_DATA, REQUEST_GET_SIGNAL_DATA)
 {
 }
 
 GetSignalDataResponseProtocol::GetSignalDataResponseProtocol(TimeStamp timeStamp, const QVector<SignalData> &signalDatas) :
-    ResponseProtocol(ProtocolType::GetSignalDataResponse, ProtocolType::GetSignalDataRequest),
+    ResponseProtocol(RESPONSE_GET_SIGNAL_DATA, REQUEST_GET_SIGNAL_DATA),
     timeStamp(timeStamp),
     signalDatas(signalDatas)
 {

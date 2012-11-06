@@ -3,14 +3,14 @@
 using namespace BufferStorage;
 
 GetBufferResponseProtocol::GetBufferResponseProtocol() :
-    ResponseProtocol(ProtocolType::GetBufferResponse, ProtocolType::GetBufferRequest),
+    ResponseProtocol(RESPONSE_GET_BUFFER, REQUEST_GET_BUFFER),
     bufferId(0)
 {
 }
 
 
 GetBufferResponseProtocol::GetBufferResponseProtocol(quint16 bufferId, const QVector<TimeStamp> &bufferTimeStamps, const QVector<SignalData> &bufferData) :
-    ResponseProtocol(ProtocolType::GetBufferResponse, ProtocolType::GetBufferRequest),
+    ResponseProtocol(RESPONSE_GET_BUFFER, REQUEST_GET_BUFFER),
     bufferId(bufferId),
     bufferTimeStamps(bufferTimeStamps),
     bufferData(bufferData)

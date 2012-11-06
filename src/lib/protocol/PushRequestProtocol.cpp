@@ -3,12 +3,12 @@
 using namespace BufferStorage;
 
 PushRequestProtocol::PushRequestProtocol() :
-    RequestProtocol(ProtocolType::PushRequest)
+    RequestProtocol(REQUEST_PUSH)
 {
 }
 
 PushRequestProtocol::PushRequestProtocol(TimeStamp timeStamp, const QVector<SignalData> &signalDatas) :
-    RequestProtocol(ProtocolType::PushRequest),
+    RequestProtocol(REQUEST_PUSH),
     timeStamp(timeStamp),
     signalDatas(signalDatas)
 {

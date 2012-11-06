@@ -6,7 +6,7 @@
 namespace BufferStorage {
 struct Response {
     Response() :
-        requestType(ProtocolType::UnknownType)
+        requestType(UNKNOWN)
     {}
 
     Response(quint8 requestType) :

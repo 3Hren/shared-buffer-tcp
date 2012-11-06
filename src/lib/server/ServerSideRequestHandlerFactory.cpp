@@ -13,11 +13,11 @@ RequestHandler *ServerSideRequestHandlerFactory::createHandler(RequestProtocol *
 {
     quint8 type = requestProtocol->getType();
     switch (type) {
-    case ProtocolType::PushRequest:
+    case REQUEST_PUSH:
         return new PushRequestHandler(requestProtocol, server, socket);
-    case ProtocolType::GetSignalDataRequest:
+    case REQUEST_GET_SIGNAL_DATA:
         return new GetSignalDataRequestHandler(requestProtocol, server, socket);
-    case ProtocolType::GetBufferRequest:
+    case REQUEST_GET_BUFFER:
         return new GetBufferRequestHandler(requestProtocol, server, socket);
     default:
         Q_ASSERT(false);

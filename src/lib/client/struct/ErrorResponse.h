@@ -7,7 +7,7 @@ struct ErrorResponse : public Response
 {    
     ErrorResponse() :
         Response(),
-        errorType(ProtocolError::NoError)
+        errorType(ProtocolError::NORMAL)
     {}
 
     ErrorResponse(quint8 requestType, quint8 errorType, const QString &description) :

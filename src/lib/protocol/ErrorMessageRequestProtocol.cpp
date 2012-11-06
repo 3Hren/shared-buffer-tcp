@@ -3,13 +3,13 @@
 using namespace BufferStorage;
 
 ErrorMessageRequestProtocol::ErrorMessageRequestProtocol() :
-    ResponseProtocol(ProtocolType::ErrorMessageResponse, ProtocolType::UnknownType),
-    errorType(ProtocolError::UnknownError)
+    ResponseProtocol(RESPONSE_ERROR, UNKNOWN),
+    errorType(ProtocolError::UNKNOWN)
 {
 }
 
-ErrorMessageRequestProtocol::ErrorMessageRequestProtocol(quint8 requestType, quint8 errorType, const QString &errorMessage) :
-    ResponseProtocol(ProtocolType::ErrorMessageResponse, requestType),
+ErrorMessageRequestProtocol::ErrorMessageRequestProtocol(ProtocolType requestType, quint8 errorType, const QString &errorMessage) :
+    ResponseProtocol(RESPONSE_ERROR, requestType),
     errorType(errorType),
     errorMessage(errorMessage)
 {

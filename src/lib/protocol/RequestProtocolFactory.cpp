@@ -24,27 +24,26 @@ RequestProtocol *RequestProtocolFactory::createRequestProtocol(QDataStream *inpu
 
     RequestProtocol *requestProtocol = 0;
 
-    using namespace ProtocolType;
     switch (type) {
-    case PushRequest:
+    case REQUEST_PUSH:
         requestProtocol = new PushRequestProtocol();
         break;
-    case GetSignalDataRequest:
+    case REQUEST_GET_SIGNAL_DATA:
         requestProtocol = new GetSignalDataRequestProtocol();
         break;
-    case GetSignalDataResponse:
+    case RESPONSE_GET_SIGNAL_DATA:
         requestProtocol = new GetSignalDataResponseProtocol();
         break;
-    case GetBufferRequest:
+    case REQUEST_GET_BUFFER:
         requestProtocol = new GetBufferRequestProtocol();
         break;
-    case GetBufferResponse:
+    case RESPONSE_GET_BUFFER:
         requestProtocol = new GetBufferResponseProtocol();
         break;
-    case ErrorMessageResponse:
+    case RESPONSE_ERROR:
         requestProtocol = new ErrorMessageRequestProtocol();
         break;
-    case NormalMessageResponse:
+    case RESPONSE_PUSH:
         requestProtocol = new NormalMessageResponseProtocol();
         break;
     default:

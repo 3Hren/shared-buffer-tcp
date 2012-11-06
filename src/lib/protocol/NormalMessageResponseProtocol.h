@@ -8,7 +8,7 @@ class NormalMessageResponseProtocol : public ResponseProtocol
     QString message;
 public:
     NormalMessageResponseProtocol();
-    NormalMessageResponseProtocol(RequestType requestType, const QString &message);
+    NormalMessageResponseProtocol(ProtocolType requestType, const QString &message);
 
     QString getMessage() const;
 

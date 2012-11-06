@@ -2,7 +2,7 @@
 
 using namespace BufferStorage;
 
-RequestProtocol::RequestProtocol(quint8 type) :
+RequestProtocol::RequestProtocol(ProtocolType type) :
     messageSize(0),
     type(type)
 {
@@ -31,7 +31,7 @@ void RequestProtocol::decode(QDataStream *in)
     decodeData(in);
 }
 
-quint8 RequestProtocol::getType() const
+ProtocolType RequestProtocol::getType() const
 {
     return type;
 }

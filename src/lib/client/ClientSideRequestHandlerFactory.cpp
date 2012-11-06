@@ -14,13 +14,13 @@ RequestHandler *ClientSideRequestHandlerFactory::createHandler(RequestProtocol *
 {
     quint8 type = requestProtocol->getType();
     switch (type) {
-    case ProtocolType::ErrorMessageResponse:
+    case RESPONSE_ERROR:
         return new ErrorMessageResponseHandler(requestProtocol, clientPrivate, socket);
-    case ProtocolType::NormalMessageResponse:
+    case RESPONSE_PUSH:
         return new NormalMessageResponseHandler(requestProtocol, clientPrivate, socket);
-    case ProtocolType::GetSignalDataResponse:
+    case RESPONSE_GET_SIGNAL_DATA:
         return new GetSignalDataResponseHandler(requestProtocol, clientPrivate, socket);
-    case ProtocolType::GetBufferResponse:
+    case RESPONSE_GET_BUFFER:
         return new GetBufferResponseHandler(requestProtocol, clientPrivate, socket);
     default:
         Q_ASSERT(false);

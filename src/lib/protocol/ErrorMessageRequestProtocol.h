@@ -9,7 +9,7 @@ class ErrorMessageRequestProtocol : public ResponseProtocol
     QString errorMessage;    
 public:
     ErrorMessageRequestProtocol();
-    ErrorMessageRequestProtocol(quint8 requestType, quint8 errorType, const QString &errorMessage);
+    ErrorMessageRequestProtocol(ProtocolType requestType, quint8 errorType, const QString &errorMessage);
 
     quint8 getErrorType() const;
     QString getErrorMessage() const;

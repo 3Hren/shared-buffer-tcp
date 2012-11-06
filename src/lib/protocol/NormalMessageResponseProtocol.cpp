@@ -3,12 +3,12 @@
 using namespace BufferStorage;
 
 NormalMessageResponseProtocol::NormalMessageResponseProtocol() :
-    ResponseProtocol(ProtocolType::NormalMessageResponse, ProtocolType::UnknownType)
+    ResponseProtocol(RESPONSE_PUSH, UNKNOWN)
 {
 }
 
-NormalMessageResponseProtocol::NormalMessageResponseProtocol(RequestType requestType, const QString &message) :
-    ResponseProtocol(ProtocolType::NormalMessageResponse, requestType),
+NormalMessageResponseProtocol::NormalMessageResponseProtocol(ProtocolType requestType, const QString &message) :
+    ResponseProtocol(RESPONSE_PUSH, requestType),//! @todo: СЮДА!
     message(message)
 {
 }

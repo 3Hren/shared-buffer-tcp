@@ -2,13 +2,13 @@
 
 using namespace BufferStorage;
 
-ResponseProtocol::ResponseProtocol(quint8 type, quint8 requestType) :
+ResponseProtocol::ResponseProtocol(ProtocolType type, ProtocolType requestType) :
     RequestProtocol(type),
     requestType(requestType)
 {
 }
 
-quint8 ResponseProtocol::getRequestType() const
+ProtocolType ResponseProtocol::getRequestType() const
 {
     return requestType;
 }

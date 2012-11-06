@@ -6,11 +6,11 @@ namespace BufferStorage {
 class ResponseProtocol : public RequestProtocol
 {
 protected:
-    quint8 requestType;
+    ProtocolType requestType;
 
 public:
-    ResponseProtocol(quint8 type, quint8 requestType);
+    ResponseProtocol(ProtocolType type, ProtocolType requestType);
 
-    quint8 getRequestType() const;
+    ProtocolType getRequestType() const;
 };
 }

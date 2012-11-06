@@ -3,13 +3,13 @@
 using namespace BufferStorage;
 
 GetBufferRequestProtocol::GetBufferRequestProtocol() :
-    RequestProtocol(ProtocolType::GetBufferRequest),
+    RequestProtocol(REQUEST_GET_BUFFER),
     bufferId(0)
 {
 }
 
 GetBufferRequestProtocol::GetBufferRequestProtocol(quint16 bufferId) :
-    RequestProtocol(ProtocolType::GetBufferRequest),
+    RequestProtocol(REQUEST_GET_BUFFER),
     bufferId(bufferId)
 {
 }

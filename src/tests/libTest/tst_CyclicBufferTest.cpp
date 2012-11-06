@@ -133,7 +133,7 @@ void CyclicBufferTest::testPushRequestSerializing()
     QScopedPointer<RequestProtocol> inputRequest(getInputRequestThroughNetworkSendMock(&outputRequest));
 
     // Compare
-    QCOMPARE(inputRequest->getType(), (quint8)ProtocolType::PushRequest);
+    QCOMPARE(inputRequest->getType(), REQUEST_PUSH);
     PushRequestProtocol *decodedInputRequest = static_cast<PushRequestProtocol *>(inputRequest.data());
     QCOMPARE(decodedInputRequest->getTimeStamp(), timeStamp);
     QCOMPARE(decodedInputRequest->getSignalDataVector(), signalDatas);
@@ -151,7 +151,7 @@ void CyclicBufferTest::testGetSignalDataRequestSerializing()
     QScopedPointer<RequestProtocol> inputRequest(getInputRequestThroughNetworkSendMock(&outputRequest));
 
     // Compare
-    QCOMPARE(inputRequest->getType(), (quint8)ProtocolType::GetSignalDataRequest);
+    QCOMPARE(inputRequest->getType(), REQUEST_GET_SIGNAL_DATA);
     GetSignalDataRequestProtocol *decodedInputRequest = static_cast<GetSignalDataRequestProtocol *>(inputRequest.data());
     QCOMPARE(decodedInputRequest->getTimeStamp(), timeStamp);
     QCOMPARE(decodedInputRequest->getRequestedBufferIndexes(), bufferIds);
@@ -169,7 +169,7 @@ void CyclicBufferTest::testGetSignalDataResponseSerializing()
     QScopedPointer<RequestProtocol> inputRequest(getInputRequestThroughNetworkSendMock(&outputRequest));
 
     // Compare
-    QCOMPARE(inputRequest->getType(), (quint8)ProtocolType::GetSignalDataResponse);
+    QCOMPARE(inputRequest->getType(), RESPONSE_GET_SIGNAL_DATA);
     GetSignalDataResponseProtocol *decodedInputRequest = static_cast<GetSignalDataResponseProtocol *>(inputRequest.data());
     QCOMPARE(decodedInputRequest->getTimeStamp(), timeStamp);
     QCOMPARE(decodedInputRequest->getSignalDatas(), signalDatas);
@@ -178,8 +178,8 @@ void CyclicBufferTest::testGetSignalDataResponseSerializing()
 void CyclicBufferTest::testErrorMessageRequestSerializing()
 {
     //Initialize
-    quint8 inputRequestType = ProtocolType::PushRequest;
-    quint8 errorType = ProtocolError::UnknownError;
+    ProtocolType inputRequestType = REQUEST_PUSH;
+    quint8 errorType = ProtocolError::UNKNOWN;
     const QString errorMessage = tr("This is error message. Intended that it should be push error message. Type: %1. ErrorType: %2").arg(inputRequestType).arg(errorType);
 
     // Run
@@ -187,7 +187,7 @@ void CyclicBufferTest::testErrorMessageRequestSerializing()
     QScopedPointer<RequestProtocol> inputRequest(getInputRequestThroughNetworkSendMock(&outputRequest));
 
     // Compare
-    QCOMPARE(inputRequest->getType(), (quint8)ProtocolType::ErrorMessageResponse);
+    QCOMPARE(inputRequest->getType(), RESPONSE_ERROR);
     ErrorMessageRequestProtocol *decodedInputRequest = static_cast<ErrorMessageRequestProtocol *>(inputRequest.data());
     QCOMPARE(decodedInputRequest->getRequestType(), inputRequestType);
     QCOMPARE(decodedInputRequest->getErrorType(), errorType);
@@ -197,20 +197,20 @@ void CyclicBufferTest::testErrorMessageRequestSerializing()
 #include "protocol/NormalMessageResponseProtocol.h"
 void CyclicBufferTest::testNormalMessageResponseProtocolClass()
 {
-    NormalMessageResponseProtocol request(ProtocolType::PushRequest, "");
+    NormalMessageResponseProtocol request(REQUEST_PUSH, "");
     Q_UNUSED(request);
 }
 
 void CyclicBufferTest::testNormalMessageRequestSerializing()
 {
     // Run
-    NormalMessageResponseProtocol request(ProtocolType::PushRequest, "Ok");
+    NormalMessageResponseProtocol request(REQUEST_PUSH, "Ok");
     QScopedPointer<RequestProtocol> response(getInputRequestThroughNetworkSendMock(&request));
 
     // Compare
-    QCOMPARE(response->getType(), (RequestType)ProtocolType::NormalMessageResponse);
+    QCOMPARE(response->getType(), RESPONSE_PUSH);
     NormalMessageResponseProtocol *decodedResponse = static_cast<NormalMessageResponseProtocol *>(response.data());
-    QCOMPARE(decodedResponse->getRequestType(), (RequestType)ProtocolType::PushRequest);
+    QCOMPARE(decodedResponse->getRequestType(), REQUEST_PUSH);
     QCOMPARE(decodedResponse->getMessage(), QString("Ok"));
 }
 
@@ -221,7 +221,7 @@ void CyclicBufferTest::testGetBufferRequestProtocolSerializing()
     GetBufferRequestProtocol outputRequest(bufferId);
     QScopedPointer<RequestProtocol> inputRequest(getInputRequestThroughNetworkSendMock(&outputRequest));
 
-    QCOMPARE(inputRequest->getType(), (quint8)ProtocolType::GetBufferRequest);
+    QCOMPARE(inputRequest->getType(), REQUEST_GET_BUFFER);
     GetBufferRequestProtocol *decodedInputRequest = static_cast<GetBufferRequestProtocol *>(inputRequest.data());
     QCOMPARE(decodedInputRequest->getBufferId(), bufferId);
 }
@@ -237,7 +237,7 @@ void CyclicBufferTest::testGetBufferResponseProtocolSerializing()
     GetBufferResponseProtocol outputRequest(bufferId, timeStamps, datas);
     QScopedPointer<RequestProtocol> inputRequest(getInputRequestThroughNetworkSendMock(&outputRequest));
 
-    QCOMPARE(inputRequest->getType(), (quint8)ProtocolType::GetBufferResponse);
+    QCOMPARE(inputRequest->getType(), RESPONSE_GET_BUFFER);
     GetBufferResponseProtocol *decodedInputRequest = static_cast<GetBufferResponseProtocol *>(inputRequest.data());
     QCOMPARE(decodedInputRequest->getBufferId(), bufferId);
     QCOMPARE(decodedInputRequest->getBufferTimeStamps(), timeStamps);
@@ -371,7 +371,7 @@ void CyclicBufferTest::tryPushWrongDataCountToServerAndCompareError(quint16 data
     QVariantList arguments = spy.takeFirst();
     QCOMPARE(arguments.at(0).canConvert<ErrorResponse>(), true);
     const ErrorResponse &response = arguments.at(0).value<ErrorResponse>();
-    QCOMPARE(response.requestType, (quint8)ProtocolType::PushRequest);
+    QCOMPARE(response.requestType, (quint8)REQUEST_PUSH);
     QCOMPARE(response.errorType, errorType);
 }
 
@@ -380,14 +380,14 @@ void CyclicBufferTest::testPushDataToServerWithMoreDatasThanOnServer()
 {
     const quint16 DATA_COUNT = 10;
     const quint16 WRONG_DATA_COUNT = 11;
-    tryPushWrongDataCountToServerAndCompareError(DATA_COUNT, WRONG_DATA_COUNT, ProtocolError::WrongInputArraySize);
+    tryPushWrongDataCountToServerAndCompareError(DATA_COUNT, WRONG_DATA_COUNT, ProtocolError::WRONG_INPUT_ARRAY_SIZE);
 }
 
 void CyclicBufferTest::testPushDataToServerWithLessDatasThanOnServer()
 {
     const quint16 DATA_COUNT = 10;
     const quint16 WRONG_DATA_COUNT = 9;
-    tryPushWrongDataCountToServerAndCompareError(DATA_COUNT, WRONG_DATA_COUNT, ProtocolError::WrongInputArraySize);
+    tryPushWrongDataCountToServerAndCompareError(DATA_COUNT, WRONG_DATA_COUNT, ProtocolError::WRONG_INPUT_ARRAY_SIZE);
 }
 
 Q_DECLARE_METATYPE(SignalDataResponse)
@@ -426,7 +426,7 @@ void CyclicBufferTest::testGetValueFromServer()
     QCOMPARE(arguments.at(0).canConvert<SignalDataResponse>(), true);
 
     const SignalDataResponse &response = arguments.at(0).value<SignalDataResponse>();
-    QCOMPARE(response.requestType, (quint8)ProtocolType::GetSignalDataRequest);
+    QCOMPARE(response.requestType, (quint8)REQUEST_GET_SIGNAL_DATA);
     QCOMPARE(response.timeStamp, pushTimeStamp);
     QCOMPARE(response.signalDatas.size(), 1);
     QCOMPARE(response.signalDatas.at(0), SignalData(100.0, 0));
@@ -464,7 +464,7 @@ void CyclicBufferTest::testGetValuesFromServer()
     QCOMPARE(arguments.at(0).canConvert<SignalDataResponse>(), true);
 
     const SignalDataResponse &response = arguments.at(0).value<SignalDataResponse>();
-    QCOMPARE(response.requestType, (quint8)ProtocolType::GetSignalDataRequest);
+    QCOMPARE(response.requestType, (quint8)REQUEST_GET_SIGNAL_DATA);
     QCOMPARE(response.timeStamp, pushTimeStamp);
     QCOMPARE(response.signalDatas.size(), data.size());
     QCOMPARE(response.signalDatas, data.values().toVector());
@@ -503,8 +503,8 @@ void CyclicBufferTest::testGetValuesWrongSomeIndexes()
     QCOMPARE(arguments.at(0).canConvert<ErrorResponse>(), true);
 
     const ErrorResponse &response = arguments.at(0).value<ErrorResponse>();
-    QCOMPARE(response.requestType, (quint8)ProtocolType::GetSignalDataRequest);
-    QCOMPARE(response.errorType, (quint8)ProtocolError::BufferNotFound);
+    QCOMPARE(response.requestType, (quint8)REQUEST_GET_SIGNAL_DATA);
+    QCOMPARE(response.errorType, (quint8)ProtocolError::WRONG_BUFFER_ID);
 }
 
 void CyclicBufferTest::testGetValuesWrongTimeStamp()
@@ -539,8 +539,8 @@ void CyclicBufferTest::testGetValuesWrongTimeStamp()
     QCOMPARE(arguments.at(0).canConvert<ErrorResponse>(), true);
 
     const ErrorResponse &response = arguments.at(0).value<ErrorResponse>();
-    QCOMPARE(response.requestType, (quint8)ProtocolType::GetSignalDataRequest);
-    QCOMPARE(response.errorType, (quint8)ProtocolError::WrongTimeStamp);
+    QCOMPARE(response.requestType, (quint8)REQUEST_GET_SIGNAL_DATA);
+    QCOMPARE(response.errorType, (quint8)ProtocolError::WRONG_TIME_STAMP);
 }
 
 void CyclicBufferTest::compareBufferGetResults(QSignalSpy *spy, int spyCount, const QVector<TimeStamp> &bufferTimeStamps, const QVector<SignalData> &signalDatas) const
@@ -553,7 +553,7 @@ void CyclicBufferTest::compareBufferGetResults(QSignalSpy *spy, int spyCount, co
     QCOMPARE(arguments.at(BUFFER_DATA_POS).canConvert<BufferResponse>(), true);
     const BufferResponse &response = arguments.at(BUFFER_DATA_POS).value<BufferResponse>();
 
-    QCOMPARE(response.requestType, (quint8)ProtocolType::GetBufferRequest);
+    QCOMPARE(response.requestType, (quint8)REQUEST_GET_BUFFER);
     QCOMPARE(response.timeStamps, bufferTimeStamps);
     QCOMPARE(response.signalDatas, signalDatas);
 }
@@ -625,8 +625,8 @@ void CyclicBufferTest::testGetBufferWrongIndex()
     QCOMPARE(arguments.at(0).canConvert<ErrorResponse>(), true);
 
     const ErrorResponse &response = arguments.at(0).value<ErrorResponse>();
-    QCOMPARE(response.requestType, (quint8)ProtocolType::GetBufferRequest);
-    QCOMPARE(response.errorType, (quint8)ProtocolError::BufferNotFound);
+    QCOMPARE(response.requestType, (quint8)REQUEST_GET_BUFFER);
+    QCOMPARE(response.errorType, (quint8)ProtocolError::WRONG_BUFFER_ID);
 }
 
 const int BUFFERS_COUNT = 30000;
@@ -766,7 +766,7 @@ void CyclicBufferTest::testBlockingGetEmptyBuffer()
 
     QCOMPARE(isConnected, true);
     QCOMPARE(response.id, (quint16)0);
-    QCOMPARE(response.requestType, (quint8)ProtocolType::GetBufferRequest);
+    QCOMPARE(response.requestType, (quint8)REQUEST_GET_BUFFER);
     QCOMPARE(response.timeStamps.size(), 0);
     QCOMPARE(response.signalDatas.size(), 0);
 
@@ -790,8 +790,8 @@ void CyclicBufferTest::testBlockingGetBufferWrongIndex()
         client.blockingGetBuffer(500);
         QFAIL("failed");
     } catch (ProtocolException &e) {
-        QCOMPARE(e.getInputRequestType(), (quint8)ProtocolType::GetBufferRequest);
-        QCOMPARE(e.getErrorType(), (quint8)ProtocolError::BufferNotFound);
+        QCOMPARE(e.getInputRequestType(), (quint8)REQUEST_GET_BUFFER);
+        QCOMPARE(e.getErrorType(), (quint8)ProtocolError::WRONG_BUFFER_ID);
 
         thread.quit();
         thread.wait();
