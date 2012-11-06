@@ -36,17 +36,9 @@ qint64 BufferClientPrivate::sendRequest(Request *request)
     return bytesWritten;
 }
 
-void BufferClientPrivate::checkConnection()
+bool BufferClientPrivate::isConnected() const
 {
-    if (socket->state() != QAbstractSocket::ConnectedState)
-        throw ClientNotConnectedException();
-}
-
-//! @todo: move to listener
-void BufferClientPrivate::waitForResponseReceived(BlockingListener *listener)
-{
-    while (listener->isListening())
-        qApp->processEvents();    
+    return socket->state() == QAbstractSocket::ConnectedState;
 }
 
 void BufferClientPrivate::setSocketError(QAbstractSocket::SocketError abstractSocketError)

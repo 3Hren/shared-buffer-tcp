@@ -33,8 +33,7 @@ public:
     BufferClientPrivate(BufferClient *bufferClient);
 
     qint64 sendRequest(Request *request);
-    void checkConnection();
-    void waitForResponseReceived(BlockingListener *listener);
+    bool isConnected() const;
 
     Q_SLOT void setSocketError(QAbstractSocket::SocketError abstractSocketError);        
 

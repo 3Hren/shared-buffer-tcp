@@ -16,14 +16,12 @@ class BufferClient;
 class BlockingListener : public QObject
 {    
     Q_OBJECT
-    int timeout;
     volatile bool listening;
     QSharedPointer<Response> response;
 public:
-    BlockingListener(int timeout, BufferClient *client, QObject *parent = 0);
+    BlockingListener(BufferClient *client, QObject *parent = 0);
 
-    int getTimeout() const;
-    bool isListening() const;
+    void listen(int timeout);
 
     template<typename T>
     T getResponse() const {

@@ -70,11 +70,17 @@ void BufferClient::push(const SignalValueVector &signalValues, TimeStamp timeSta
 void BufferClient::blockingPush(const SignalValueVector &signalValues, TimeStamp timeStamp, int timeout)
 {
     Q_D(BufferClient);
-    d->checkConnection();
+    if (!d->isConnected())
+        throw BufferStorageException("There is no connection to the server");
+
     push(signalValues, timeStamp);
-    BlockingListener listener(timeout, this);
-    d->waitForResponseReceived(&listener);
-    listener.getResponse<PushResponse *>();
+    BlockingListener listener(this);
+    try {
+        listener.listen(timeout);
+        listener.getResponse<PushResponse *>();
+    } catch (BufferStorageException &exception) {
+        throw;
+    }
 }
 
 qint64 BufferClient::getSignalData(const QVector<BufferId> &bufferIds, TimeStamp timeStamp)
@@ -94,12 +100,20 @@ void BufferClient::getBuffer(BufferId bufferId)
 SignalBuffer BufferClient::blockingGetBuffer(BufferId bufferId, int timeout)
 {    
     Q_D(BufferClient);
-    d->checkConnection();
+    if (!d->isConnected())
+        throw BufferStorageException("There is no connection to the server");
+
+    SignalBuffer signalBuffer;
     getBuffer(bufferId);
-    BlockingListener listener(timeout, this);
-    d->waitForResponseReceived(&listener);
-    GetBufferResponse *response = listener.getResponse<GetBufferResponse *>();
-    const SignalBuffer signalBuffer(response->getTimeStamps(), response->getSignalValues());
+    BlockingListener listener(this);
+    try {
+        listener.listen(timeout);
+        GetBufferResponse *response = listener.getResponse<GetBufferResponse *>();
+        signalBuffer = SignalBuffer(response->getTimeStamps(), response->getSignalValues());
+    } catch (BufferStorageException &exception) {
+        throw;
+    }
+
     return signalBuffer;
 }
 

@@ -796,7 +796,7 @@ void CyclicBufferTest::testBlockingGetBufferClientNotConnectedError()
     BufferStorage::SocketError error = client.getSocketError();
 
     QCOMPARE(isConnected, false);
-    QVERIFY_THROW(client.blockingGetBuffer(0), ClientNotConnectedException);
+    QVERIFY_THROW(client.blockingGetBuffer(0), BufferStorageException);
     QCOMPARE(error.error, QAbstractSocket::ConnectionRefusedError);
     QCOMPARE(error.errorString, QString("Connection refused"));
 }
