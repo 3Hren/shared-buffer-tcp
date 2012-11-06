@@ -4,13 +4,13 @@
 #include "BufferStorageGlobal.h"
 
 namespace BufferStorage {
-class RequestProtocol
+class Request
 {
     MessageSize messageSize;
     ProtocolType type;
 public:
-    RequestProtocol(ProtocolType type);
-    virtual ~RequestProtocol();
+    Request(ProtocolType type);
+    virtual ~Request();
 
     QByteArray encode() const;
     void decode(QDataStream *in);

@@ -1,8 +1,8 @@
 #include "ConnectionHandler.h"
 
 #include "BufferStorageGlobal.h"
-#include "protocol/RequestProtocol.h"
-#include "protocol/RequestProtocolFactory.h"
+#include "protocol/Request.h"
+#include "protocol/RequestFactory.h"
 
 #include <QTcpSocket>
 
@@ -39,8 +39,8 @@ void ConnectionHandler::readPendingData()
         return;
     }
 
-    RequestProtocolFactory protocolFactory;
-    QScopedPointer<RequestProtocol> inputRequest(protocolFactory.createRequestProtocol(&in));    
+    RequestFactory protocolFactory;
+    QScopedPointer<Request> inputRequest(protocolFactory.createRequestProtocol(&in));    
     processRequest(inputRequest.data());
 
     requestSize = 0;

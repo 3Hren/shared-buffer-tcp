@@ -2,19 +2,19 @@
 
 #include "../BufferClient.h"
 #include "../BufferClientPrivate.h"
-#include "../../protocol/GetSignalDataResponseProtocol.h"
+#include "../../protocol/GetSignalDataResponse.h"
 #include "../struct/SignalDataResponse.h"
 
 using namespace BufferStorage;
 
-GetSignalDataResponseHandler::GetSignalDataResponseHandler(RequestProtocol *requestProtocol, BufferClientPrivate *clientPrivate, QTcpSocket *socket) :
+GetSignalDataResponseHandler::GetSignalDataResponseHandler(Request *requestProtocol, BufferClientPrivate *clientPrivate, QTcpSocket *socket) :
     ClientSideResponseHandler(requestProtocol, clientPrivate, socket)
 {
 }
 
 void GetSignalDataResponseHandler::execute()
 {
-    GetSignalDataResponseProtocol *getSignalDataResponseProtocol = static_cast<GetSignalDataResponseProtocol *>(requestProtocol);
+    GetSignalDataResponse *getSignalDataResponseProtocol = static_cast<GetSignalDataResponse *>(requestProtocol);
 
     const ProtocolType &requestType = getSignalDataResponseProtocol->getRequestType();
     const TimeStamp &timeStamp = getSignalDataResponseProtocol->getTimeStamp();

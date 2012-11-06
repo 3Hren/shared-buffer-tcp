@@ -1,7 +1,7 @@
 #include "ServerSideRequestHandlerFactory.h"
 
 #include "../BufferStorageGlobal.h"
-#include "../protocol/RequestProtocol.h"
+#include "../protocol/Request.h"
 
 #include "handler/PushRequestHandler.h"
 #include "handler/GetSignalDataRequestHandler.h"
@@ -9,7 +9,7 @@
 
 using namespace BufferStorage;
 
-RequestHandler *ServerSideRequestHandlerFactory::createHandler(RequestProtocol *requestProtocol, BufferServer *server, QTcpSocket *socket)
+RequestHandler *ServerSideRequestHandlerFactory::createHandler(Request *requestProtocol, BufferServer *server, QTcpSocket *socket)
 {
     quint8 type = requestProtocol->getType();
     switch (type) {

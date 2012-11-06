@@ -1,6 +1,6 @@
 #pragma once
 
-#include "RequestProtocol.h"
+#include "Request.h"
 
 #include "BufferStorageGlobal.h"
 #include "SignalData.h"
@@ -8,13 +8,13 @@
 #include <QVector>
 
 namespace BufferStorage {
-class PushRequestProtocol : public RequestProtocol
+class PushRequest : public Request
 {
     TimeStamp timeStamp;
     QVector<SignalData> signalDatas;
 public:
-    PushRequestProtocol();
-    PushRequestProtocol(TimeStamp timeStamp, const QVector<SignalData> &signalDatas);
+    PushRequest();
+    PushRequest(TimeStamp timeStamp, const QVector<SignalData> &signalDatas);
 
     TimeStamp getTimeStamp() const;
     QVector<SignalData> getSignalDataVector() const;

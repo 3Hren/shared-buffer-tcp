@@ -28,8 +28,8 @@ typedef quint32 TimeStamp;
 static const Magic MAGIC = 927932743;
 enum ProtocolType {
     REQUEST_PUSH = 0,
-    REQUEST_GET_SIGNAL_DATA,
-    REQUEST_GET_BUFFER,
+    REQUEST_GET_SIGNAL_DATA = 1,
+    REQUEST_GET_BUFFER = 2,
 
     RESPONSE_PUSH = 100 + 0,
     RESPONSE_GET_SIGNAL_DATA = 100 + 1,
@@ -42,13 +42,13 @@ DECLARE_SERIALIZATION_FOR_ENUM(ProtocolType)
 
 enum ErrorType {
     NORMAL = 0,
-            WRONG_REQUEST_TYPE = 100,
-            WRONG_BUFFER_ID = 110,
-            WRONG_INPUT_ARRAY_SIZE = 111,
-            WRONG_TIME_STAMP = 112,
-            SOCKET_ERROR = 200,
+    WRONG_REQUEST_TYPE = 100,
+    WRONG_BUFFER_ID = 110,
+    WRONG_INPUT_ARRAY_SIZE = 111,
+    WRONG_TIME_STAMP = 112,
+    SOCKET_ERROR = 200,
 
-            UNKNOWN_ERROR_TYPE = 255 //! @todo: ???
+    UNKNOWN_ERROR_TYPE = 255
 };
 DECLARE_SERIALIZATION_FOR_ENUM(ErrorType)
 

@@ -9,7 +9,7 @@
 #include "struct/SignalDataResponse.h"
 #include "struct/BufferResponse.h"
 
-#include "protocol/RequestProtocol.h"
+#include "protocol/Request.h"
 
 #include <QAbstractSocket>
 
@@ -34,7 +34,7 @@ public:
 
     BufferClientPrivate(BufferClient *bufferClient);
 
-    qint64 sendRequest(RequestProtocol *request);
+    qint64 sendRequest(Request *request);
     void checkConnection();
     void waitForOperationDone(BlockingListener *listener);
 

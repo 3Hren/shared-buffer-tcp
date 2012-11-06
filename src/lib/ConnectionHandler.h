@@ -7,7 +7,7 @@
 class QTcpSocket;
 
 namespace BufferStorage {
-class RequestProtocol;
+class Request;
 class ConnectionHandler : public QObject
 {
     Q_OBJECT
@@ -19,7 +19,7 @@ public:
     ConnectionHandler(QTcpSocket *socket, QObject *parent = 0);
 
 protected:
-    virtual void processRequest(RequestProtocol *requestProtocol) = 0;
+    virtual void processRequest(Request *requestProtocol) = 0;
 
 public Q_SLOTS:
     void readPendingData();

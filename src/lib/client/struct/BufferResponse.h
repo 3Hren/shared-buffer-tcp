@@ -1,17 +1,18 @@
 #pragma once
 
-#include "Response.h"
+#include "AbstractResponse.h"
+
 #include "SignalData.h"
 
 namespace BufferStorage {
-struct BufferResponse : public Response {
+struct BufferResponse : public AbstractResponse {
     BufferResponse() :
-        Response(),
+        AbstractResponse(),
         bufferId(-1)
     {}
 
     BufferResponse(ProtocolType requestType, BufferId bufferId, const QVector<TimeStamp> &timeStamps, const QVector<SignalData> &signalDatas) :
-        Response(requestType),
+        AbstractResponse(requestType),
         bufferId(bufferId),
         timeStamps(timeStamps),
         signalDatas(signalDatas)

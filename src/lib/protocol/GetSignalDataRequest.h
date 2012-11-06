@@ -1,17 +1,17 @@
 #pragma once
 
-#include "RequestProtocol.h"
+#include "Request.h"
 
 #include <QVector>
 
 namespace BufferStorage {
-class GetSignalDataRequestProtocol : public RequestProtocol
+class GetSignalDataRequest : public Request
 {
     TimeStamp timeStamp;
     QVector<BufferId> bufferIds;
 public:
-    GetSignalDataRequestProtocol();
-    GetSignalDataRequestProtocol(TimeStamp timeStamp, const QVector<BufferId> &bufferIds);
+    GetSignalDataRequest();
+    GetSignalDataRequest(TimeStamp timeStamp, const QVector<BufferId> &bufferIds);
 
     TimeStamp getTimeStamp() const;
     QVector<BufferId> getRequestedBufferIndexes() const;

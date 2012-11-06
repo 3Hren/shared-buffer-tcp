@@ -11,6 +11,6 @@ protected:
     BufferClientPrivate *clientPrivate;
 
 public:
-    ClientSideResponseHandler(RequestProtocol *requestProtocol, BufferClientPrivate *clientPrivate, QTcpSocket *socket);
+    ClientSideResponseHandler(Request *requestProtocol, BufferClientPrivate *clientPrivate, QTcpSocket *socket);
 };
 }

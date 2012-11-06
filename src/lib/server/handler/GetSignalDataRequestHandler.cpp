@@ -2,15 +2,15 @@
 
 #include "../BufferServer.h"
 #include "../BufferManager.h"
-#include "../../protocol/GetSignalDataRequestProtocol.h"
-#include "../../protocol/GetSignalDataResponseProtocol.h"
+#include "../../protocol/GetSignalDataRequest.h"
+#include "../../protocol/GetSignalDataResponse.h"
 #include "../../exceptions/BufferException.h"
 
 #include <QTcpSocket>
 
 using namespace BufferStorage;
 
-GetSignalDataRequestHandler::GetSignalDataRequestHandler(RequestProtocol *requestProtocol, BufferServer *server, QTcpSocket *socket) :
+GetSignalDataRequestHandler::GetSignalDataRequestHandler(Request *requestProtocol, BufferServer *server, QTcpSocket *socket) :
     ServerSideRequestHandler(requestProtocol, server, socket)
 {
 }
@@ -18,7 +18,7 @@ GetSignalDataRequestHandler::GetSignalDataRequestHandler(RequestProtocol *reques
 void GetSignalDataRequestHandler::execute()
 {
     BufferManager *bufferManager = server->getBufferManager();
-    GetSignalDataRequestProtocol *getSignalDataRequestProtocol = static_cast<GetSignalDataRequestProtocol *>(requestProtocol);
+    GetSignalDataRequest *getSignalDataRequestProtocol = static_cast<GetSignalDataRequest *>(requestProtocol);
 
     const QVector<quint16> &bufferIds = getSignalDataRequestProtocol->getRequestedBufferIndexes();
     TimeStamp timeStamp = getSignalDataRequestProtocol->getTimeStamp();
@@ -32,6 +32,6 @@ void GetSignalDataRequestHandler::execute()
         throw e;
     }
 
-    GetSignalDataResponseProtocol response(timeStamp, signalDatas);
+    GetSignalDataResponse response(timeStamp, signalDatas);
     socket->write(response.encode());
 }

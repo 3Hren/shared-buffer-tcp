@@ -16,7 +16,7 @@ ClientConnectionHandler::ClientConnectionHandler(QTcpSocket *socket, QObject *vi
 {
 }
 
-void ClientConnectionHandler::processRequest(RequestProtocol *requestProtocol)
+void ClientConnectionHandler::processRequest(Request *requestProtocol)
 {    
     try {
         QScopedPointer<RequestHandler>handler(ClientSideRequestHandlerFactory::createHandler(requestProtocol, clientPrivate, socket));

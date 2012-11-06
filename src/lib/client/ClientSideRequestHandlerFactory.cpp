@@ -1,7 +1,7 @@
 #include "ClientSideRequestHandlerFactory.h"
 
 #include "BufferStorageGlobal.h"
-#include "protocol/RequestProtocol.h"
+#include "protocol/Request.h"
 
 #include "handler/ErrorMessageResponseHandler.h"
 #include "handler/NormalMessageResponseHandler.h"
@@ -10,7 +10,7 @@
 
 using namespace BufferStorage;
 
-RequestHandler *ClientSideRequestHandlerFactory::createHandler(RequestProtocol *requestProtocol, BufferClientPrivate *clientPrivate, QTcpSocket *socket)
+RequestHandler *ClientSideRequestHandlerFactory::createHandler(Request *requestProtocol, BufferClientPrivate *clientPrivate, QTcpSocket *socket)
 {
     quint8 type = requestProtocol->getType();
     switch (type) {

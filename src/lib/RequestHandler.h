@@ -3,15 +3,15 @@
 class QTcpSocket;
 
 namespace BufferStorage {
-class RequestProtocol;
+class Request;
 class RequestHandler
 {
 protected:
-    RequestProtocol *requestProtocol;
+    Request *requestProtocol;
     QTcpSocket *socket;
 
 public:
-    RequestHandler(RequestProtocol *requestProtocol, QTcpSocket *socket);
+    RequestHandler(Request *requestProtocol, QTcpSocket *socket);
     virtual ~RequestHandler();
 
     virtual void execute() = 0;

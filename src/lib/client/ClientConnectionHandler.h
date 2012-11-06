@@ -12,6 +12,6 @@ public:
     ClientConnectionHandler(QTcpSocket *socket, QObject *visitor);
     
 protected:
-    void processRequest(RequestProtocol *requestProtocol);
+    void processRequest(Request *requestProtocol);
 };
 }

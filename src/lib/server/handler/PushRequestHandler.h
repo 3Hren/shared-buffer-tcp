@@ -6,7 +6,7 @@ namespace BufferStorage {
 class PushRequestHandler : public ServerSideRequestHandler
 {
 public:
-    PushRequestHandler(RequestProtocol *requestProtocol, BufferServer *server, QTcpSocket *socket);
+    PushRequestHandler(Request *requestProtocol, BufferServer *server, QTcpSocket *socket);
 
     void execute();
 };

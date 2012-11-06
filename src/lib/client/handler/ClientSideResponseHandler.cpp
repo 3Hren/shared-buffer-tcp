@@ -2,7 +2,7 @@
 
 using namespace BufferStorage;
 
-ClientSideResponseHandler::ClientSideResponseHandler(RequestProtocol *requestProtocol, BufferClientPrivate *clientPrivate, QTcpSocket *socket) :
+ClientSideResponseHandler::ClientSideResponseHandler(Request *requestProtocol, BufferClientPrivate *clientPrivate, QTcpSocket *socket) :
     RequestHandler(requestProtocol, socket),
     clientPrivate(clientPrivate)
 {

@@ -1,15 +1,15 @@
 #pragma once
 
-#include "RequestProtocol.h"
+#include "Request.h"
 
 namespace BufferStorage {
-class ResponseProtocol : public RequestProtocol
+class Response : public Request
 {
 protected:
     ProtocolType requestType;
 
 public:
-    ResponseProtocol(ProtocolType type, ProtocolType requestType);
+    Response(ProtocolType type, ProtocolType requestType);
 
     ProtocolType getRequestType() const;
 };

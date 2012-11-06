@@ -1,18 +1,18 @@
-#include "RequestProtocol.h"
+#include "Request.h"
 
 using namespace BufferStorage;
 
-RequestProtocol::RequestProtocol(ProtocolType type) :
+Request::Request(ProtocolType type) :
     messageSize(0),
     type(type)
 {
 }
 
-RequestProtocol::~RequestProtocol()
+Request::~Request()
 {
 }
 
-QByteArray RequestProtocol::encode() const
+QByteArray Request::encode() const
 {
     QByteArray encodedMessage;
     QDataStream out(&encodedMessage, QIODevice::WriteOnly);
@@ -26,12 +26,12 @@ QByteArray RequestProtocol::encode() const
     return encodedMessage;
 }
 
-void RequestProtocol::decode(QDataStream *in)
+void Request::decode(QDataStream *in)
 {
     decodeData(in);
 }
 
-ProtocolType RequestProtocol::getType() const
+ProtocolType Request::getType() const
 {
     return type;
 }

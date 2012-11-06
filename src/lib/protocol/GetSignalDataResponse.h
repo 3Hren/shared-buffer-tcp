@@ -1,19 +1,19 @@
 #pragma once
 
-#include "ResponseProtocol.h"
+#include "Response.h"
 
 #include "SignalData.h"
 
 #include <QVector>
 
 namespace BufferStorage {
-class GetSignalDataResponseProtocol : public ResponseProtocol
+class GetSignalDataResponse : public Response
 {
     TimeStamp timeStamp;
     QVector<SignalData> signalDatas;
 public:
-    GetSignalDataResponseProtocol();
-    GetSignalDataResponseProtocol(TimeStamp timeStamp, const QVector<SignalData> &signalDatas);
+    GetSignalDataResponse();
+    GetSignalDataResponse(TimeStamp timeStamp, const QVector<SignalData> &signalDatas);
 
     TimeStamp getTimeStamp() const;
     QVector<SignalData> getSignalDatas() const;

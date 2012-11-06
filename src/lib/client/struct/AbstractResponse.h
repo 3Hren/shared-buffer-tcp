@@ -4,12 +4,12 @@
 #include "BufferStorageGlobal.h"
 
 namespace BufferStorage {
-struct Response {
-    Response() :
+struct AbstractResponse {
+    AbstractResponse() :
         requestType(UNKNOWN_PROTOCOL_TYPE)
     {}
 
-    Response(ProtocolType requestType) :
+    AbstractResponse(ProtocolType requestType) :
         requestType(requestType)
     {}
 

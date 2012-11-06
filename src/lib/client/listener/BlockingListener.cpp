@@ -2,7 +2,7 @@
 
 #include "client/BufferClient.h"
 
-#include "client/struct/Response.h"
+#include "client/struct/AbstractResponse.h"
 #include "client/struct/ErrorResponse.h"
 
 #include <QTimer>

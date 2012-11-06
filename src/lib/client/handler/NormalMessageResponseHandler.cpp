@@ -2,20 +2,20 @@
 
 #include "../BufferClientPrivate.h"
 
-#include "protocol/NormalMessageResponseProtocol.h"
+#include "protocol/NormalMessageResponse.h"
 
 #include "../struct/NormalResponse.h"
 
 using namespace BufferStorage;
 
-NormalMessageResponseHandler::NormalMessageResponseHandler(RequestProtocol *requestProtocol, BufferClientPrivate *clientPrivate, QTcpSocket *socket) :
+NormalMessageResponseHandler::NormalMessageResponseHandler(Request *requestProtocol, BufferClientPrivate *clientPrivate, QTcpSocket *socket) :
     ClientSideResponseHandler(requestProtocol, clientPrivate, socket)
 {
 }
 
 void NormalMessageResponseHandler::execute()
 {
-    NormalMessageResponseProtocol *messageResponse = static_cast<NormalMessageResponseProtocol *>(requestProtocol);
+    NormalMessageResponse *messageResponse = static_cast<NormalMessageResponse *>(requestProtocol);
     const ProtocolType requestType = messageResponse->getRequestType();
     const QString &message = messageResponse->getMessage();
 

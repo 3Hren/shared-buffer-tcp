@@ -1,9 +1,9 @@
 #include "BufferClient.h"
 #include "BufferClientPrivate.h"
 
-#include "../protocol/PushRequestProtocol.h"
-#include "../protocol/GetSignalDataRequestProtocol.h"
-#include "../protocol/GetBufferRequestProtocol.h"
+#include "../protocol/PushRequest.h"
+#include "../protocol/GetSignalDataRequest.h"
+#include "../protocol/GetBufferRequest.h"
 
 #include "listener/BlockingBufferListener.h"
 #include "listener/BlockingPushListener.h"
@@ -61,7 +61,7 @@ bool BufferClient::waitForConnected(int timeout) const
 void BufferClient::push(const QVector<SignalData> &signalDatas, TimeStamp timeStamp)
 {
     Q_D(BufferClient);
-    PushRequestProtocol request(timeStamp, signalDatas);
+    PushRequest request(timeStamp, signalDatas);
     d->sendRequest(&request);
 }
 
@@ -77,14 +77,14 @@ void BufferClient::blockingPush(const QVector<SignalData> &signalDatas, TimeStam
 qint64 BufferClient::getSignalData(const QVector<BufferId> &bufferIds, TimeStamp timeStamp)
 {
     Q_D(BufferClient);
-    GetSignalDataRequestProtocol request(timeStamp, bufferIds);
+    GetSignalDataRequest request(timeStamp, bufferIds);
     return d->sendRequest(&request);
 }
 
 void BufferClient::getBuffer(BufferId bufferId)
 {
     Q_D(BufferClient);
-    GetBufferRequestProtocol request(bufferId);
+    GetBufferRequest request(bufferId);
     d->sendRequest(&request);
 }
 

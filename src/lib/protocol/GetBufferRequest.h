@@ -1,14 +1,14 @@
 #pragma once
 
-#include "RequestProtocol.h"
+#include "Request.h"
 
 namespace BufferStorage {
-class GetBufferRequestProtocol : public RequestProtocol
+class GetBufferRequest : public Request
 {
     BufferId bufferId;
 public:
-    GetBufferRequestProtocol();
-    GetBufferRequestProtocol(BufferId bufferId);
+    GetBufferRequest();
+    GetBufferRequest(BufferId bufferId);
 
     BufferId getBufferId() const;
 

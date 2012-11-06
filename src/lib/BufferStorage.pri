@@ -8,18 +8,10 @@ HEADERS += \
     exceptions/ProtocolException.h \
     ConnectionHandler.h \
     RequestHandler.h \
-    protocol/PushRequestProtocol.h \
-    protocol/RequestProtocolFactory.h \
-    protocol/RequestProtocol.h \
-    protocol/ErrorMessageRequestProtocol.h \
     server/ServerConnectionHandler.h \
     client/ClientConnectionHandler.h \
     server/ServerSideRequestHandlerFactory.h \
     client/ClientSideRequestHandlerFactory.h \
-    protocol/GetSignalDataRequestProtocol.h \
-    protocol/GetSignalDataResponseProtocol.h \    
-    protocol/GetBufferRequestProtocol.h \
-    protocol/GetBufferResponseProtocol.h \    
     client/handler/GetSignalDataResponseHandler.h \
     client/handler/GetBufferResponseHandler.h \
     client/handler/ErrorMessageResponseHandler.h \
@@ -32,40 +24,41 @@ HEADERS += \
     server/buffer/TreeBufferManager.h \
     FixedSizeQueue.h \
     client/listener/BlockingBufferListener.h \
-    client/struct/Response.h \
     client/struct/BufferResponse.h \
     client/struct/ErrorResponse.h \
     client/struct/SignalDataResponse.h \
-    protocol/ResponseProtocol.h \
     client/BufferClient.h \
     server/BufferServer.h \
     BufferStorageGlobal.h \
     client/BufferClientPrivate.h \
-    protocol/NormalMessageResponseProtocol.h \
     client/listener/BlockingListener.h \
     client/listener/BlockingPushListener.h \
     client/struct/NormalResponse.h \
     client/handler/NormalMessageResponseHandler.h \
     exceptions/BufferStorageException.h \
-    exceptions/ClientException.h
+    exceptions/ClientException.h \
+    protocol/Response.h \
+    protocol/PushRequest.h \
+    protocol/NormalMessageResponse.h \
+    protocol/GetSignalDataResponse.h \
+    protocol/GetSignalDataRequest.h \
+    protocol/GetBufferResponse.h \
+    protocol/GetBufferRequest.h \
+    protocol/ErrorMessageRequest.h \
+    protocol/Request.h \
+    protocol/RequestFactory.h \
+    client/struct/AbstractResponse.h
 
 SOURCES += \
     ConnectionHandler.cpp \
     RequestHandler.cpp \
-    protocol/PushRequestProtocol.cpp \
-    protocol/RequestProtocolFactory.cpp \
-    protocol/RequestProtocol.cpp \
-    protocol/ErrorMessageRequestProtocol.cpp \
+    protocol/ErrorMessageRequest.cpp \
     server/ServerConnectionHandler.cpp \
     client/ClientConnectionHandler.cpp \
     server/BufferServer.cpp \
     client/BufferClient.cpp \
     server/ServerSideRequestHandlerFactory.cpp \
     client/ClientSideRequestHandlerFactory.cpp \
-    protocol/GetSignalDataRequestProtocol.cpp \
-    protocol/GetSignalDataResponseProtocol.cpp \
-    protocol/GetBufferRequestProtocol.cpp \
-    protocol/GetBufferResponseProtocol.cpp \
     client/handler/GetSignalDataResponseHandler.cpp \
     client/handler/GetBufferResponseHandler.cpp \
     client/handler/ErrorMessageResponseHandler.cpp \
@@ -77,9 +70,16 @@ SOURCES += \
     server/buffer/HashTableBufferManager.cpp \
     server/buffer/TreeBufferManager.cpp \
     client/listener/BlockingBufferListener.cpp \
-    protocol/ResponseProtocol.cpp \
     client/BufferClientPrivate.cpp \
-    protocol/NormalMessageResponseProtocol.cpp \
     client/listener/BlockingListener.cpp \
     client/listener/BlockingPushListener.cpp \
-    client/handler/NormalMessageResponseHandler.cpp
+    client/handler/NormalMessageResponseHandler.cpp \
+    protocol/GetBufferRequest.cpp \
+    protocol/GetBufferResponse.cpp \
+    protocol/GetSignalDataRequest.cpp \
+    protocol/PushRequest.cpp \
+    protocol/Request.cpp \
+    protocol/Response.cpp \
+    protocol/RequestFactory.cpp \
+    protocol/NormalMessageResponse.cpp \
+    protocol/GetSignalDataResponse.cpp

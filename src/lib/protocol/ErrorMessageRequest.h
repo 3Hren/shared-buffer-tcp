@@ -1,15 +1,15 @@
 #pragma once
 
-#include "ResponseProtocol.h"
+#include "Response.h"
 
 namespace BufferStorage {
-class ErrorMessageRequestProtocol : public ResponseProtocol
+class ErrorMessageRequest : public Response
 {
     ErrorType errorType;
     QString errorMessage;    
 public:
-    ErrorMessageRequestProtocol();
-    ErrorMessageRequestProtocol(ProtocolType requestType, ErrorType errorType, const QString &errorMessage);
+    ErrorMessageRequest();
+    ErrorMessageRequest(ProtocolType requestType, ErrorType errorType, const QString &errorMessage);
 
     ErrorType getErrorType() const;
     QString getErrorMessage() const;

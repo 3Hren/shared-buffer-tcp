@@ -4,8 +4,8 @@
 #include "ServerSideRequestHandlerFactory.h"
 #include "../RequestHandler.h"
 #include "../exceptions/BufferException.h"
-#include "../protocol/RequestProtocol.h"
-#include "../protocol/ErrorMessageRequestProtocol.h"
+#include "../protocol/Request.h"
+#include "../protocol/ErrorMessageRequest.h"
 #include "../BufferStorageGlobal.h"
 
 #include <QTcpSocket>
@@ -19,13 +19,13 @@ ServerConnectionHandler::ServerConnectionHandler(QTcpSocket *socket, QObject *vi
     connect(socket,SIGNAL(disconnected()),socket,SLOT(deleteLater()));
 }
 
-void ServerConnectionHandler::processRequest(RequestProtocol *requestProtocol)
+void ServerConnectionHandler::processRequest(Request *requestProtocol)
 {        
     try {        
         QScopedPointer<RequestHandler>handler(ServerSideRequestHandlerFactory::createHandler(requestProtocol, server, socket));
         handler->execute();
     } catch (ProtocolException &e) {
-        ErrorMessageRequestProtocol errorMessageRequest(requestProtocol->getType(), e.getErrorType(), e.getReason());
+        ErrorMessageRequest errorMessageRequest(requestProtocol->getType(), e.getErrorType(), e.getReason());
         const QByteArray &encodedMessage = errorMessageRequest.encode();
         socket->write(encodedMessage);
     }

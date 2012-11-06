@@ -1,17 +1,17 @@
 #pragma once
 
-#include "Response.h"
+#include "AbstractResponse.h"
 
 namespace BufferStorage {
-struct ErrorResponse : public Response
+struct ErrorResponse : public AbstractResponse
 {    
     ErrorResponse() :
-        Response(),
+        AbstractResponse(),
         errorType(NORMAL)
     {}
 
     ErrorResponse(ProtocolType requestType, ErrorType errorType, const QString &description) :
-        Response(requestType),
+        AbstractResponse(requestType),
         errorType(errorType),
         description(description)
     {}

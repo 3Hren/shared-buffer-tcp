@@ -27,7 +27,7 @@ BufferClientPrivate::BufferClientPrivate(BufferClient *bufferClient) :
     connect(this, SIGNAL(error(ErrorResponse)), bufferClient, SIGNAL(error(ErrorResponse)));
 }
 
-qint64 BufferClientPrivate::sendRequest(RequestProtocol *request)
+qint64 BufferClientPrivate::sendRequest(Request *request)
 {
     const QByteArray &requestMessage = request->encode();
     qint64 bytesWritten = socket->write(requestMessage);
@@ -54,7 +54,7 @@ void BufferClientPrivate::setSocketError(QAbstractSocket::SocketError abstractSo
 {
     socketError.error = abstractSocketError;
     socketError.errorString = socket->errorString();
-    Q_EMIT error(ErrorResponse(RESPONSE_ERROR, static_cast<ErrorType>(socketError.error), socketError.errorString));//! @todo: RESPONSE_ERROR неправильно
+    Q_EMIT error(ErrorResponse(RESPONSE_ERROR, static_cast<ErrorType>(socketError.error), socketError.errorString));
 }
 
 void BufferClientPrivate::callSignalDatasReceived(const SignalDataResponse &response)

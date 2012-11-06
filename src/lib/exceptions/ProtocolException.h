@@ -6,27 +6,27 @@
 
 namespace BufferStorage {
 class ProtocolException : public BufferStorageException {
-    ProtocolType inputRequestType; //! @todo: make public?
+    ProtocolType requestType; //! @todo: make public?
     ErrorType errorType;
 public:
     ProtocolException(ErrorType errorType, const QString &reason) throw() :
         BufferStorageException(reason),
-        inputRequestType(UNKNOWN_PROTOCOL_TYPE),
+        requestType(UNKNOWN_PROTOCOL_TYPE),
         errorType(errorType)
     {}
 
     ProtocolException(ProtocolType inputRequestType, ErrorType errorType, const QString &reason) throw() :
         BufferStorageException(reason),
-        inputRequestType(inputRequestType),
+        requestType(inputRequestType),
         errorType(errorType)
     {}
 
-    ProtocolType getInputRequestType() const { //! @todo: rename to getInputPROTOCOLType
-        return inputRequestType;
+    ProtocolType getRequestType() const {
+        return requestType;
     }
 
-    void setInputRequestType(ProtocolType type) {
-        inputRequestType = type;
+    void setRequestType(ProtocolType type) {
+        requestType = type;
     }
 
     ErrorType getErrorType() const {

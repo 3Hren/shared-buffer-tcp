@@ -6,7 +6,7 @@ namespace BufferStorage {
 class NormalMessageResponseHandler : public ClientSideResponseHandler
 {
 public:
-    NormalMessageResponseHandler(RequestProtocol *requestProtocol, BufferClientPrivate *clientPrivate, QTcpSocket *socket);
+    NormalMessageResponseHandler(Request *requestProtocol, BufferClientPrivate *clientPrivate, QTcpSocket *socket);
 
     void execute();
 };

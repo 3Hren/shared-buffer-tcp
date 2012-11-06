@@ -2,18 +2,18 @@
 
 #include "../BufferClient.h"
 #include "../BufferClientPrivate.h"
-#include "../../protocol/GetBufferResponseProtocol.h"
+#include "../../protocol/GetBufferResponse.h"
 
 using namespace BufferStorage;
 
-GetBufferResponseHandler::GetBufferResponseHandler(RequestProtocol *requestProtocol, BufferClientPrivate *clientPrivate, QTcpSocket *socket) :
+GetBufferResponseHandler::GetBufferResponseHandler(Request *requestProtocol, BufferClientPrivate *clientPrivate, QTcpSocket *socket) :
     ClientSideResponseHandler(requestProtocol, clientPrivate, socket)
 {
 }
 
 void GetBufferResponseHandler::execute()
 {
-    GetBufferResponseProtocol *getBufferResponseProtocol = static_cast<GetBufferResponseProtocol *>(requestProtocol);
+    GetBufferResponse *getBufferResponseProtocol = static_cast<GetBufferResponse *>(requestProtocol);
 
     const ProtocolType requestType = getBufferResponseProtocol->getRequestType();
     const quint16 id = getBufferResponseProtocol->getBufferId();

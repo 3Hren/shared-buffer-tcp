@@ -2,15 +2,15 @@
 
 #include "../BufferServer.h"
 #include "../BufferManager.h"
-#include "../../protocol/GetBufferRequestProtocol.h"
-#include "../../protocol/GetBufferResponseProtocol.h"
+#include "../../protocol/GetBufferRequest.h"
+#include "../../protocol/GetBufferResponse.h"
 #include "../../exceptions/BufferException.h"
 
 #include <QTcpSocket>
 
 using namespace BufferStorage;
 
-GetBufferRequestHandler::GetBufferRequestHandler(RequestProtocol *requestProtocol, BufferServer *server, QTcpSocket *socket) :
+GetBufferRequestHandler::GetBufferRequestHandler(Request *requestProtocol, BufferServer *server, QTcpSocket *socket) :
     ServerSideRequestHandler(requestProtocol, server, socket)
 {
 }
@@ -18,7 +18,7 @@ GetBufferRequestHandler::GetBufferRequestHandler(RequestProtocol *requestProtoco
 void GetBufferRequestHandler::execute()
 {
     BufferManager *bufferManager = server->getBufferManager();
-    GetBufferRequestProtocol *getBufferRequestProtocol = static_cast<GetBufferRequestProtocol *>(requestProtocol);
+    GetBufferRequest *getBufferRequestProtocol = static_cast<GetBufferRequest *>(requestProtocol);
 
     BufferId bufferId = getBufferRequestProtocol->getBufferId();
 
@@ -32,6 +32,6 @@ void GetBufferRequestHandler::execute()
         throw exception;
     }
 
-    GetBufferResponseProtocol response(bufferId, bufferTimeStamps, bufferData);
+    GetBufferResponse response(bufferId, bufferTimeStamps, bufferData);
     socket->write(response.encode());
 }

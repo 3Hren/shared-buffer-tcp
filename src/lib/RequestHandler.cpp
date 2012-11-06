@@ -2,7 +2,7 @@
 
 using namespace BufferStorage;
 
-RequestHandler::RequestHandler(RequestProtocol *requestProtocol, QTcpSocket *socket) :
+RequestHandler::RequestHandler(Request *requestProtocol, QTcpSocket *socket) :
     requestProtocol(requestProtocol),
     socket(socket)
 {
