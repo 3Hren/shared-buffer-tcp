@@ -43,7 +43,7 @@ public:
 Q_SIGNALS:
     void connected();
     void stateChanged(QAbstractSocket::SocketState state);
-    void error(const ErrorResponseStruct &response);
+    void error(const ErrorResponseStruct &response); //! @todo: эти вот структуры можно пихнуть
     void signalDatasReceived(const SignalDataResponse &response);
     void bufferReceived(const BufferResponse &response);
     void normalResponseReceived(const NormalResponse &response);

@@ -194,22 +194,22 @@ void CyclicBufferTest::testErrorMessageRequestSerializing()
     QCOMPARE(decodedInputRequest->getErrorMessage(), errorMessage);
 }
 
-#include "protocol/NormalMessageResponse.h"
+#include "protocol/PushResponse.h"
 void CyclicBufferTest::testNormalMessageResponseProtocolClass()
 {
-    NormalMessageResponse request(REQUEST_PUSH, "");
+    PushResponse request(REQUEST_PUSH, "");
     Q_UNUSED(request);
 }
 
 void CyclicBufferTest::testNormalMessageRequestSerializing()
 {
     // Run
-    NormalMessageResponse request(REQUEST_PUSH, "Ok");
+    PushResponse request(REQUEST_PUSH, "Ok");
     QScopedPointer<Request> response(getInputRequestThroughNetworkSendMock(&request));
 
     // Compare
     QCOMPARE(response->getType(), RESPONSE_PUSH);
-    NormalMessageResponse *decodedResponse = static_cast<NormalMessageResponse *>(response.data());
+    PushResponse *decodedResponse = static_cast<PushResponse *>(response.data());
     QCOMPARE(decodedResponse->getRequestType(), REQUEST_PUSH);
     QCOMPARE(decodedResponse->getMessage(), QString("Ok"));
 }

@@ -4,7 +4,7 @@
 #include "server/BufferManager.h"
 
 #include "protocol/PushRequest.h"
-#include "protocol/NormalMessageResponse.h"
+#include "protocol/PushResponse.h"
 
 #include "exceptions/BufferException.h"
 
@@ -27,7 +27,7 @@ void PushRequestHandler::execute()
 
     try {
         bufferManager->pushSignalDatas(signalDatas, timeStamp);
-        NormalMessageResponse response(REQUEST_PUSH, "Ok");
+        PushResponse response(REQUEST_PUSH, "Ok");
         socket->write(response.encode());
     } catch (BufferException &e) {
         throw e;

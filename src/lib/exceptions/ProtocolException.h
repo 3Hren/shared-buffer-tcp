@@ -6,7 +6,7 @@
 
 namespace BufferStorage {
 class ProtocolException : public BufferStorageException {
-    ProtocolType requestType; //! @todo: make public?
+    ProtocolType requestType;
     ErrorType errorType;
 public:
     ProtocolException(ErrorType errorType, const QString &reason) throw() :

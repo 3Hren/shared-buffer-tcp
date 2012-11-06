@@ -38,7 +38,6 @@ HEADERS += \
     exceptions/ClientException.h \
     protocol/Response.h \
     protocol/PushRequest.h \
-    protocol/NormalMessageResponse.h \
     protocol/GetSignalDataResponse.h \
     protocol/GetSignalDataRequest.h \
     protocol/GetBufferResponse.h \
@@ -47,7 +46,8 @@ HEADERS += \
     protocol/RequestFactory.h \
     client/struct/AbstractResponse.h \
     protocol/ErrorResponse.h \
-    client/struct/ErrorResponseStruct.h
+    client/struct/ErrorResponseStruct.h \
+    protocol/PushResponse.h
 
 SOURCES += \
     ConnectionHandler.cpp \
@@ -80,6 +80,6 @@ SOURCES += \
     protocol/Request.cpp \
     protocol/Response.cpp \
     protocol/RequestFactory.cpp \
-    protocol/NormalMessageResponse.cpp \
     protocol/GetSignalDataResponse.cpp \
-    protocol/ErrorResponse.cpp
+    protocol/ErrorResponse.cpp \
+    protocol/PushResponse.cpp

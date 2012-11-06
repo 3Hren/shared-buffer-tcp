@@ -2,7 +2,7 @@
 
 #include "client/BufferClientPrivate.h"
 
-#include "protocol/NormalMessageResponse.h"
+#include "protocol/PushResponse.h"
 
 #include "client/struct/NormalResponse.h"
 
@@ -15,7 +15,7 @@ NormalMessageResponseHandler::NormalMessageResponseHandler(Request *requestProto
 
 void NormalMessageResponseHandler::execute()
 {
-    NormalMessageResponse *messageResponse = static_cast<NormalMessageResponse *>(requestProtocol);
+    PushResponse *messageResponse = static_cast<PushResponse *>(requestProtocol);
     const ProtocolType requestType = messageResponse->getRequestType();
     const QString &message = messageResponse->getMessage();
 

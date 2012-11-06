@@ -3,12 +3,12 @@
 #include "Response.h"
 
 namespace BufferStorage {
-class NormalMessageResponse : public Response
+class PushResponse : public Response
 {
     QString message;
 public:
-    NormalMessageResponse();
-    NormalMessageResponse(ProtocolType requestType, const QString &message);
+    PushResponse();
+    PushResponse(ProtocolType requestType, const QString &message);
 
     QString getMessage() const;
 
