@@ -10,7 +10,7 @@ GetSignalDataResponse::GetSignalDataResponse() :
 GetSignalDataResponse::GetSignalDataResponse(TimeStamp timeStamp, const SignalValueVector &signalDatas) :
     Response(RESPONSE_GET_SIGNAL_DATA, REQUEST_GET_SIGNAL_DATA),
     timeStamp(timeStamp),
-    signalDatas(signalDatas)
+    signalValues(signalDatas)
 {
 }
 
@@ -19,17 +19,17 @@ TimeStamp GetSignalDataResponse::getTimeStamp() const
     return timeStamp;
 }
 
-SignalValueVector GetSignalDataResponse::getSignalDatas() const
+SignalValueVector GetSignalDataResponse::getSignalValues() const
 {
-    return signalDatas;
+    return signalValues;
 }
 
 void GetSignalDataResponse::encodeData(QDataStream *out) const
 {
-    *out << timeStamp << signalDatas;
+    *out << timeStamp << signalValues;
 }
 
 void GetSignalDataResponse::decodeData(QDataStream *in)
 {
-    *in >> timeStamp >> signalDatas;
+    *in >> timeStamp >> signalValues;
 }

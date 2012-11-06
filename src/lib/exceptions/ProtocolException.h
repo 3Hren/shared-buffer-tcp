@@ -15,9 +15,9 @@ public:
         errorType(errorType)
     {}
 
-    ProtocolException(ProtocolType inputRequestType, ErrorType errorType, const QString &reason) throw() :
+    ProtocolException(ProtocolType requestType, ErrorType errorType, const QString &reason) throw() :
         BufferStorageException(reason),
-        requestType(inputRequestType),
+        requestType(requestType),
         errorType(errorType)
     {}
 
@@ -25,8 +25,8 @@ public:
         return requestType;
     }
 
-    void setRequestType(ProtocolType type) {
-        requestType = type;
+    void setRequestType(ProtocolType requestType) {
+        this->requestType = requestType;
     }
 
     ErrorType getErrorType() const {

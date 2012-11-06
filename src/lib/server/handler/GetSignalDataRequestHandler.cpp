@@ -20,7 +20,7 @@ GetSignalDataRequestHandler::GetSignalDataRequestHandler(Request *requestProtoco
 void GetSignalDataRequestHandler::execute()
 {
     BufferManager *bufferManager = server->getBufferManager();
-    GetSignalDataRequest *getSignalDataRequestProtocol = static_cast<GetSignalDataRequest *>(requestProtocol);
+    GetSignalDataRequest *getSignalDataRequestProtocol = static_cast<GetSignalDataRequest *>(request);
 
     const QVector<quint16> &bufferIds = getSignalDataRequestProtocol->getRequestedBufferIndexes();
     TimeStamp timeStamp = getSignalDataRequestProtocol->getTimeStamp();

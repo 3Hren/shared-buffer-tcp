@@ -136,7 +136,7 @@ void CyclicBufferTest::testPushRequestSerializing()
     QCOMPARE(inputRequest->getType(), REQUEST_PUSH);
     PushRequest *decodedInputRequest = static_cast<PushRequest *>(inputRequest.data());
     QCOMPARE(decodedInputRequest->getTimeStamp(), timeStamp);
-    QCOMPARE(decodedInputRequest->getSignalDataVector(), signalDatas);
+    QCOMPARE(decodedInputRequest->getSignalValues(), signalDatas);
 }
 
 void CyclicBufferTest::testGetSignalDataRequestSerializing()
@@ -172,7 +172,7 @@ void CyclicBufferTest::testGetSignalDataResponseSerializing()
     QCOMPARE(inputRequest->getType(), RESPONSE_GET_SIGNAL_DATA);
     GetSignalDataResponse *decodedInputRequest = static_cast<GetSignalDataResponse *>(inputRequest.data());
     QCOMPARE(decodedInputRequest->getTimeStamp(), timeStamp);
-    QCOMPARE(decodedInputRequest->getSignalDatas(), signalDatas);
+    QCOMPARE(decodedInputRequest->getSignalValues(), signalDatas);
 }
 
 void CyclicBufferTest::testErrorMessageRequestSerializing()
@@ -240,8 +240,8 @@ void CyclicBufferTest::testGetBufferResponseProtocolSerializing()
     QCOMPARE(inputRequest->getType(), RESPONSE_GET_BUFFER);
     GetBufferResponse *decodedInputRequest = static_cast<GetBufferResponse *>(inputRequest.data());
     QCOMPARE(decodedInputRequest->getBufferId(), bufferId);
-    QCOMPARE(decodedInputRequest->getBufferTimeStamps(), timeStamps);
-    QCOMPARE(decodedInputRequest->getBufferData(), datas);
+    QCOMPARE(decodedInputRequest->getTimeStamps(), timeStamps);
+    QCOMPARE(decodedInputRequest->getSignalValues(), datas);
 }
 
 void CyclicBufferTest::testServerIsListening()
@@ -425,8 +425,8 @@ void CyclicBufferTest::testGetValueFromServer()
     QCOMPARE(response->getType(), RESPONSE_GET_SIGNAL_DATA);
     GetSignalDataResponse *getSignalDataResponse = static_cast<GetSignalDataResponse *>(response.data());
     QCOMPARE(getSignalDataResponse->getTimeStamp(), pushTimeStamp);
-    QCOMPARE(getSignalDataResponse->getSignalDatas().size(), 1);
-    QCOMPARE(getSignalDataResponse->getSignalDatas().at(0), SignalValue(100.0, 0));
+    QCOMPARE(getSignalDataResponse->getSignalValues().size(), 1);
+    QCOMPARE(getSignalDataResponse->getSignalValues().at(0), SignalValue(100.0, 0));
 }
 
 void CyclicBufferTest::testGetValuesFromServer()
@@ -464,8 +464,8 @@ void CyclicBufferTest::testGetValuesFromServer()
     QCOMPARE(response->getRequestType(), REQUEST_GET_SIGNAL_DATA);
     GetSignalDataResponse *getSignalDataResponse = static_cast<GetSignalDataResponse *>(response.data());
     QCOMPARE(getSignalDataResponse->getTimeStamp(), pushTimeStamp);
-    QCOMPARE(getSignalDataResponse->getSignalDatas().size(), data.size());
-    QCOMPARE(getSignalDataResponse->getSignalDatas(), data.values().toVector());
+    QCOMPARE(getSignalDataResponse->getSignalValues().size(), data.size());
+    QCOMPARE(getSignalDataResponse->getSignalValues(), data.values().toVector());
 }
 
 void CyclicBufferTest::testGetValuesWrongSomeIndexes()
@@ -550,8 +550,8 @@ void CyclicBufferTest::compareBufferGetResults(QSignalSpy *spy, int spyCount, co
     QSharedPointer<Response> response = arguments.at(0).value<QSharedPointer<Response> >();
     GetBufferResponse *getBufferResponse = static_cast<GetBufferResponse *>(response.data());
     QCOMPARE(getBufferResponse->getRequestType(), REQUEST_GET_BUFFER);
-    QCOMPARE(getBufferResponse->getBufferTimeStamps(), bufferTimeStamps);
-    QCOMPARE(getBufferResponse->getBufferData(), signalDatas);
+    QCOMPARE(getBufferResponse->getTimeStamps(), bufferTimeStamps);
+    QCOMPARE(getBufferResponse->getSignalValues(), signalDatas);
 }
 
 void CyclicBufferTest::testGetBuffer()

@@ -10,6 +10,6 @@ protected:
     BufferServer *server;
 
 public:
-    ServerSideRequestHandler(Request *requestProtocol, BufferServer *server, QTcpSocket *socket);
+    ServerSideRequestHandler(Request *request, BufferServer *server, QTcpSocket *socket);
 };
 }

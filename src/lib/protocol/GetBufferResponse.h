@@ -8,15 +8,15 @@ namespace BufferStorage {
 class GetBufferResponse : public Response
 {
     BufferId bufferId;
-    TimeStampVector bufferTimeStamps;
-    SignalValueVector bufferData;
+    TimeStampVector timeStamps;
+    SignalValueVector signalValues;
 public:
     GetBufferResponse();
-    GetBufferResponse(BufferId bufferId, const TimeStampVector &bufferTimeStamps, const SignalValueVector &bufferData);
+    GetBufferResponse(BufferId bufferId, const TimeStampVector &timeStamps, const SignalValueVector &signalValues);
 
     BufferId getBufferId() const;
-    TimeStampVector getBufferTimeStamps() const;
-    SignalValueVector getBufferData() const;
+    TimeStampVector getTimeStamps() const;
+    SignalValueVector getSignalValues() const;
 
 protected:
     void encodeData(QDataStream *out) const;

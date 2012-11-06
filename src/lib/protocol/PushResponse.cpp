@@ -8,7 +8,7 @@ PushResponse::PushResponse() :
 }
 
 PushResponse::PushResponse(ProtocolType requestType, const QString &message) :
-    Response(RESPONSE_PUSH, requestType),//! @todo: СЮДА!
+    Response(RESPONSE_PUSH, requestType),
     message(message)
 {
 }

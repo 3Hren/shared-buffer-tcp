@@ -7,10 +7,10 @@ PushRequest::PushRequest() :
 {
 }
 
-PushRequest::PushRequest(TimeStamp timeStamp, const SignalValueVector &signalDatas) :
+PushRequest::PushRequest(TimeStamp timeStamp, const SignalValueVector &signalValues) :
     Request(REQUEST_PUSH),
     timeStamp(timeStamp),
-    signalDatas(signalDatas)
+    signalValues(signalValues)
 {
 }
 
@@ -20,17 +20,17 @@ TimeStamp PushRequest::getTimeStamp() const
 }
 
 //! @todo: rename
-SignalValueVector PushRequest::getSignalDataVector() const
+SignalValueVector PushRequest::getSignalValues() const
 {
-    return signalDatas;
+    return signalValues;
 }
 
 void PushRequest::encodeData(QDataStream *out) const
 {
-    *out << timeStamp << signalDatas;
+    *out << timeStamp << signalValues;
 }
 
 void PushRequest::decodeData(QDataStream *in)
 {
-    *in >> timeStamp >> signalDatas;
+    *in >> timeStamp >> signalValues;
 }

@@ -38,6 +38,12 @@ void BufferClient::connectToServer(const QString &host, quint16 port)
     d->socket->connectToHost(host, port);
 }
 
+bool BufferClient::waitForConnected(int timeout) const
+{
+    Q_D(const BufferClient);
+    return d->socket->waitForConnected(timeout);
+}
+
 bool BufferClient::blockingConnectToServer(const QString &host, quint16 port, int timeout)
 {
     connectToServer(host, port);
@@ -54,24 +60,18 @@ bool BufferClient::blockingDisconnectFromServer(int timeout)
     return d->socket->waitForDisconnected(timeout);
 }
 
-bool BufferClient::waitForConnected(int timeout) const
-{
-    Q_D(const BufferClient);
-    return d->socket->waitForConnected(timeout);
-}
-
-void BufferClient::push(const SignalValueVector &signalDatas, TimeStamp timeStamp)
+void BufferClient::push(const SignalValueVector &signalValues, TimeStamp timeStamp)
 {
     Q_D(BufferClient);
-    PushRequest request(timeStamp, signalDatas);
+    PushRequest request(timeStamp, signalValues);
     d->sendRequest(&request);
 }
 
-void BufferClient::blockingPush(const SignalValueVector &signalDatas, TimeStamp timeStamp, int timeout)
+void BufferClient::blockingPush(const SignalValueVector &signalValues, TimeStamp timeStamp, int timeout)
 {
     Q_D(BufferClient);
     d->checkConnection();
-    push(signalDatas, timeStamp);
+    push(signalValues, timeStamp);
     BlockingListener listener(timeout, this);
     d->waitForResponseReceived(&listener);
     listener.getResponse<PushResponse *>();
@@ -99,7 +99,7 @@ SignalBuffer BufferClient::blockingGetBuffer(BufferId bufferId, int timeout)
     BlockingListener listener(timeout, this);
     d->waitForResponseReceived(&listener);
     GetBufferResponse *response = listener.getResponse<GetBufferResponse *>();
-    const SignalBuffer signalBuffer(response->getBufferTimeStamps(), response->getBufferData());
+    const SignalBuffer signalBuffer(response->getTimeStamps(), response->getSignalValues());
     return signalBuffer;
 }
 

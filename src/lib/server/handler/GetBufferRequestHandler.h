@@ -6,7 +6,7 @@ namespace BufferStorage {
 class GetBufferRequestHandler : public ServerSideRequestHandler
 {
 public:
-    GetBufferRequestHandler(Request *requestProtocol, BufferServer *server, QTcpSocket *socket);
+    GetBufferRequestHandler(Request *request, BufferServer *server, QTcpSocket *socket);
 
     void execute();
 };

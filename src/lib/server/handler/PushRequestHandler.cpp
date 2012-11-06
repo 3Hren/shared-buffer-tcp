@@ -20,9 +20,9 @@ PushRequestHandler::PushRequestHandler(Request *requestProtocol, BufferServer *s
 void PushRequestHandler::execute()
 {    
     BufferManager *bufferManager = server->getBufferManager();
-    PushRequest *pushRequestProtocol = static_cast<PushRequest *>(requestProtocol);
+    PushRequest *pushRequestProtocol = static_cast<PushRequest *>(request);
 
-    const SignalValueVector &signalDatas = pushRequestProtocol->getSignalDataVector();
+    const SignalValueVector &signalDatas = pushRequestProtocol->getSignalValues();
     const TimeStamp &timeStamp = pushRequestProtocol->getTimeStamp();
 
     try {

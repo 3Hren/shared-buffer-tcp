@@ -12,8 +12,8 @@ GetBufferResponse::GetBufferResponse() :
 GetBufferResponse::GetBufferResponse(BufferId bufferId, const TimeStampVector &bufferTimeStamps, const SignalValueVector &bufferData) :
     Response(RESPONSE_GET_BUFFER, REQUEST_GET_BUFFER),
     bufferId(bufferId),
-    bufferTimeStamps(bufferTimeStamps),
-    bufferData(bufferData)
+    timeStamps(bufferTimeStamps),
+    signalValues(bufferData)
 {
 }
 
@@ -22,22 +22,22 @@ BufferId GetBufferResponse::getBufferId() const
     return bufferId;
 }
 
-TimeStampVector GetBufferResponse::getBufferTimeStamps() const
+TimeStampVector GetBufferResponse::getTimeStamps() const
 {
-    return bufferTimeStamps;
+    return timeStamps;
 }
 
-SignalValueVector GetBufferResponse::getBufferData() const
+SignalValueVector GetBufferResponse::getSignalValues() const
 {
-    return bufferData;
+    return signalValues;
 }
 
 void GetBufferResponse::encodeData(QDataStream *out) const
 {
-    *out << bufferId << bufferTimeStamps << bufferData;
+    *out << bufferId << timeStamps << signalValues;
 }
 
 void GetBufferResponse::decodeData(QDataStream *in)
 {
-    *in >> bufferId >> bufferTimeStamps >> bufferData;
+    *in >> bufferId >> timeStamps >> signalValues;
 }

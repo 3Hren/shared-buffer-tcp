@@ -10,13 +10,13 @@ namespace BufferStorage {
 class GetSignalDataResponse : public Response
 {
     TimeStamp timeStamp;
-    SignalValueVector signalDatas;
+    SignalValueVector signalValues;
 public:
     GetSignalDataResponse();
-    GetSignalDataResponse(TimeStamp timeStamp, const SignalValueVector &signalDatas);
+    GetSignalDataResponse(TimeStamp timeStamp, const SignalValueVector &signalValues);
 
     TimeStamp getTimeStamp() const;
-    SignalValueVector getSignalDatas() const;
+    SignalValueVector getSignalValues() const;
 
 protected:
     void encodeData(QDataStream *out) const;

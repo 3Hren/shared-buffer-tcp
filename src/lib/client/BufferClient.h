@@ -6,12 +6,13 @@
 #include "SignalBuffer.h"
 #include "SignalValue.h"
 
+#include "protocol/Response.h"
+#include "protocol/ErrorResponse.h"
+
 #include <QDateTime>
 #include <QSharedPointer>
 
 namespace BufferStorage {
-class Response;
-class ErrorResponse;
 class BufferClientPrivate;
 class BufferClient : public QObject
 {        
@@ -25,12 +26,13 @@ public:
 
     bool isConnected() const;
     void connectToServer(const QString &host = "127.0.0.1", quint16 port = 14690);
-    bool blockingConnectToServer(const QString &host = "127.0.0.1", quint16 port = 14690, int timeout = 1500);
-    bool blockingDisconnectFromServer(int timeout = 1500);
     bool waitForConnected(int timeout = 1500) const;
+    bool blockingConnectToServer(const QString &host = "127.0.0.1", quint16 port = 14690, int timeout = 1500);    
 
-    void push(const SignalValueVector &signalDatas, TimeStamp timeStamp = QDateTime::currentDateTime().toTime_t());
-    void blockingPush(const SignalValueVector &signalDatas, TimeStamp timeStamp = QDateTime::currentDateTime().toTime_t(), int timeout = 1500);
+    bool blockingDisconnectFromServer(int timeout = 1500);    
+
+    void push(const SignalValueVector &signalValues, TimeStamp timeStamp = QDateTime::currentDateTime().toTime_t());
+    void blockingPush(const SignalValueVector &signalValues, TimeStamp timeStamp = QDateTime::currentDateTime().toTime_t(), int timeout = 1500);
 
     qint64 getSignalData(const QVector<BufferId> &bufferIds, TimeStamp timeStamp);
 

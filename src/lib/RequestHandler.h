@@ -7,11 +7,11 @@ class Request;
 class RequestHandler
 {
 protected:
-    Request *requestProtocol;
+    Request *request;
     QTcpSocket *socket;
 
 public:
-    RequestHandler(Request *requestProtocol, QTcpSocket *socket);
+    RequestHandler(Request *request, QTcpSocket *socket);
     virtual ~RequestHandler();
 
     virtual void execute() = 0;

@@ -21,6 +21,7 @@ headers.files += \
     BufferStorageGlobal.h \
     Runnable.h \
     SignalValue.h \
+    SignalBuffer.h \
     server/BufferServer.h \
     client/BufferClient.h \    
 

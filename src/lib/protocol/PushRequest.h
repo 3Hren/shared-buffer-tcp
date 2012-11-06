@@ -11,13 +11,13 @@ namespace BufferStorage {
 class PushRequest : public Request
 {
     TimeStamp timeStamp;
-    SignalValueVector signalDatas;
+    SignalValueVector signalValues;
 public:
     PushRequest();
-    PushRequest(TimeStamp timeStamp, const SignalValueVector &signalDatas);
+    PushRequest(TimeStamp timeStamp, const SignalValueVector &signalValues);
 
     TimeStamp getTimeStamp() const;
-    SignalValueVector getSignalDataVector() const;
+    SignalValueVector getSignalValues() const;
 
 protected:
     void encodeData(QDataStream *out) const;

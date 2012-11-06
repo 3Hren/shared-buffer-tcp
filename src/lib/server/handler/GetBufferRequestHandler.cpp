@@ -20,7 +20,7 @@ GetBufferRequestHandler::GetBufferRequestHandler(Request *requestProtocol, Buffe
 void GetBufferRequestHandler::execute()
 {
     BufferManager *bufferManager = server->getBufferManager();
-    GetBufferRequest *getBufferRequestProtocol = static_cast<GetBufferRequest *>(requestProtocol);
+    GetBufferRequest *getBufferRequestProtocol = static_cast<GetBufferRequest *>(request);
 
     BufferId bufferId = getBufferRequestProtocol->getBufferId();
 

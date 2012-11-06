@@ -33,8 +33,8 @@ HEADERS += \
     protocol/RequestFactory.h \
     protocol/ErrorResponse.h \
     protocol/PushResponse.h \
-    ../../lib/SignalBuffer.h \
-    ../../lib/SignalValue.h \
+    SignalBuffer.h \
+    SignalValue.h \
     client/listener/BlockingListener.h
 
 SOURCES += \
