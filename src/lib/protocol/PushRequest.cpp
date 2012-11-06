@@ -19,7 +19,6 @@ TimeStamp PushRequest::getTimeStamp() const
     return timeStamp;
 }
 
-//! @todo: rename
 SignalValueVector PushRequest::getSignalValues() const
 {
     return signalValues;

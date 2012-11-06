@@ -704,6 +704,10 @@ public:
         bufferMaxSize(bufferMaxSize)
     {}
 
+    BufferServer *getServer() const {
+        return server;
+    }
+
 public Q_SLOTS:
     void run() {
         server = new BufferServer(this);
@@ -719,28 +723,34 @@ public Q_SLOTS:
 void CyclicBufferTest::testBlockingPushDataToServer()
 {
     const int MAX_BUFFERS = 10;
-    const int START_INDEX = 1000;
 
     // Initialize
-    BufferServer server;
     BufferClient client;
-    initializeBufferTable(&server, MAX_BUFFERS, START_INDEX);
+    QThread thread;
+    ServerRunner serverRunner(MAX_BUFFERS, 1000);
+    serverRunner.moveToThread(&thread);
+    thread.start();
+    connect(&thread,SIGNAL(started()),&serverRunner,SLOT(run()));
+    QTest::qWait(50); // Wait for thread is started and server run state.
+
     SignalValueVector data;
     data.fill(SignalValue(55.5, 0), MAX_BUFFERS);
 
     // Run
-    server.run();
     client.blockingConnectToServer();
     client.blockingPush(data);
 
     // Compare
-    BufferManager *bM = server.getBufferManager();
+    BufferManager *bM = serverRunner.getServer()->getBufferManager();
     for (int i = 0; i < MAX_BUFFERS; ++i) {
-        Buffer *buffer = bM->getBuffer(START_INDEX + i);
+        Buffer *buffer = bM->getBuffer(i);
         Q_ASSERT(buffer);
         QCOMPARE(buffer->size(), (quint16)1);
         QCOMPARE(buffer->first(), data.at(i));
     }
+
+    thread.quit();
+    thread.wait();
 }
 
 void CyclicBufferTest::testBlockingGetEmptyBuffer()
@@ -750,12 +760,11 @@ void CyclicBufferTest::testBlockingGetEmptyBuffer()
     serverRunner.moveToThread(&thread);
     thread.start();
     connect(&thread,SIGNAL(started()),&serverRunner,SLOT(run()));
-
     QTest::qWait(50); // Wait for thread is started and server run state.
 
     BufferClient client;
     bool isConnected = client.blockingConnectToServer();
-    const SignalBuffer &response = client.blockingGetBuffer(0);
+    const SignalBuffer &response = client.blockingGetBuffer(0, 10000);
 
     QCOMPARE(isConnected, true);
     QCOMPARE(response.timeStampVector.size(), 0);
@@ -778,7 +787,7 @@ void CyclicBufferTest::testBlockingGetBufferWrongIndex()
     BufferClient client;
     client.blockingConnectToServer();
     try {
-        client.blockingGetBuffer(500);
+        client.blockingGetBuffer(500, 10000);
         QFAIL("failed");
     } catch (ProtocolException &e) {
         QCOMPARE(e.getRequestType(), REQUEST_GET_BUFFER);
@@ -796,7 +805,7 @@ void CyclicBufferTest::testBlockingGetBufferClientNotConnectedError()
     BufferStorage::SocketError error = client.getSocketError();
 
     QCOMPARE(isConnected, false);
-    QVERIFY_THROW(client.blockingGetBuffer(0), BufferStorageException);
+    QVERIFY_THROW(client.blockingGetBuffer(0, 10000), BufferStorageException);
     QCOMPARE(error.error, QAbstractSocket::ConnectionRefusedError);
     QCOMPARE(error.errorString, QString("Connection refused"));
 }
@@ -804,3 +813,6 @@ void CyclicBufferTest::testBlockingGetBufferClientNotConnectedError()
 QTEST_MAIN(CyclicBufferTest)
 
 #include "tst_CyclicBufferTest.moc"
+
+//! @todo: перевести на тестовую архитектуру gtest
+//! @todo: внедрить некоторые особенности: диспетчер, расчет хешей, логгирование.

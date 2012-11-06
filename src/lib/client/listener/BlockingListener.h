@@ -9,7 +9,6 @@
 
 #include <QSharedPointer>
 
-//! @todo: сделать шаблонный класс на основе этого
 namespace BufferStorage {
 class Response;
 class BufferClient;
@@ -36,8 +35,10 @@ public:
         return static_cast<T>(response.data());
     }
 
+    Q_SLOT void stopListening();
+
+private:
     Q_SLOT void saveResponse(QSharedPointer<Response> response);
     Q_SLOT void saveErrorResponse(QSharedPointer<ErrorResponse> errorResponse);
-    Q_SLOT void stopListening();
 };
 }

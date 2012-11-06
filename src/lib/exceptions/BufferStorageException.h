@@ -15,7 +15,7 @@ public:
     ~BufferStorageException() throw() {}
 
     const char *what() const throw() {
-        return reason.toUtf8();
+        return reason.toUtf8().constData();
     }
 
     QString getReason() const throw() {
