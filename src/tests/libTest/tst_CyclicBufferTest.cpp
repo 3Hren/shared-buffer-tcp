@@ -5,9 +5,10 @@
 #include "server/BufferServer.h"
 #include "client/BufferClient.h"
 #include "server/BufferManager.h"
-#include "exceptions/BufferNotFoundException.h"
-#include "exceptions/ClientNotConnectedException.h"
-#include "exceptions/ServerCouldNotStartException.h"
+
+#include "exceptions/BufferException.h"
+#include "exceptions/ClientException.h"
+#include "exceptions/ServerException.h"
 
 #include "protocol/RequestProtocol.h"
 #include "protocol/PushRequestProtocol.h"

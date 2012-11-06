@@ -5,14 +5,14 @@
 #include <QObject>
 #include <QString>
 
-class Exception : public std::exception {
-    QString reason;
+namespace BufferStorage {
+class BufferStorageException : public std::exception {
+    const QString reason;
 public:
-    Exception(const QString &reason) throw() :
+    BufferStorageException(const QString &reason) throw() :
         reason(reason)
     {}
-
-    ~Exception() throw() {}
+    ~BufferStorageException() throw() {}
 
     const char *what() const throw() {
         return reason.toUtf8();
@@ -22,4 +22,4 @@ public:
         return reason;
     }
 };
-
+}

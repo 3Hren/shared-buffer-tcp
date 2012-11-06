@@ -1,8 +1,8 @@
 TEMPLATE = app
 TARGET = buffer_server
-ROOT = ../../..
-LIBRARY_PATH = $$ROOT/lib
-DESTDIR = $$ROOT/bin/app
+ROOT_PATH = ../../..
+LIBRARY_PATH = $$ROOT_PATH/lib
+DESTDIR = $$ROOT_PATH/bin/app
 
 QT       += core network
 QT       -= gui

@@ -88,9 +88,6 @@ void BufferClient::getBuffer(quint16 bufferId)
     d->sendRequest(&request);
 }
 
-#include <QCoreApplication>
-#include "exceptions/ProtocolException.h"
-#include "exceptions/ClientNotConnectedException.h"
 BufferResponse BufferClient::blockingGetBuffer(quint16 bufferId, int timeout)
 {    
     Q_D(BufferClient);

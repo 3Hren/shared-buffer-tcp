@@ -5,8 +5,6 @@
 #include <QHash>
 
 namespace BufferStorage {
-static const quint32 MAGIC = 9275623;
-
 typedef quint8 RequestType;
 
 namespace ProtocolType {
@@ -48,5 +46,6 @@ struct SocketError {
 typedef QMap<quint16, quint16> BufferInfoMap;
 typedef quint32 MessageSize;
 typedef quint32 Magic;
+static const Magic MAGIC = 9275623;
 typedef quint32 TimeStamp;
 }

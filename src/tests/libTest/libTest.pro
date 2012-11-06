@@ -10,14 +10,14 @@ CONFIG   += console
 #CONFIG   += debug_and_release build_all warn_on
 CONFIG   -= app_bundle
 
-LIB_SOURCE_DIR = ../../lib
+LIB_SOURCE_PATH = ../../lib
 
-INCLUDEPATH += $$LIB_SOURCE_DIR
-DEPENDPATH += $$LIB_SOURCE_DIR
-include($$LIB_SOURCE_DIR/BufferStorage.pri)
+INCLUDEPATH += $$LIB_SOURCE_PATH
+DEPENDPATH += $$LIB_SOURCE_PATH
+include($$LIB_SOURCE_PATH/BufferStorage.pri)
 
 SOURCES += tst_CyclicBufferTest.cpp
 DEFINES += SRCDIR=\\\"$$PWD/\\\"
 
-OBJECTS_DIR = .obj/debug
-MOC_DIR = .moc/debug
+OBJECTS_DIR = .obj
+MOC_DIR = .moc

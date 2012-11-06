@@ -1,9 +1,10 @@
 #include "BufferServer.h"
 
-#include "../exceptions/ServerCouldNotStartException.h"
-#include "buffer/HashTableBufferManager.h"
-#include "../ConnectionHandler.h"
 #include "ServerConnectionHandler.h"
+
+#include "buffer/HashTableBufferManager.h"
+
+#include "exceptions/ServerException.h"
 
 #include <QTcpServer>
 

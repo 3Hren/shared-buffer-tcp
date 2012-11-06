@@ -1,36 +1,25 @@
 #pragma once
 
-#include "Exception.h"
+#include "BufferStorageException.h"
 
 #include "BufferStorageGlobal.h"
 
 namespace BufferStorage {
-class ProtocolException : public Exception {    
-    TimeStamp timeStamp;
+class ProtocolException : public BufferStorageException {
     quint8 inputRequestType;
     quint8 errorType;
 public:
     ProtocolException(quint8 errorType, const QString &reason) throw() :
-        Exception(reason),
-        timeStamp(0),
+        BufferStorageException(reason),
         inputRequestType(0),
         errorType(errorType)
     {}
 
     ProtocolException(quint8 inputRequestType, quint8 errorType, const QString &reason) throw() :
-        Exception(reason),
-        timeStamp(0),
+        BufferStorageException(reason),
         inputRequestType(inputRequestType),
         errorType(errorType)
     {}
-
-    TimeStamp getTimeStamp() const {
-        return timeStamp;
-    }
-
-    void setTimeStamp(TimeStamp timeStamp) {
-        this->timeStamp = timeStamp;
-    }
 
     quint8 getInputRequestType() const {
         return inputRequestType;

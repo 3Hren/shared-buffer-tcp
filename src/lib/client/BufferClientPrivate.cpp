@@ -6,7 +6,7 @@
 
 #include "listener/BlockingListener.h"
 
-#include "exceptions/ClientNotConnectedException.h"
+#include "exceptions/ClientException.h"
 #include "exceptions/ProtocolException.h"
 
 #include <QTcpSocket>

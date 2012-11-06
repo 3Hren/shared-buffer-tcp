@@ -13,8 +13,8 @@ include(BufferStorage.pri)
 
 SOURCES += main.cpp
 
-OBJECTS_DIR = .obj/debug
-MOC_DIR = .moc/debug
+OBJECTS_DIR = .obj
+MOC_DIR = .moc
 
 headers.path = ../../lib/include
 headers.files += \

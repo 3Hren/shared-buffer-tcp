@@ -3,7 +3,7 @@
 #include "BufferServer.h"
 #include "ServerSideRequestHandlerFactory.h"
 #include "../RequestHandler.h"
-#include "../exceptions/WrongRequestTypeException.h"
+#include "../exceptions/BufferException.h"
 #include "../protocol/RequestProtocol.h"
 #include "../protocol/ErrorMessageRequestProtocol.h"
 #include "../BufferStorageGlobal.h"

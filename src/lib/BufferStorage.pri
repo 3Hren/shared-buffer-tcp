@@ -1,17 +1,10 @@
-DEFINES += \
-    BUFFER_CLIENT_DEBUG \
-    BUFFER_SERVER_DEBUG
-
 HEADERS += \
-    exceptions/ServerCouldNotStartException.h \
     exceptions/ServerException.h \
     Runnable.h \
     server/BufferManager.h \
     Buffer.h \
-    exceptions/BufferNotFoundException.h \
     exceptions/BufferException.h \
     SignalData.h \
-    exceptions/WrongRequestTypeException.h \
     exceptions/ProtocolException.h \
     ConnectionHandler.h \
     RequestHandler.h \
@@ -22,11 +15,9 @@ HEADERS += \
     server/ServerConnectionHandler.h \
     client/ClientConnectionHandler.h \
     server/ServerSideRequestHandlerFactory.h \
-    exceptions/WrongPushedDataSizeException.h \
     client/ClientSideRequestHandlerFactory.h \
     protocol/GetSignalDataRequestProtocol.h \
     protocol/GetSignalDataResponseProtocol.h \    
-    exceptions/WrongTimeStampException.h \
     protocol/GetBufferRequestProtocol.h \
     protocol/GetBufferResponseProtocol.h \    
     client/handler/GetSignalDataResponseHandler.h \
@@ -46,7 +37,6 @@ HEADERS += \
     client/struct/ErrorResponse.h \
     client/struct/SignalDataResponse.h \
     protocol/ResponseProtocol.h \
-    exceptions/ClientNotConnectedException.h \
     client/BufferClient.h \
     server/BufferServer.h \
     BufferStorageGlobal.h \
@@ -56,7 +46,8 @@ HEADERS += \
     client/listener/BlockingPushListener.h \
     client/struct/NormalResponse.h \
     client/handler/NormalMessageResponseHandler.h \
-    exceptions/Exception.h
+    exceptions/BufferStorageException.h \
+    exceptions/ClientException.h
 
 SOURCES += \
     ConnectionHandler.cpp \

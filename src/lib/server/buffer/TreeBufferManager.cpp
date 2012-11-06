@@ -1,8 +1,6 @@
 #include "TreeBufferManager.h"
 
-#include "../../exceptions/BufferNotFoundException.h"
-#include "../../exceptions/WrongPushedDataSizeException.h"
-#include "../../exceptions/WrongTimeStampException.h"
+#include "exceptions/BufferException.h"
 
 using namespace BufferStorage;
 
