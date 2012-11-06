@@ -25,10 +25,10 @@ headers.files += \
     server/BufferServer.h \
     client/BufferClient.h \    
 
-client_struct.path = ../../lib/include/struct
-client_struct.files += client/struct/*
+protocol.path = ../../lib/include/protocol
+protocol.files += protocol/*.h
 
 exceptions.path = ../../lib/include/exceptions
-exceptions.files += exceptions/*
+exceptions.files += exceptions/*.h
 
-INSTALLS += headers client_struct exceptions
+INSTALLS += headers protocol exceptions

@@ -14,7 +14,7 @@ class Model : public QAbstractTableModel
     Q_OBJECT
     BufferClient *client;
     TimeStampVector timeStamps;
-    QList<SignalValueVector > signalDatas;
+    QList<SignalValueVector> signalDatas;
 
     quint16 startAddress;
     quint16 buffersCount;

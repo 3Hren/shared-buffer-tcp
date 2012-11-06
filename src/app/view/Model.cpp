@@ -76,13 +76,13 @@ QVariant Model::data(const QModelIndex &index, int role) const
 void Model::updateValues()
 {
     beginResetModel();
-    const BufferResponse &response = client->blockingGetBuffer(startAddress);
-    timeStamps = response.timeStamps;
+    const SignalBuffer &signalBuffer= client->blockingGetBuffer(startAddress);
+    timeStamps = signalBuffer.timeStampVector;
 
     signalDatas.clear();
     for (quint16 address = startAddress; address < startAddress + 2 * buffersCount; address += 2) {
-        const BufferResponse &response = client->blockingGetBuffer(address);
-        signalDatas.append(response.signalDatas);
+        const SignalBuffer &signalBuffer = client->blockingGetBuffer(address);
+        signalDatas.append(signalBuffer.signalValueVector);
     }
     endResetModel();
 }
