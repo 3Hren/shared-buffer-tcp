@@ -74,21 +74,21 @@ void BufferClient::blockingPush(const QVector<SignalData> &signalDatas, TimeStam
     d->waitForOperationDone(&listener);
 }
 
-qint64 BufferClient::getSignalData(const QVector<quint16> &bufferIds, TimeStamp timeStamp)
+qint64 BufferClient::getSignalData(const QVector<BufferId> &bufferIds, TimeStamp timeStamp)
 {
     Q_D(BufferClient);
     GetSignalDataRequestProtocol request(timeStamp, bufferIds);
     return d->sendRequest(&request);
 }
 
-void BufferClient::getBuffer(quint16 bufferId)
+void BufferClient::getBuffer(BufferId bufferId)
 {
     Q_D(BufferClient);
     GetBufferRequestProtocol request(bufferId);
     d->sendRequest(&request);
 }
 
-BufferResponse BufferClient::blockingGetBuffer(quint16 bufferId, int timeout)
+BufferResponse BufferClient::blockingGetBuffer(BufferId bufferId, int timeout)
 {    
     Q_D(BufferClient);
     d->checkConnection();

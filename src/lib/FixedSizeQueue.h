@@ -1,22 +1,23 @@
 #pragma once
 
+#include "BufferStorageGlobal.h"
 #include <QQueue>
 
 namespace BufferStorage {
 template<typename T>
 class FixedSizeQueue {
-    quint16 maximumSize;
+    BufferSize maximumSize;
     QQueue<T> queue;
 
 public:
     FixedSizeQueue() {}
-    FixedSizeQueue(quint16 maximumSize) : maximumSize(maximumSize) {}
+    FixedSizeQueue(BufferSize maximumSize) : maximumSize(maximumSize) {}
 
-    quint16 getMaximumSize() const {
+    BufferSize getMaximumSize() const {
         return maximumSize;
     }
 
-    void setMaximumSize(quint16 size) {
+    void setMaximumSize(BufferSize size) {
         maximumSize = size;
     }
 
@@ -30,7 +31,7 @@ public:
         return queue.dequeue();
     }
 
-    quint16 size() const {
+    BufferSize size() const {
         return queue.size();
     }
 
@@ -46,7 +47,7 @@ public:
         return queue.first();
     }
 
-    const T &at(quint16 id) const {
+    const T &at(BufferSize id) const {
         return queue.at(id);
     }
 };

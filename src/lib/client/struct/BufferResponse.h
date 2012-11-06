@@ -7,17 +7,17 @@ namespace BufferStorage {
 struct BufferResponse : public Response {
     BufferResponse() :
         Response(),
-        id(-1)
+        bufferId(-1)
     {}
 
-    BufferResponse(ProtocolType requestType, quint16 id, const QVector<TimeStamp> &timeStamps, const QVector<SignalData> &signalDatas) :
+    BufferResponse(ProtocolType requestType, BufferId bufferId, const QVector<TimeStamp> &timeStamps, const QVector<SignalData> &signalDatas) :
         Response(requestType),
-        id(id),
+        bufferId(bufferId),
         timeStamps(timeStamps),
         signalDatas(signalDatas)
     {}
 
-    quint16 id; //! @todo: make type safe
+    BufferId bufferId;
     QVector<TimeStamp> timeStamps;
     QVector<SignalData> signalDatas;
 };

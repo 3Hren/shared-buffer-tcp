@@ -7,17 +7,17 @@ namespace BufferStorage {
 class HashTableBufferManager : public BufferManager
 {
     FixedSizeQueue<TimeStamp> timeStamps;
-    QHash<quint16, Buffer *> buffers;    
+    QHash<BufferId, Buffer *> buffers;
     QVector<Buffer *> buffersVector;
 public:
     ~HashTableBufferManager();
 
-    Buffer *getBuffer(quint16 id) const;
-    void setBuffers(const BufferInfoMap &bufferInfoMap);
+    Buffer *getBuffer(BufferId id) const;
+    void setBuffers(const BufferInfoTable &bufferInfoMap);
 
     QVector<TimeStamp> getTimeStamps() const;
-    QVector<TimeStamp> getTimeStampsForBuffer(quint16 bufferId) const;
-    SignalData getSignalData(quint16 bufferId, TimeStamp timeStamp) const;
+    QVector<TimeStamp> getTimeStampsForBuffer(BufferId bufferId) const;
+    SignalData getSignalData(BufferId bufferId, TimeStamp timeStamp) const;
     void pushSignalDatas(const QVector<SignalData> &signalDatas, TimeStamp timeStamp);
 };
 }

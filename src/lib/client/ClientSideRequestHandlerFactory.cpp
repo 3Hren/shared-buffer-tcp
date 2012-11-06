@@ -1,7 +1,7 @@
 #include "ClientSideRequestHandlerFactory.h"
 
-#include "../BufferStorageGlobal.h"
-#include "../protocol/RequestProtocol.h"
+#include "BufferStorageGlobal.h"
+#include "protocol/RequestProtocol.h"
 
 #include "handler/ErrorMessageResponseHandler.h"
 #include "handler/NormalMessageResponseHandler.h"

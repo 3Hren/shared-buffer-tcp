@@ -9,7 +9,7 @@ TreeBufferManager::~TreeBufferManager()
     qDeleteAll(buffers);
 }
 
-Buffer *TreeBufferManager::getBuffer(quint16 id) const
+Buffer *TreeBufferManager::getBuffer(BufferId id) const
 {
     if (!buffers.contains(id))
         throw BufferNotFoundException(id);
@@ -17,7 +17,7 @@ Buffer *TreeBufferManager::getBuffer(quint16 id) const
     return buffers.value(id);
 }
 
-void TreeBufferManager::setBuffers(const BufferInfoMap &bufferInfoMap)
+void TreeBufferManager::setBuffers(const BufferInfoTable &bufferInfoMap)
 {
     QMapIterator<quint16, quint16> it(bufferInfoMap);
     while (it.hasNext()) {
@@ -41,7 +41,7 @@ QVector<TimeStamp> TreeBufferManager::getTimeStamps() const
     return timeStamps.toVector();
 }
 
-QVector<TimeStamp> TreeBufferManager::getTimeStampsForBuffer(quint16 bufferId) const
+QVector<TimeStamp> TreeBufferManager::getTimeStampsForBuffer(BufferId bufferId) const
 {
     Buffer *buffer = getBuffer(bufferId);
     QVector<TimeStamp> timeStamps;
@@ -54,7 +54,7 @@ QVector<TimeStamp> TreeBufferManager::getTimeStampsForBuffer(quint16 bufferId) c
     return timeStamps;
 }
 
-SignalData TreeBufferManager::getSignalData(quint16 bufferId, TimeStamp timeStamp) const
+SignalData TreeBufferManager::getSignalData(BufferId bufferId, TimeStamp timeStamp) const
 {
     const QQueue<TimeStamp> &timeStampsQueue = timeStamps.getData();
     Buffer *buffer = getBuffer(bufferId);

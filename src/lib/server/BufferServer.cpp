@@ -59,7 +59,7 @@ quint16 BufferServer::getPort() const
     return server->serverPort();
 }
 
-void BufferServer::initializeBuffers(const BufferInfoMap &bufferInfoMap)
+void BufferServer::initializeBuffers(const BufferInfoTable &bufferInfoMap)
 {    
     bufferManager->setBuffers(bufferInfoMap);
 }

@@ -96,7 +96,7 @@ CyclicBufferTest::CyclicBufferTest()
 
 void CyclicBufferTest::initializeBufferTable(BufferServer *server, quint16 maximumIds = 10, quint16 initialOffset = 0, quint16 elementOffset = 1, quint16 maximumBufferSize = 1024) const
 {
-    BufferInfoMap bufferInfoMap;
+    BufferInfoTable bufferInfoMap;
     for (quint16 i = 0; i < maximumIds; ++i)
         bufferInfoMap.insert(initialOffset + elementOffset * i, maximumBufferSize);
 
@@ -634,7 +634,7 @@ const int BUFFER_MAX_SIZE = 1024;
 
 void CyclicBufferTest::createBuffers(BufferManager *bufferManager) const
 {
-    BufferInfoMap map;
+    BufferInfoTable map;
     for (int bufferId = 0; bufferId < BUFFERS_COUNT; ++bufferId)
         map.insert(bufferId, BUFFER_MAX_SIZE);
 
@@ -714,7 +714,7 @@ public:
 public Q_SLOTS:
     void run() {
         server = new BufferServer(this);
-        BufferInfoMap map;
+        BufferInfoTable map;
         for (int i = 0; i < bufferCount; ++i)
             map.insert(i, bufferMaxSize);
 
@@ -765,7 +765,7 @@ void CyclicBufferTest::testBlockingGetEmptyBuffer()
     const BufferResponse &response = client.blockingGetBuffer(0);
 
     QCOMPARE(isConnected, true);
-    QCOMPARE(response.id, (quint16)0);
+    QCOMPARE(response.bufferId, (quint16)0);
     QCOMPARE(response.requestType, REQUEST_GET_BUFFER);
     QCOMPARE(response.timeStamps.size(), 0);
     QCOMPARE(response.signalDatas.size(), 0);

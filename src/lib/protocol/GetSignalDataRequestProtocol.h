@@ -8,13 +8,13 @@ namespace BufferStorage {
 class GetSignalDataRequestProtocol : public RequestProtocol
 {
     TimeStamp timeStamp;
-    QVector<quint16> bufferIds;
+    QVector<BufferId> bufferIds;
 public:
     GetSignalDataRequestProtocol();
-    GetSignalDataRequestProtocol(TimeStamp timeStamp, const QVector<quint16> &bufferIds);
+    GetSignalDataRequestProtocol(TimeStamp timeStamp, const QVector<BufferId> &bufferIds);
 
     TimeStamp getTimeStamp() const;
-    QVector<quint16> getRequestedBufferIndexes() const;
+    QVector<BufferId> getRequestedBufferIndexes() const;
 protected:
     void encodeData(QDataStream *out) const;
     void decodeData(QDataStream *in);

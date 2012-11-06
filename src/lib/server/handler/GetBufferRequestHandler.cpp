@@ -20,7 +20,7 @@ void GetBufferRequestHandler::execute()
     BufferManager *bufferManager = server->getBufferManager();
     GetBufferRequestProtocol *getBufferRequestProtocol = static_cast<GetBufferRequestProtocol *>(requestProtocol);
 
-    quint16 bufferId = getBufferRequestProtocol->getBufferId();
+    BufferId bufferId = getBufferRequestProtocol->getBufferId();
 
     QVector<TimeStamp> bufferTimeStamps;
     QVector<SignalData> bufferData;

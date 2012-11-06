@@ -9,7 +9,7 @@ HashTableBufferManager::~HashTableBufferManager()
     qDeleteAll(buffers);
 }
 
-Buffer *HashTableBufferManager::getBuffer(quint16 id) const
+Buffer *HashTableBufferManager::getBuffer(BufferId id) const
 {
     if (!buffers.contains(id))
         throw BufferNotFoundException(id);
@@ -17,7 +17,7 @@ Buffer *HashTableBufferManager::getBuffer(quint16 id) const
     return buffers.value(id);
 }
 
-void HashTableBufferManager::setBuffers(const BufferInfoMap &bufferInfoMap)
+void HashTableBufferManager::setBuffers(const BufferInfoTable &bufferInfoMap)
 {    
     QMapIterator<quint16, quint16> it(bufferInfoMap);
     while (it.hasNext()) {
@@ -43,7 +43,7 @@ QVector<TimeStamp> HashTableBufferManager::getTimeStamps() const
     return timeStamps.toVector();
 }
 
-QVector<TimeStamp> HashTableBufferManager::getTimeStampsForBuffer(quint16 bufferId) const
+QVector<TimeStamp> HashTableBufferManager::getTimeStampsForBuffer(BufferId bufferId) const
 {
     Buffer *buffer = getBuffer(bufferId);
     QVector<TimeStamp> timeStamps;
@@ -56,7 +56,7 @@ QVector<TimeStamp> HashTableBufferManager::getTimeStampsForBuffer(quint16 buffer
     return timeStamps;
 }
 
-SignalData HashTableBufferManager::getSignalData(quint16 bufferId, TimeStamp timeStamp) const
+SignalData HashTableBufferManager::getSignalData(BufferId bufferId, TimeStamp timeStamp) const
 {
     const QQueue<TimeStamp> &timeStampsQueue = timeStamps.getData();
     Buffer *buffer = getBuffer(bufferId);    

@@ -19,7 +19,7 @@ RequestProtocolFactory::RequestProtocolFactory()
 
 RequestProtocol *RequestProtocolFactory::createRequestProtocol(QDataStream *inputStream) const
 {
-    quint8 type = 0;
+    ProtocolType type;
     *inputStream >> type;
 
     RequestProtocol *requestProtocol = 0;

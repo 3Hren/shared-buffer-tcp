@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
 
     QCoreApplication a(argc, argv);
     BufferServer server;
-    BufferInfoMap map;
+    BufferInfoTable map;
     for (int i = 0; i < count; ++i)
         map.insert(startAddress + 2 * i, maximumSize);
 

@@ -20,6 +20,11 @@
 namespace BufferStorage {
 typedef quint32 MessageSize;
 typedef quint32 Magic;
+typedef quint16 BufferId;
+typedef quint16 BufferSize;
+typedef QMap<BufferId, BufferSize> BufferInfoTable;
+typedef quint32 TimeStamp;
+
 static const Magic MAGIC = 927932743;
 enum ProtocolType {
     REQUEST_PUSH = 0,
@@ -52,7 +57,4 @@ struct SocketError {
     QAbstractSocket::SocketError error;
     QString errorString;
 };
-
-typedef QMap<quint16, quint16> BufferInfoMap;
-typedef quint32 TimeStamp;
 }

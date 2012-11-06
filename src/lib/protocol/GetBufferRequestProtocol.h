@@ -5,12 +5,12 @@
 namespace BufferStorage {
 class GetBufferRequestProtocol : public RequestProtocol
 {
-    quint16 bufferId;
+    BufferId bufferId;
 public:
     GetBufferRequestProtocol();
-    GetBufferRequestProtocol(quint16 bufferId);
+    GetBufferRequestProtocol(BufferId bufferId);
 
-    quint16 getBufferId() const;
+    BufferId getBufferId() const;
 
 protected:
     void encodeData(QDataStream *out) const;

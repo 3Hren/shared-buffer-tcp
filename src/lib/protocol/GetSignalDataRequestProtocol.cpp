@@ -19,7 +19,7 @@ TimeStamp GetSignalDataRequestProtocol::getTimeStamp() const
     return timeStamp;
 }
 
-QVector<quint16> GetSignalDataRequestProtocol::getRequestedBufferIndexes() const
+QVector<BufferId> GetSignalDataRequestProtocol::getRequestedBufferIndexes() const
 {
     return bufferIds;
 }

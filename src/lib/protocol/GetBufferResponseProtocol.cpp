@@ -9,7 +9,7 @@ GetBufferResponseProtocol::GetBufferResponseProtocol() :
 }
 
 
-GetBufferResponseProtocol::GetBufferResponseProtocol(quint16 bufferId, const QVector<TimeStamp> &bufferTimeStamps, const QVector<SignalData> &bufferData) :
+GetBufferResponseProtocol::GetBufferResponseProtocol(BufferId bufferId, const QVector<TimeStamp> &bufferTimeStamps, const QVector<SignalData> &bufferData) :
     ResponseProtocol(RESPONSE_GET_BUFFER, REQUEST_GET_BUFFER),
     bufferId(bufferId),
     bufferTimeStamps(bufferTimeStamps),
@@ -17,7 +17,7 @@ GetBufferResponseProtocol::GetBufferResponseProtocol(quint16 bufferId, const QVe
 {
 }
 
-quint16 GetBufferResponseProtocol::getBufferId() const
+BufferId GetBufferResponseProtocol::getBufferId() const
 {
     return bufferId;
 }

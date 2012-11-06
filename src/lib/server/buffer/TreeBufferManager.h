@@ -6,16 +6,16 @@ namespace BufferStorage {
 class TreeBufferManager : public BufferManager
 {    
     FixedSizeQueue<TimeStamp> timeStamps;
-    QMap<quint16, Buffer*> buffers;
+    QMap<BufferId, Buffer*> buffers;
 public:
     ~TreeBufferManager();
 
-    Buffer *getBuffer(quint16 id) const;
-    void setBuffers(const BufferInfoMap &bufferInfoMap);
+    Buffer *getBuffer(BufferId id) const;
+    void setBuffers(const BufferInfoTable &bufferInfoMap);
 
     QVector<TimeStamp> getTimeStamps() const;
-    QVector<TimeStamp> getTimeStampsForBuffer(quint16 bufferId) const;
-    SignalData getSignalData(quint16 bufferId, TimeStamp timeStamp) const;
+    QVector<TimeStamp> getTimeStampsForBuffer(BufferId bufferId) const;
+    SignalData getSignalData(BufferId bufferId, TimeStamp timeStamp) const;
     void pushSignalDatas(const QVector<SignalData> &signalDatas, TimeStamp timeStamp);
 };
 }

@@ -7,14 +7,14 @@
 namespace BufferStorage {
 class GetBufferResponseProtocol : public ResponseProtocol
 {
-    quint16 bufferId;
+    BufferId bufferId;
     QVector<TimeStamp> bufferTimeStamps;
     QVector<SignalData> bufferData;
 public:
     GetBufferResponseProtocol();
-    GetBufferResponseProtocol(quint16 bufferId, const QVector<TimeStamp> &bufferTimeStamps, const QVector<SignalData> &bufferData);
+    GetBufferResponseProtocol(BufferId bufferId, const QVector<TimeStamp> &bufferTimeStamps, const QVector<SignalData> &bufferData);
 
-    quint16 getBufferId() const;
+    BufferId getBufferId() const;
     QVector<TimeStamp> getBufferTimeStamps() const;
     QVector<SignalData> getBufferData() const;
 

@@ -8,13 +8,13 @@ GetBufferRequestProtocol::GetBufferRequestProtocol() :
 {
 }
 
-GetBufferRequestProtocol::GetBufferRequestProtocol(quint16 bufferId) :
+GetBufferRequestProtocol::GetBufferRequestProtocol(BufferId bufferId) :
     RequestProtocol(REQUEST_GET_BUFFER),
     bufferId(bufferId)
 {
 }
 
-quint16 GetBufferRequestProtocol::getBufferId() const
+BufferId GetBufferRequestProtocol::getBufferId() const
 {
     return bufferId;
 }

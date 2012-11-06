@@ -30,7 +30,7 @@ public:
     QString getHost() const;
     quint16 getPort() const;
 
-    void initializeBuffers(const BufferInfoMap &bufferInfoMap);
+    void initializeBuffers(const BufferInfoTable &bufferInfoMap);
     BufferManager *getBufferManager() const;
 
 private Q_SLOTS:

@@ -33,10 +33,10 @@ public:
     void push(const QVector<SignalData> &signalDatas, TimeStamp timeStamp = QDateTime::currentDateTime().toTime_t());
     void blockingPush(const QVector<SignalData> &signalDatas, TimeStamp timeStamp = QDateTime::currentDateTime().toTime_t(), int timeout = 1500);
 
-    qint64 getSignalData(const QVector<quint16> &bufferIds, TimeStamp timeStamp);
+    qint64 getSignalData(const QVector<BufferId> &bufferIds, TimeStamp timeStamp);
 
-    void getBuffer(quint16 bufferId);
-    BufferResponse blockingGetBuffer(quint16 bufferId, int timeout = 1500);
+    void getBuffer(BufferId bufferId);
+    BufferResponse blockingGetBuffer(BufferId bufferId, int timeout = 1500);
 
     SocketError getSocketError() const;
 
