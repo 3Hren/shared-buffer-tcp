@@ -3,7 +3,8 @@
 using namespace BufferStorage;
 
 PushRequest::PushRequest() :
-    Request(REQUEST_PUSH)
+    Request(REQUEST_PUSH),
+    timeStamp(0)
 {
 }
 

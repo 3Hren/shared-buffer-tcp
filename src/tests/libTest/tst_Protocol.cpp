@@ -84,3 +84,34 @@ TEST(GetBufferResponse, EncodingDecoding) {
     EXPECT_EQ(10, clientResponse.getBufferId());
     EXPECT_EQ(signalBuffer, clientResponse.getSignalBuffer());
 }
+
+#include "protocol/PushRequest.h"
+TEST(PushRequest, Class) {
+    PushRequest request;
+    Q_UNUSED(request);
+}
+
+TEST(PushRequest, TimeStampIsNullByDefault) {
+    PushRequest request;
+    EXPECT_EQ(0, request.getTimeStamp());
+}
+
+TEST(PushRequest, InitializesType) {
+    PushRequest request;
+    EXPECT_EQ(REQUEST_PUSH, request.getType());
+}
+
+TEST(PushRequest, InitializingConstructor) {
+    SignalValueVector signalValues = {SignalValue(5.0, 0), SignalValue(1.25, 1)};
+    PushRequest request(5, signalValues);
+    EXPECT_EQ(5, request.getTimeStamp());
+    EXPECT_EQ(signalValues, request.getSignalValues());
+}
+
+TEST(PushRequest, EncodingDecoding) {
+    SignalValueVector signalValues = {SignalValue(5.0, 0), SignalValue(1.25, 1)};
+    PushRequest clientRequest(5, signalValues);
+    PushRequest serverRequest = EncodeDecode(clientRequest, REQUEST_PUSH);
+    EXPECT_EQ(5, serverRequest.getTimeStamp());
+    EXPECT_EQ(signalValues, serverRequest.getSignalValues());
+}
