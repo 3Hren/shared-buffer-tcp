@@ -10,7 +10,7 @@ class FixedSizeQueue {
     QQueue<T> queue;
 
 public:
-    FixedSizeQueue() {}
+    FixedSizeQueue() : maximumSize(1) {}
     FixedSizeQueue(BufferSize maximumSize) : maximumSize(maximumSize) {}
 
     BufferSize getMaximumSize() const {
@@ -49,6 +49,10 @@ public:
 
     const T &at(BufferSize id) const {
         return queue.at(id);
+    }
+
+    bool isEmpty() const {
+        return queue.isEmpty();
     }
 };
 }
