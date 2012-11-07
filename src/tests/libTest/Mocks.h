@@ -25,3 +25,8 @@ void TestStructSerializing(Serializable outSerializable) {
 }
 
 using namespace BufferStorage;
+
+#include "server/BufferManager.h"
+class BufferManagerMock : public BufferManager {
+
+};

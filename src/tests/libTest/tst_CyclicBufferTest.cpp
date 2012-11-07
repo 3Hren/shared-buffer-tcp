@@ -19,7 +19,7 @@
 #include "protocol/RequestFactory.h"
 #include "protocol/GetBufferResponse.h"
 #include "server/buffer/HashTableBufferManager.h"
-#include "server/buffer/TreeBufferManager.h"
+#include "server/buffer/TreeMapBufferManager.h"
 
 #define QVERIFY_THROW(expression, ExpectedExceptionType) \
     do { \
@@ -565,7 +565,7 @@ void CyclicBufferTest::benchmarkHashTableBufferManager()
 
 void CyclicBufferTest::benchmarkTreeBufferManager()
 {
-    TreeBufferManager bM;
+    TreeMapBufferManager bM;
     createBuffers(&bM);
     SignalValueVector sD = createSignalDatas();
 

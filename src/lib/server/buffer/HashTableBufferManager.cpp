@@ -38,11 +38,6 @@ void HashTableBufferManager::setBuffers(const BufferInfoTable &bufferInfoMap)
     timeStamps.setMaximumSize(timeStampsQueueSize);
 }
 
-TimeStampVector HashTableBufferManager::getTimeStamps() const
-{
-    return timeStamps.toVector();
-}
-
 TimeStampVector HashTableBufferManager::getTimeStampsForBuffer(BufferId bufferId) const
 {
     Buffer *buffer = getBuffer(bufferId);
@@ -56,7 +51,7 @@ TimeStampVector HashTableBufferManager::getTimeStampsForBuffer(BufferId bufferId
     return timeStamps;
 }
 
-SignalValue HashTableBufferManager::getSignalData(BufferId bufferId, TimeStamp timeStamp) const
+SignalValue HashTableBufferManager::getSignalValue(BufferId bufferId, TimeStamp timeStamp) const
 {
     const QQueue<TimeStamp> &timeStampsQueue = timeStamps.getData();
     Buffer *buffer = getBuffer(bufferId);    

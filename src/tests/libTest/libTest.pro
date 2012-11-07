@@ -36,7 +36,8 @@ SOURCES += tst_CyclicBufferTest.cpp \
     tst_Protocol.cpp \
     tst_FixedSizeQueue.cpp \
     tst_Structs.cpp \
-    tst_AcceptanceTesting.cpp
+    tst_AcceptanceTesting.cpp \
+    tst_Server.cpp
 
 HEADERS += \
     Mocks.h

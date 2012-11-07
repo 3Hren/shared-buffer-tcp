@@ -1,15 +1,15 @@
-#include "TreeBufferManager.h"
+#include "TreeMapBufferManager.h"
 
 #include "exceptions/BufferException.h"
 
 using namespace BufferStorage;
 
-TreeBufferManager::~TreeBufferManager()
+TreeMapBufferManager::~TreeMapBufferManager()
 {
     qDeleteAll(buffers);
 }
 
-Buffer *TreeBufferManager::getBuffer(BufferId id) const
+Buffer *TreeMapBufferManager::getBuffer(BufferId id) const
 {
     if (!buffers.contains(id))
         throw BufferNotFoundException(id);
@@ -17,7 +17,7 @@ Buffer *TreeBufferManager::getBuffer(BufferId id) const
     return buffers.value(id);
 }
 
-void TreeBufferManager::setBuffers(const BufferInfoTable &bufferInfoMap)
+void TreeMapBufferManager::setBuffers(const BufferInfoTable &bufferInfoMap)
 {
     QMapIterator<quint16, quint16> it(bufferInfoMap);
     while (it.hasNext()) {
@@ -36,12 +36,7 @@ void TreeBufferManager::setBuffers(const BufferInfoTable &bufferInfoMap)
     timeStamps.setMaximumSize(timeStampsQueueSize);
 }
 
-TimeStampVector TreeBufferManager::getTimeStamps() const
-{
-    return timeStamps.toVector();
-}
-
-TimeStampVector TreeBufferManager::getTimeStampsForBuffer(BufferId bufferId) const
+TimeStampVector TreeMapBufferManager::getTimeStampsForBuffer(BufferId bufferId) const
 {
     Buffer *buffer = getBuffer(bufferId);
     TimeStampVector timeStamps;
@@ -54,7 +49,7 @@ TimeStampVector TreeBufferManager::getTimeStampsForBuffer(BufferId bufferId) con
     return timeStamps;
 }
 
-SignalValue TreeBufferManager::getSignalData(BufferId bufferId, TimeStamp timeStamp) const
+SignalValue TreeMapBufferManager::getSignalValue(BufferId bufferId, TimeStamp timeStamp) const
 {
     const QQueue<TimeStamp> &timeStampsQueue = timeStamps.getData();
     Buffer *buffer = getBuffer(bufferId);
@@ -67,7 +62,7 @@ SignalValue TreeBufferManager::getSignalData(BufferId bufferId, TimeStamp timeSt
     return buffer->at(signalDataId);
 }
 
-void TreeBufferManager::pushSignalDatas(const SignalValueVector &signalDatas, TimeStamp timeStamp)
+void TreeMapBufferManager::pushSignalDatas(const SignalValueVector &signalDatas, TimeStamp timeStamp)
 {
     if (signalDatas.size() != buffers.size())
         throw WrongPushedDataSizeException(signalDatas.size(), buffers.size());

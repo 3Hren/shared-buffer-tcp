@@ -29,7 +29,7 @@ void GetSignalDataRequestHandler::execute()
 
         BufferManager *bufferManager = server->getBufferManager();
         foreach (BufferId bufferId, bufferIds) {
-            const SignalValue &signalValue = bufferManager->getSignalData(bufferId, timeStamp);
+            const SignalValue &signalValue = bufferManager->getSignalValue(bufferId, timeStamp);
             signalValues.append(signalValue);
         }
 

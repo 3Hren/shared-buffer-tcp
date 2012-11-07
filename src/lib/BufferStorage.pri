@@ -15,7 +15,6 @@ HEADERS += \
     server/handler/GetBufferRequestHandler.h \
     server/handler/ServerSideRequestHandler.h \
     server/buffer/HashTableBufferManager.h \
-    server/buffer/TreeBufferManager.h \
     FixedSizeQueue.h \
     client/BufferClient.h \
     server/BufferServer.h \
@@ -35,7 +34,8 @@ HEADERS += \
     protocol/PushResponse.h \
     SignalBuffer.h \
     SignalValue.h \
-    client/listener/BlockingListener.h
+    client/listener/BlockingListener.h \
+    server/buffer/TreeMapBufferManager.h
 
 SOURCES += \
     ConnectionHandler.cpp \
@@ -50,7 +50,6 @@ SOURCES += \
     server/handler/GetBufferRequestHandler.cpp \
     server/handler/ServerSideRequestHandler.cpp \
     server/buffer/HashTableBufferManager.cpp \
-    server/buffer/TreeBufferManager.cpp \
     client/BufferClientPrivate.cpp \
     protocol/GetBufferRequest.cpp \
     protocol/GetBufferResponse.cpp \
@@ -62,4 +61,5 @@ SOURCES += \
     protocol/GetSignalDataResponse.cpp \
     protocol/ErrorResponse.cpp \
     protocol/PushResponse.cpp \
-    client/listener/BlockingListener.cpp
+    client/listener/BlockingListener.cpp \
+    server/buffer/TreeMapBufferManager.cpp
