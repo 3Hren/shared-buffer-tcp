@@ -582,7 +582,7 @@ void CyclicBufferTest::testGetBufferWrongIndex()
     QCOMPARE(response->getErrorType(), WRONG_BUFFER_ID);
 }
 
-const int BUFFERS_COUNT = 30000;
+const int BUFFERS_COUNT = 3000;
 const int BUFFER_MAX_SIZE = 1024;
 
 void CyclicBufferTest::createBuffers(BufferManager *bufferManager) const

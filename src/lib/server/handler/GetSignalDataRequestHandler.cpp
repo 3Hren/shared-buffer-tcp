@@ -18,22 +18,24 @@ GetSignalDataRequestHandler::GetSignalDataRequestHandler(Request *requestProtoco
 }
 
 void GetSignalDataRequestHandler::execute()
-{
-    BufferManager *bufferManager = server->getBufferManager();
-    GetSignalDataRequest *getSignalDataRequestProtocol = static_cast<GetSignalDataRequest *>(request);
-
-    const QVector<quint16> &bufferIds = getSignalDataRequestProtocol->getRequestedBufferIndexes();
-    TimeStamp timeStamp = getSignalDataRequestProtocol->getTimeStamp();
-    SignalValueVector signalDatas;
-    signalDatas.reserve(bufferIds.size());
-
+{        
     try {
-        foreach (quint16 bufferId, bufferIds)
-            signalDatas << bufferManager->getSignalData(bufferId, timeStamp);
-    } catch (BufferException &e) {
-        throw e;
-    }
+        GetSignalDataRequest *getSignalDataRequest = static_cast<GetSignalDataRequest *>(request);
+        const QVector<BufferId> &bufferIds = getSignalDataRequest->getRequestedBufferIndexes();
+        TimeStamp timeStamp = getSignalDataRequest->getTimeStamp();
 
-    GetSignalDataResponse response(timeStamp, signalDatas);
-    socket->write(response.encode());
+        SignalValueVector signalValues;
+        signalValues.reserve(bufferIds.size());
+
+        BufferManager *bufferManager = server->getBufferManager();
+        foreach (BufferId bufferId, bufferIds) {
+            const SignalValue &signalValue = bufferManager->getSignalData(bufferId, timeStamp);
+            signalValues.append(signalValue);
+        }
+
+        GetSignalDataResponse response(timeStamp, signalValues);
+        socket->write(response.encode());
+    } catch (BufferException &exception) {
+        throw exception;
+    }    
 }

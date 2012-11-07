@@ -18,18 +18,18 @@ PushRequestHandler::PushRequestHandler(Request *requestProtocol, BufferServer *s
 }
 
 void PushRequestHandler::execute()
-{    
-    BufferManager *bufferManager = server->getBufferManager();
-    PushRequest *pushRequestProtocol = static_cast<PushRequest *>(request);
-
-    const SignalValueVector &signalDatas = pushRequestProtocol->getSignalValues();
-    const TimeStamp &timeStamp = pushRequestProtocol->getTimeStamp();
-
+{            
     try {
-        bufferManager->pushSignalDatas(signalDatas, timeStamp);
+        PushRequest *pushRequest = static_cast<PushRequest *>(request);
+        const SignalValueVector &signalValues = pushRequest->getSignalValues();
+        const TimeStamp &timeStamp = pushRequest->getTimeStamp();
+
+        BufferManager *bufferManager = server->getBufferManager();
+        bufferManager->pushSignalDatas(signalValues, timeStamp);
+
         PushResponse response("Ok");
         socket->write(response.encode());
-    } catch (BufferException &e) {
-        throw e;
+    } catch (BufferException &exception) {
+        throw exception;
     }    
 }
