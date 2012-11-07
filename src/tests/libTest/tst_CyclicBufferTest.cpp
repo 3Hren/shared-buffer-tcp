@@ -54,8 +54,6 @@ private Q_SLOTS:
     void testGetSignalDataRequestSerializing();
     void testGetSignalDataResponseSerializing();
     void testErrorMessageRequestSerializing();
-    void testNormalMessageResponseProtocolClass();
-    void testNormalMessageRequestSerializing();
     void testGetBufferRequestProtocolSerializing();
 
     void testServerIsListening();
@@ -194,24 +192,6 @@ void CyclicBufferTest::testErrorMessageRequestSerializing()
 }
 
 #include "protocol/PushResponse.h"
-void CyclicBufferTest::testNormalMessageResponseProtocolClass()
-{
-    PushResponse request(REQUEST_PUSH, "");
-    Q_UNUSED(request);
-}
-
-void CyclicBufferTest::testNormalMessageRequestSerializing()
-{
-    // Run
-    PushResponse request(REQUEST_PUSH, "Ok");
-    QScopedPointer<Request> response(getInputRequestThroughNetworkSendMock(&request));
-
-    // Compare
-    QCOMPARE(response->getType(), RESPONSE_PUSH);
-    PushResponse *decodedResponse = static_cast<PushResponse *>(response.data());
-    QCOMPARE(decodedResponse->getRequestType(), REQUEST_PUSH);
-    QCOMPARE(decodedResponse->getMessage(), QString("Ok"));
-}
 
 void CyclicBufferTest::testGetBufferRequestProtocolSerializing()
 {

@@ -3,12 +3,12 @@
 using namespace BufferStorage;
 
 PushResponse::PushResponse() :
-    Response(RESPONSE_PUSH, UNKNOWN_PROTOCOL_TYPE)
+    Response(RESPONSE_PUSH, REQUEST_PUSH)
 {
 }
 
-PushResponse::PushResponse(ProtocolType requestType, const QString &message) :
-    Response(RESPONSE_PUSH, requestType),
+PushResponse::PushResponse(const QString &message) :
+    Response(RESPONSE_PUSH, REQUEST_PUSH),
     message(message)
 {
 }

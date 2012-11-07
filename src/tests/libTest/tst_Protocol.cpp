@@ -93,7 +93,7 @@ TEST(PushRequest, Class) {
 
 TEST(PushRequest, TimeStampIsNullByDefault) {
     PushRequest request;
-    EXPECT_EQ(0, request.getTimeStamp());
+    EXPECT_EQ(TimeStamp(0), request.getTimeStamp());
 }
 
 TEST(PushRequest, InitializesType) {
@@ -104,7 +104,7 @@ TEST(PushRequest, InitializesType) {
 TEST(PushRequest, InitializingConstructor) {
     SignalValueVector signalValues = {SignalValue(5.0, 0), SignalValue(1.25, 1)};
     PushRequest request(5, signalValues);
-    EXPECT_EQ(5, request.getTimeStamp());
+    EXPECT_EQ(TimeStamp(5), request.getTimeStamp());
     EXPECT_EQ(signalValues, request.getSignalValues());
 }
 
@@ -112,6 +112,35 @@ TEST(PushRequest, EncodingDecoding) {
     SignalValueVector signalValues = {SignalValue(5.0, 0), SignalValue(1.25, 1)};
     PushRequest clientRequest(5, signalValues);
     PushRequest serverRequest = EncodeDecode(clientRequest, REQUEST_PUSH);
-    EXPECT_EQ(5, serverRequest.getTimeStamp());
+    EXPECT_EQ(TimeStamp(5), serverRequest.getTimeStamp());
     EXPECT_EQ(signalValues, serverRequest.getSignalValues());
 }
+
+#include "protocol/PushResponse.h"
+TEST(PushResponse, Class) {
+    PushResponse response;
+    Q_UNUSED(response);
+}
+
+TEST(PushResponse, InitializesType) {
+    PushResponse response;
+    EXPECT_EQ(RESPONSE_PUSH, response.getType());
+}
+
+TEST(PushResponse, InitializesRequestType) {
+    PushResponse response;
+    EXPECT_EQ(REQUEST_PUSH, response.getRequestType());
+}
+
+TEST(PushResponse, MessageConstructor) {
+    PushResponse response("Ok");
+    EXPECT_STREQ_QT("Ok", response.getMessage());
+}
+
+TEST(PushResponse, EncodingDecoding) {
+    PushResponse serverResponse("Ok");
+    PushResponse clientResponse = EncodeDecode(serverResponse, RESPONSE_PUSH);
+    EXPECT_STREQ_QT("Ok", clientResponse.getMessage());
+}
+
+//TEST(ErrorResponse, Class)

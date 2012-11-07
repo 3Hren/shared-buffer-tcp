@@ -8,7 +8,7 @@ class PushResponse : public Response
     QString message;
 public:
     PushResponse();
-    PushResponse(ProtocolType requestType, const QString &message);
+    PushResponse(const QString &message);
 
     QString getMessage() const;
 

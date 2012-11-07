@@ -17,7 +17,7 @@ QMAKE_CXXFLAGS += -std=c++0x
 QT       += network testlib
 QT       -= gui
 
-CONFIG   += console #debug_and_release build_all warn_on
+CONFIG   += console warn_on #debug_and_release build_all
 CONFIG   -= app_bundle
 
 INCLUDEPATH += \

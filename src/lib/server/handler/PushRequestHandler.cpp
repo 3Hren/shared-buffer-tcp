@@ -27,7 +27,7 @@ void PushRequestHandler::execute()
 
     try {
         bufferManager->pushSignalDatas(signalDatas, timeStamp);
-        PushResponse response(REQUEST_PUSH, "Ok");
+        PushResponse response("Ok");
         socket->write(response.encode());
     } catch (BufferException &e) {
         throw e;
