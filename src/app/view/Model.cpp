@@ -17,6 +17,14 @@ Model::Model(quint16 startAddress, quint16 buffersCount, QObject *parent) :
     if (!client->blockingConnectToServer())
         qFatal("Cannot connect to server");
 
+    for (quint16 address = startAddress; address < startAddress + 2 * buffersCount; address += 2) {
+        SignalValueVector signalValues;
+        for (int i = 0; i < buffersCount; ++i)
+            signalValues.append(SignalValue());
+
+        signalDatas.append(signalValues);
+    }
+
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), SLOT(updateValues()));
     timer->start(1000);
@@ -85,12 +93,13 @@ void Model::updateValues()
 
         for (quint16 address = startAddress; address < startAddress + 2 * buffersCount; address += 2) {
             const SignalBuffer &signalBuffer = client->blockingGetBuffer(address);
-            signalDatas.insert(address, signalBuffer.signalValueVector);
+            int index = (address - startAddress) / 2;
+            signalDatas.replace(index, signalBuffer.signalValueVector);
         }
     } catch (BufferStorageException &exception) {
         qCritical() << exception.getReason();
     }
-    qDebug() << timer.elapsed();
+    qDebug() << QString("'SELECT *' was done in %1 msecs").arg(timer.elapsed());
 
     endResetModel();
 }

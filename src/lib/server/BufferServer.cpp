@@ -7,6 +7,7 @@
 #include "exceptions/ServerException.h"
 
 #include <QTcpServer>
+#include <QTcpSocket>
 
 using namespace BufferStorage;
 
@@ -15,7 +16,7 @@ BufferServer::BufferServer(QObject *parent) :
     server(new QTcpServer(this)),
     bufferManager(new HashTableBufferManager)
 {
-    connect(server,SIGNAL(newConnection()),SLOT(acceptConnection()));
+    connect(server, SIGNAL(newConnection()), SLOT(acceptConnection()));
 }
 
 BufferServer::~BufferServer()
@@ -59,9 +60,9 @@ quint16 BufferServer::getPort() const
     return server->serverPort();
 }
 
-void BufferServer::initializeBuffers(const BufferInfoTable &bufferInfoMap)
+void BufferServer::initializeBuffers(const BufferInfoTable &bufferInfoTable)
 {    
-    bufferManager->setBuffers(bufferInfoMap);
+    bufferManager->setBuffers(bufferInfoTable);
 }
 
 BufferManager *BufferServer::getBufferManager() const
@@ -69,9 +70,17 @@ BufferManager *BufferServer::getBufferManager() const
     return bufferManager;
 }
 
+//! После выполнения этого метода сервер отвечает за удаление BufferManager'а.
+void BufferServer::setBufferManager(BufferManager *bufferManager)
+{
+    delete this->bufferManager;
+    this->bufferManager = bufferManager;
+}
+
 void BufferServer::acceptConnection()
 {
     QTcpSocket *socket = server->nextPendingConnection();     
     ConnectionHandler *requestHandler = new ServerConnectionHandler(socket, this);
+    qDebug() << QString("New connection from: %1:%2").arg(socket->peerAddress().toString()).arg(socket->peerPort());
     Q_UNUSED(requestHandler);
 }

@@ -7,10 +7,10 @@ GetSignalDataResponse::GetSignalDataResponse() :
 {
 }
 
-GetSignalDataResponse::GetSignalDataResponse(TimeStamp timeStamp, const SignalValueVector &signalDatas) :
+GetSignalDataResponse::GetSignalDataResponse(TimeStamp timeStamp, const SignalValueVector &signalValues) :
     Response(RESPONSE_GET_SIGNAL_DATA, REQUEST_GET_SIGNAL_DATA),
     timeStamp(timeStamp),
-    signalValues(signalDatas)
+    signalValues(signalValues)
 {
 }
 

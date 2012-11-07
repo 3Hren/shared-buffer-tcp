@@ -45,7 +45,7 @@ private:
     void initializeBufferTable(BufferServer *server, quint16 maximumIds, quint16 initialOffset, quint16 elementOffset, quint16 maximumBufferSize) const;
     Request *getInputRequestThroughNetworkSendMock(Request *outputRequest) const;
     void tryPushWrongDataCountToServerAndCompareError(quint16 dataCount, quint16 wrongDataCount, ErrorType errorType) const;
-    void compareBufferGetResults(QSignalSpy *spy, int spyCount, const TimeStampVector &bufferTimeStamps, const SignalValueVector &signalDatas) const;
+    void compareBufferGetResults(QSignalSpy *spy, int spyCount, const TimeStampVector &bufferTimeStamps, const SignalValueVector &signalValues) const;
     void createBuffers(BufferManager *bufferManager) const;
     SignalValueVector createSignalDatas() const;
 
@@ -89,11 +89,11 @@ CyclicBufferTest::CyclicBufferTest()
 
 void CyclicBufferTest::initializeBufferTable(BufferServer *server, quint16 maximumIds = 10, quint16 initialOffset = 0, quint16 elementOffset = 1, quint16 maximumBufferSize = 1024) const
 {
-    BufferInfoTable bufferInfoMap;
+    BufferInfoTable bufferInfoTable;
     for (quint16 i = 0; i < maximumIds; ++i)
-        bufferInfoMap.insert(initialOffset + elementOffset * i, maximumBufferSize);
+        bufferInfoTable.insert(initialOffset + elementOffset * i, maximumBufferSize);
 
-    server->initializeBuffers(bufferInfoMap);
+    server->initializeBuffers(bufferInfoTable);
 }
 
 Request *CyclicBufferTest::getInputRequestThroughNetworkSendMock(Request *outputRequest) const
@@ -136,18 +136,18 @@ void CyclicBufferTest::testGetSignalDataResponseSerializing()
 {
     // Initialize
     TimeStamp timeStamp = QDateTime::currentDateTime().addSecs(-5).toTime_t();
-    SignalValueVector signalDatas;
-    signalDatas << SignalValue(1.0, 0) << SignalValue(2.5, 1) << SignalValue(3.0, 2) << SignalValue(-235.23, 0);
+    SignalValueVector signalValues;
+    signalValues << SignalValue(1.0, 0) << SignalValue(2.5, 1) << SignalValue(3.0, 2) << SignalValue(-235.23, 0);
 
     // Run
-    GetSignalDataResponse outputRequest(timeStamp, signalDatas);
+    GetSignalDataResponse outputRequest(timeStamp, signalValues);
     QScopedPointer<Request> inputRequest(getInputRequestThroughNetworkSendMock(&outputRequest));
 
     // Compare
     QCOMPARE(inputRequest->getType(), RESPONSE_GET_SIGNAL_DATA);
     GetSignalDataResponse *decodedInputRequest = static_cast<GetSignalDataResponse *>(inputRequest.data());
     QCOMPARE(decodedInputRequest->getTimeStamp(), timeStamp);
-    QCOMPARE(decodedInputRequest->getSignalValues(), signalDatas);
+    QCOMPARE(decodedInputRequest->getSignalValues(), signalValues);
 }
 
 void CyclicBufferTest::testServerIsListening()
@@ -447,7 +447,7 @@ void CyclicBufferTest::testGetValuesWrongTimeStamp()
     QCOMPARE(response->getErrorType(), WRONG_TIME_STAMP);
 }
 
-void CyclicBufferTest::compareBufferGetResults(QSignalSpy *spy, int spyCount, const TimeStampVector &bufferTimeStamps, const SignalValueVector &signalDatas) const
+void CyclicBufferTest::compareBufferGetResults(QSignalSpy *spy, int spyCount, const TimeStampVector &bufferTimeStamps, const SignalValueVector &signalValues) const
 {
     QCOMPARE(spy->count(), spyCount);
     const QVariantList &arguments = spy->takeLast();
@@ -456,7 +456,7 @@ void CyclicBufferTest::compareBufferGetResults(QSignalSpy *spy, int spyCount, co
     QSharedPointer<Response> response = arguments.at(0).value<QSharedPointer<Response> >();
     GetBufferResponse *getBufferResponse = static_cast<GetBufferResponse *>(response.data());
     QCOMPARE(getBufferResponse->getRequestType(), REQUEST_GET_BUFFER);
-    QCOMPARE(getBufferResponse->getSignalBuffer(), SignalBuffer(bufferTimeStamps, signalDatas));
+    QCOMPARE(getBufferResponse->getSignalBuffer(), SignalBuffer(bufferTimeStamps, signalValues));
 }
 
 void CyclicBufferTest::testGetBuffer()
@@ -541,25 +541,25 @@ void CyclicBufferTest::createBuffers(BufferManager *bufferManager) const
 
 SignalValueVector CyclicBufferTest::createSignalDatas() const
 {
-    SignalValueVector signalDatas;
-    signalDatas.reserve(BUFFERS_COUNT);
+    SignalValueVector signalValues;
+    signalValues.reserve(BUFFERS_COUNT);
     for (int i = 0; i < BUFFERS_COUNT; ++i) {
         SignalValue signalData(qrand() % 10000 / 100.0, qrand() % 2);
-        signalDatas.append(signalData);
+        signalValues.append(signalData);
     }
 
-    return signalDatas;
+    return signalValues;
 }
 
 void CyclicBufferTest::benchmarkHashTableBufferManager()
 {
     HashTableBufferManager bufferManager;
     createBuffers(&bufferManager);
-    SignalValueVector signalDatas = createSignalDatas();
+    SignalValueVector signalValues = createSignalDatas();
 
     TimeStamp tS = 0;
     QBENCHMARK {
-        bufferManager.pushSignalDatas(signalDatas, tS++);
+        bufferManager.pushSignalValues(signalValues, tS++);
     }
 }
 
@@ -571,7 +571,7 @@ void CyclicBufferTest::benchmarkTreeBufferManager()
 
     TimeStamp tS = 0;
     QBENCHMARK {
-        bM.pushSignalDatas(sD, tS++);
+        bM.pushSignalValues(sD, tS++);
     }
 }
 
@@ -710,9 +710,9 @@ using namespace ::testing;
 
 #include <QCoreApplication>
 int main(int argc, char *argv[]) {
-    InitGoogleTest(&argc, argv);
-    int googleTestResult = RUN_ALL_TESTS();
     QCoreApplication app(argc, argv);
+    InitGoogleTest(&argc, argv);
+    int googleTestResult = RUN_ALL_TESTS();    
     CyclicBufferTest tc;
     return googleTestResult & QTest::qExec(&tc, argc, argv);
 }

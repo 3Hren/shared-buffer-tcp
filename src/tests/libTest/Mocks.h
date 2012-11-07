@@ -26,7 +26,15 @@ void TestStructSerializing(Serializable outSerializable) {
 
 using namespace BufferStorage;
 
+#include "server/BufferServer.h"
+#include "client/BufferClient.h"
+
 #include "server/BufferManager.h"
 class BufferManagerMock : public BufferManager {
-
+public:
+    MOCK_CONST_METHOD1(getBuffer, Buffer*(BufferId));
+    MOCK_METHOD1(setBuffers, void(const BufferInfoTable&));
+    MOCK_METHOD2(pushSignalValues, void(const SignalValueVector&, TimeStamp));
+    MOCK_CONST_METHOD1(getTimeStampsForBuffer, TimeStampVector(BufferId));
+    MOCK_CONST_METHOD2(getSignalValue, SignalValue(BufferId, TimeStamp));
 };

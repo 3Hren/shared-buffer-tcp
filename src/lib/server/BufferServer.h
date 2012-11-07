@@ -30,8 +30,10 @@ public:
     QString getHost() const;
     quint16 getPort() const;
 
-    void initializeBuffers(const BufferInfoTable &bufferInfoMap);
+    void initializeBuffers(const BufferInfoTable &bufferInfoTable);
+
     BufferManager *getBufferManager() const;
+    void setBufferManager(BufferManager *bufferManager);
 
 private Q_SLOTS:
     void acceptConnection();

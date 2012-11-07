@@ -1,13 +1,14 @@
 #include "Mocks.h"
 
-#include "server/BufferServer.h"
+
 TEST(BufferServer, Class) {
     BufferServer server;
     Q_UNUSED(server);
 }
 
-/*TEST(BufferServer, BufferManagerGetSetCheck) {
-    BMM
+TEST(BufferServer, BufferManagerGetSetCheck) {
+    BufferManager *bufferManager = new BufferManagerMock;
     BufferServer server;
-    server.setBufferManager();
-}*/
+    server.setBufferManager(bufferManager);
+    EXPECT_EQ(bufferManager, server.getBufferManager());
+}

@@ -17,9 +17,9 @@ Buffer *TreeMapBufferManager::getBuffer(BufferId id) const
     return buffers.value(id);
 }
 
-void TreeMapBufferManager::setBuffers(const BufferInfoTable &bufferInfoMap)
+void TreeMapBufferManager::setBuffers(const BufferInfoTable &bufferInfoTable)
 {
-    QMapIterator<quint16, quint16> it(bufferInfoMap);
+    QMapIterator<quint16, quint16> it(bufferInfoTable);
     while (it.hasNext()) {
         it.next();
         quint16 id = it.key();
@@ -29,7 +29,7 @@ void TreeMapBufferManager::setBuffers(const BufferInfoTable &bufferInfoMap)
     }
 
     quint16 timeStampsQueueSize = 0;
-    foreach (quint16 maximumQueueSize, bufferInfoMap.values())
+    foreach (quint16 maximumQueueSize, bufferInfoTable.values())
         if (maximumQueueSize > timeStampsQueueSize)
             timeStampsQueueSize = maximumQueueSize;
 
@@ -62,17 +62,17 @@ SignalValue TreeMapBufferManager::getSignalValue(BufferId bufferId, TimeStamp ti
     return buffer->at(signalDataId);
 }
 
-void TreeMapBufferManager::pushSignalDatas(const SignalValueVector &signalDatas, TimeStamp timeStamp)
+void TreeMapBufferManager::pushSignalValues(const SignalValueVector &signalValues, TimeStamp timeStamp)
 {
-    if (signalDatas.size() != buffers.size())
-        throw WrongPushedDataSizeException(signalDatas.size(), buffers.size());
+    if (signalValues.size() != buffers.size())
+        throw WrongPushedDataSizeException(signalValues.size(), buffers.size());
 
     int i = 0;
     QMapIterator<quint16, Buffer*> it(buffers);
     while (it.hasNext()) {
         it.next();
         Buffer *buffer = it.value();       
-        buffer->enqueue(signalDatas.at(i++));
+        buffer->enqueue(signalValues.at(i++));
     }
 
     timeStamps.enqueue(timeStamp);

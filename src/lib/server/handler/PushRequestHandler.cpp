@@ -25,7 +25,7 @@ void PushRequestHandler::execute()
         const TimeStamp &timeStamp = pushRequest->getTimeStamp();
 
         BufferManager *bufferManager = server->getBufferManager();
-        bufferManager->pushSignalDatas(signalValues, timeStamp);
+        bufferManager->pushSignalValues(signalValues, timeStamp);
 
         PushResponse response("Ok");
         socket->write(response.encode());

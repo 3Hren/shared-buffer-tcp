@@ -17,9 +17,9 @@ Buffer *HashTableBufferManager::getBuffer(BufferId id) const
     return buffers.value(id);
 }
 
-void HashTableBufferManager::setBuffers(const BufferInfoTable &bufferInfoMap)
+void HashTableBufferManager::setBuffers(const BufferInfoTable &bufferInfoTable)
 {    
-    QMapIterator<quint16, quint16> it(bufferInfoMap);
+    QMapIterator<quint16, quint16> it(bufferInfoTable);
     while (it.hasNext()) {
         it.next();
         quint16 id = it.key();
@@ -31,7 +31,7 @@ void HashTableBufferManager::setBuffers(const BufferInfoTable &bufferInfoMap)
     }
 
     quint16 timeStampsQueueSize = 0;
-    foreach (quint16 maximumQueueSize, bufferInfoMap.values())
+    foreach (quint16 maximumQueueSize, bufferInfoTable.values())
         if (maximumQueueSize > timeStampsQueueSize)
             timeStampsQueueSize = maximumQueueSize;
 
@@ -64,14 +64,14 @@ SignalValue HashTableBufferManager::getSignalValue(BufferId bufferId, TimeStamp 
     return buffer->at(signalDataId);
 }
 
-void HashTableBufferManager::pushSignalDatas(const SignalValueVector &signalDatas, TimeStamp timeStamp)
+void HashTableBufferManager::pushSignalValues(const SignalValueVector &signalValues, TimeStamp timeStamp)
 {
-    if (signalDatas.size() != buffersVector.size())
-        throw WrongPushedDataSizeException(signalDatas.size(), buffersVector.size());
+    if (signalValues.size() != buffersVector.size())
+        throw WrongPushedDataSizeException(signalValues.size(), buffersVector.size());
 
     for (int id = 0; id < buffersVector.size(); ++id) {
         Buffer *buffer = buffersVector.at(id);
-        const SignalValue &signalData = signalDatas.at(id);
+        const SignalValue &signalData = signalValues.at(id);
         buffer->enqueue(signalData);
     }
 
