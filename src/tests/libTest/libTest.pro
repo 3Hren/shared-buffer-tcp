@@ -34,7 +34,8 @@ include($$LIB_SOURCE_PATH/BufferStorage.pri)
 SOURCES += tst_CyclicBufferTest.cpp \
     _main.cpp \
     tst_Protocol.cpp \
-    tst_FixedSizeQueue.cpp
+    tst_FixedSizeQueue.cpp \
+    tst_Structs.cpp
 
 HEADERS += \
     Mocks.h
