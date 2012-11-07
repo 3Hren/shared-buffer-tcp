@@ -29,35 +29,31 @@ BufferClient::~BufferClient()
 bool BufferClient::isConnected() const
 {
     Q_D(const BufferClient);
-    return d->socket->state() == QTcpSocket::ConnectedState;
+    return d->isConnected();
 }
 
 void BufferClient::connectToServer(const QString &host, quint16 port)
 {
     Q_D(BufferClient);
-    d->socket->connectToHost(host, port);
+    d->connectToHost(host, port);
 }
 
 bool BufferClient::waitForConnected(int timeout) const
 {
     Q_D(const BufferClient);
-    return d->socket->waitForConnected(timeout);
+    return d->waitForConnected(timeout);
 }
 
 bool BufferClient::blockingConnectToServer(const QString &host, quint16 port, int timeout)
 {
-    connectToServer(host, port);
-    return waitForConnected(timeout);
+    Q_D(BufferClient);
+    return d->blockingConnectToHost(host, port, timeout);
 }
 
 bool BufferClient::blockingDisconnectFromServer(int timeout)
 {    
     Q_D(BufferClient);
-    d->socket->disconnectFromHost();
-    if (d->socket->state() == QAbstractSocket::UnconnectedState)
-        return true;
-
-    return d->socket->waitForDisconnected(timeout);
+    return d->blockingDisconnectFromHost(timeout);
 }
 
 void BufferClient::push(const SignalValueVector &signalValues, TimeStamp timeStamp)
@@ -83,11 +79,11 @@ void BufferClient::blockingPush(const SignalValueVector &signalValues, TimeStamp
     }
 }
 
-qint64 BufferClient::getSignalData(const QVector<BufferId> &bufferIds, TimeStamp timeStamp)
+void BufferClient::getSignalData(const QVector<BufferId> &bufferIds, TimeStamp timeStamp)
 {
     Q_D(BufferClient);
     GetSignalDataRequest request(timeStamp, bufferIds);
-    return d->sendRequest(&request);
+    d->sendRequest(&request);
 }
 
 void BufferClient::getBuffer(BufferId bufferId)
@@ -115,10 +111,4 @@ SignalBuffer BufferClient::blockingGetBuffer(BufferId bufferId, int timeout)
     }
 
     return signalBuffer;
-}
-
-SocketError BufferClient::getSocketError() const
-{
-    Q_D(const BufferClient);
-    return d->socketError;
 }

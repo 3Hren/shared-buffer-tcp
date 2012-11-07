@@ -4,8 +4,6 @@
 #include "ConnectionHandler.h"
 #include "ClientConnectionHandler.h"
 
-#include "listener/BlockingListener.h"
-
 #include "protocol/Response.h"
 #include "protocol/ErrorResponse.h"
 
@@ -21,12 +19,11 @@ BufferClientPrivate::BufferClientPrivate(BufferClient *bufferClient) :
     QObject(bufferClient),
     client(bufferClient),
     socket(new QTcpSocket(this)),
-    handler(new ClientConnectionHandler(socket, this)),
-    socketError(SocketError())
+    handler(new ClientConnectionHandler(socket, this))
 {
     connect(socket, SIGNAL(connected()), bufferClient, SIGNAL(connected()));
     connect(socket, SIGNAL(stateChanged(QAbstractSocket::SocketState)), bufferClient, SIGNAL(stateChanged(QAbstractSocket::SocketState)));
-    connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), SLOT(setSocketError(QAbstractSocket::SocketError)));
+    connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), SLOT(emitSocketError(QAbstractSocket::SocketError)));
 }
 
 qint64 BufferClientPrivate::sendRequest(Request *request)
@@ -41,12 +38,39 @@ bool BufferClientPrivate::isConnected() const
     return socket->state() == QAbstractSocket::ConnectedState;
 }
 
-void BufferClientPrivate::setSocketError(QAbstractSocket::SocketError abstractSocketError)
+void BufferClientPrivate::connectToHost(const QString &host, quint16 port)
 {
-    socketError.error = abstractSocketError;
-    socketError.errorString = socket->errorString();
-    QSharedPointer<ErrorResponse> errorResponse(new ErrorResponse(RESPONSE_ERROR, static_cast<ErrorType>(socketError.error), socketError.errorString));
-    client->errorReceived(errorResponse);
+    socket->connectToHost(host, port);
+}
+
+bool BufferClientPrivate::waitForConnected(int timeout) const
+{
+    return socket->waitForConnected(timeout);
+}
+
+bool BufferClientPrivate::blockingConnectToHost(const QString &host, quint16 port, int timeout)
+{
+    connectToHost(host, port);
+    return waitForConnected(timeout);
+}
+
+void BufferClientPrivate::disconnectFromHost()
+{
+    socket->disconnectFromHost();
+}
+
+bool BufferClientPrivate::waitForDisconnected(int timeout) const
+{
+    return socket->waitForDisconnected(timeout);
+}
+
+bool BufferClientPrivate::blockingDisconnectFromHost(int timeout)
+{
+    disconnectFromHost();
+    if (socket->state() == QAbstractSocket::UnconnectedState)
+        return true;
+
+    return waitForDisconnected(timeout);
 }
 
 void BufferClientPrivate::callResponseReceived(QSharedPointer<Response> response)
@@ -57,4 +81,10 @@ void BufferClientPrivate::callResponseReceived(QSharedPointer<Response> response
 void BufferClientPrivate::callErrorReceived(QSharedPointer<ErrorResponse> errorResponse)
 {
     client->errorReceived(errorResponse);
+}
+
+void BufferClientPrivate::emitSocketError(QAbstractSocket::SocketError abstractSocketError)
+{
+    QSharedPointer<ErrorResponse> errorResponse(new ErrorResponse(RESPONSE_ERROR, static_cast<ErrorType>(abstractSocketError), socket->errorString()));
+    callErrorReceived(errorResponse);
 }

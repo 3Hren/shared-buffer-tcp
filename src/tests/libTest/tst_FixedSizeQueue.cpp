@@ -41,7 +41,7 @@ TEST(FixedSizeQueue, CanReturnFirstValue) {
 
 TEST(FixedSizeQueue, LimitedEnqueue) {
     FixedSizeQueue<int> queue(4);
-    queue.enqueue(0); //! @note: т.к. размер очереди равен 4м, этот элемент удалится
+    queue.enqueue(0); //! @note: т.к. размер очереди равен 4, этот элемент удалится
     queue.enqueue(1);
     queue.enqueue(2);
     queue.enqueue(3);

@@ -17,10 +17,10 @@ BlockingListener::BlockingListener(BufferClient *client, QObject *parent) :
 
 void BlockingListener::listen(int timeout)
 {    
+    listening = true;
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), SLOT(stopListening()));
-    timer->start(timeout);
-    listening = true;
+    timer->start(timeout);    
 
     while (listening)
         qApp->processEvents();

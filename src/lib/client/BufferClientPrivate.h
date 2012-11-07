@@ -13,31 +13,34 @@ class QTcpSocket;
 
 namespace BufferStorage {
 class ConnectionHandler;
-class BlockingListener;
 class BufferClient;
 class Response;
 class ErrorResponse;
 class BufferClientPrivate : public QObject
 {
-    Q_OBJECT    
-    friend class ErrorMessageResponseHandler;
-    friend class GetSignalDataResponseHandler;
-    friend class GetBufferResponseHandler;
-    friend class NormalMessageResponseHandler;
-public:
+    Q_OBJECT
     BufferClient *client;
     QTcpSocket *socket;
     ConnectionHandler *handler;
-    SocketError socketError;
+public:        
+    BufferClientPrivate(BufferClient *bufferClient); //! @todo: rename to ConnectionDispatcher
 
-    BufferClientPrivate(BufferClient *bufferClient);
-
-    qint64 sendRequest(Request *request);
     bool isConnected() const;
 
-    Q_SLOT void setSocketError(QAbstractSocket::SocketError abstractSocketError);        
+    void connectToHost(const QString &host, quint16 port);
+    bool waitForConnected(int timeout = 1000) const;
+    bool blockingConnectToHost(const QString &host, quint16 port, int timeout = 1000);
+
+    void disconnectFromHost();
+    bool waitForDisconnected(int timeout = 1000) const;
+    bool blockingDisconnectFromHost(int timeout = 1000);
+
+    qint64 sendRequest(Request *request);        
 
     void callResponseReceived(QSharedPointer<Response> response);
     void callErrorReceived(QSharedPointer<ErrorResponse> errorResponse);
+
+private:
+    Q_SLOT void emitSocketError(QAbstractSocket::SocketError abstractSocketError);
 };
 }

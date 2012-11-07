@@ -53,10 +53,4 @@ enum ErrorType {
     UNKNOWN_ERROR_TYPE = 255
 };
 DECLARE_SERIALIZATION_FOR_ENUM(ErrorType)
-
-struct SocketError {
-    SocketError() : error(QAbstractSocket::UnknownSocketError) {}
-    QAbstractSocket::SocketError error;
-    QString errorString;
-};
 }

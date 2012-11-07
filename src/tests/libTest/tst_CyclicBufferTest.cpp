@@ -50,11 +50,8 @@ private:
     SignalValueVector createSignalDatas() const;
 
 private Q_SLOTS:
-    void testPushRequestSerializing();
     void testGetSignalDataRequestSerializing();
     void testGetSignalDataResponseSerializing();
-    void testErrorMessageRequestSerializing();
-    void testGetBufferRequestProtocolSerializing();
 
     void testServerIsListening();
     void testServerAlreadyRunningError();
@@ -84,7 +81,6 @@ private Q_SLOTS:
 
     void testBlockingGetEmptyBuffer();
     void testBlockingGetBufferWrongIndex();
-    void testBlockingGetBufferClientNotConnectedError();
 };
 
 CyclicBufferTest::CyclicBufferTest()
@@ -116,24 +112,6 @@ Request *CyclicBufferTest::getInputRequestThroughNetworkSendMock(Request *output
 
     RequestFactory factory;
     return factory.createRequestProtocol(&in);
-}
-
-void CyclicBufferTest::testPushRequestSerializing()
-{
-    // Initialize
-    TimeStamp timeStamp = QDateTime::currentDateTime().toTime_t();
-    SignalValueVector signalDatas;
-    signalDatas.fill(SignalValue(10.0, 0), 10);
-
-    // Run
-    PushRequest outputRequest(timeStamp, signalDatas);
-    QScopedPointer<Request> inputRequest(getInputRequestThroughNetworkSendMock(&outputRequest));
-
-    // Compare
-    QCOMPARE(inputRequest->getType(), REQUEST_PUSH);
-    PushRequest *decodedInputRequest = static_cast<PushRequest *>(inputRequest.data());
-    QCOMPARE(decodedInputRequest->getTimeStamp(), timeStamp);
-    QCOMPARE(decodedInputRequest->getSignalValues(), signalDatas);
 }
 
 void CyclicBufferTest::testGetSignalDataRequestSerializing()
@@ -170,39 +148,6 @@ void CyclicBufferTest::testGetSignalDataResponseSerializing()
     GetSignalDataResponse *decodedInputRequest = static_cast<GetSignalDataResponse *>(inputRequest.data());
     QCOMPARE(decodedInputRequest->getTimeStamp(), timeStamp);
     QCOMPARE(decodedInputRequest->getSignalValues(), signalDatas);
-}
-
-void CyclicBufferTest::testErrorMessageRequestSerializing()
-{
-    //Initialize
-    ProtocolType inputRequestType = REQUEST_PUSH;
-    ErrorType errorType = UNKNOWN_ERROR_TYPE;
-    const QString errorMessage = tr("This is error message. Intended that it should be push error message. Type: %1. ErrorType: %2").arg(inputRequestType).arg(errorType);
-
-    // Run
-    ErrorResponse outputRequest(inputRequestType, errorType, errorMessage);
-    QScopedPointer<Request> inputRequest(getInputRequestThroughNetworkSendMock(&outputRequest));
-
-    // Compare
-    QCOMPARE(inputRequest->getType(), RESPONSE_ERROR);
-    ErrorResponse *decodedInputRequest = static_cast<ErrorResponse *>(inputRequest.data());
-    QCOMPARE(decodedInputRequest->getRequestType(), inputRequestType);
-    QCOMPARE(decodedInputRequest->getErrorType(), errorType);
-    QCOMPARE(decodedInputRequest->getReason(), errorMessage);
-}
-
-#include "protocol/PushResponse.h"
-
-void CyclicBufferTest::testGetBufferRequestProtocolSerializing()
-{
-    quint16 bufferId = 6;
-
-    GetBufferRequest outputRequest(bufferId);
-    QScopedPointer<Request> inputRequest(getInputRequestThroughNetworkSendMock(&outputRequest));
-
-    QCOMPARE(inputRequest->getType(), REQUEST_GET_BUFFER);
-    GetBufferRequest *decodedInputRequest = static_cast<GetBufferRequest *>(inputRequest.data());
-    QCOMPARE(decodedInputRequest->getBufferId(), bufferId);
 }
 
 void CyclicBufferTest::testServerIsListening()
@@ -758,18 +703,6 @@ void CyclicBufferTest::testBlockingGetBufferWrongIndex()
     }
 }
 
-void CyclicBufferTest::testBlockingGetBufferClientNotConnectedError()
-{
-    BufferClient client;
-    bool isConnected = client.blockingConnectToServer();
-    BufferStorage::SocketError error = client.getSocketError();
-
-    QCOMPARE(isConnected, false);
-    QVERIFY_THROW(client.blockingGetBuffer(0, 10000), BufferStorageException);
-    QCOMPARE(error.error, QAbstractSocket::ConnectionRefusedError);
-    QCOMPARE(error.errorString, QString("Connection refused"));
-}
-
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
@@ -786,4 +719,4 @@ int main(int argc, char *argv[]) {
 
 #include "tst_CyclicBufferTest.moc"
 
-//! @todo: внедрить некоторые особенности: диспетчер, расчет хешей, логгирование.
+//! @todo: внедрить некоторые особенности: диспетчер, расчет хешей, логгирование; сервер также может хранить список коннектов

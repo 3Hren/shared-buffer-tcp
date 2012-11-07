@@ -4,6 +4,7 @@
 #include <QTimer>
 
 #include <BufferClient.h>
+#include <protocol/GetBufferResponse.h>
 
 static const int TIMEOUT = 500;
 
@@ -18,11 +19,8 @@ public:
 protected:
     void run() {
         client = new BufferClient;
-        qRegisterMetaType<BufferResponse>("BufferResponse");
-        qRegisterMetaType<ErrorResponse>("ErrorResponse");
-        qRegisterMetaType<QAbstractSocket::SocketError>("QAbstractSocket::SocketError");
-        connect(client,SIGNAL(bufferReceived(BufferResponse)),SLOT(showBuffer(BufferResponse)));
-        connect(client,SIGNAL(error(ErrorResponse)),SLOT(showError(ErrorResponse)));
+        qRegisterMetaType<QSharedPointer<ErrorResponse> >("QSharedPointer<ErrorResponse>");
+        connect(client, SIGNAL(errorReceived(QSharedPointer<ErrorResponse>)), SLOT(showError(QSharedPointer<ErrorResponse>)));
         client->blockingConnectToServer();
         qDebug() << (qint8)client->getSocketError().error;
         QTimer::singleShot(TIMEOUT, this, SLOT(readBuffer()));
@@ -32,16 +30,11 @@ protected:
 private slots:
     void readBuffer() {
         quint16 bufferId = qrand() % 300;
-        //client->getBuffer(bufferId);
-        qDebug() << client->blockingGetBuffer(bufferId).signalDatas.size() << client->thread();
+        qDebug() << client->blockingGetBuffer(bufferId).signalValueVector.size() << client->thread();
         QTimer::singleShot(TIMEOUT, this, SLOT(readBuffer()));
     }
 
-    void showBuffer(const BufferResponse &response) {
-        qDebug() << QString("Buffer size: %1. Thread:").arg(response.signalDatas.size()) << client->thread();
-    }
-
-    void showError(const ErrorResponse &response) {
-        qDebug() << QString("Error: %1").arg(response.description);
+    void showError(QSharedPointer<ErrorResponse> response) {
+        qDebug() << QString("Error: %1").arg(response->getReason());
     }
 };

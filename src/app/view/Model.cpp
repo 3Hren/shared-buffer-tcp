@@ -1,6 +1,7 @@
 #include "Model.h"
 
 #include <BufferClient.h>
+#include <exceptions/BufferStorageException.h>
 
 #include <QTimer>
 #include <QDateTime>
@@ -76,13 +77,20 @@ QVariant Model::data(const QModelIndex &index, int role) const
 void Model::updateValues()
 {
     beginResetModel();
-    const SignalBuffer &signalBuffer= client->blockingGetBuffer(startAddress);
-    timeStamps = signalBuffer.timeStampVector;
+    QTime timer;
+    timer.start();
+    try {
+        const SignalBuffer &signalBuffer= client->blockingGetBuffer(startAddress);
+        timeStamps = signalBuffer.timeStampVector;
 
-    signalDatas.clear();
-    for (quint16 address = startAddress; address < startAddress + 2 * buffersCount; address += 2) {
-        const SignalBuffer &signalBuffer = client->blockingGetBuffer(address);
-        signalDatas.append(signalBuffer.signalValueVector);
+        for (quint16 address = startAddress; address < startAddress + 2 * buffersCount; address += 2) {
+            const SignalBuffer &signalBuffer = client->blockingGetBuffer(address);
+            signalDatas.insert(address, signalBuffer.signalValueVector);
+        }
+    } catch (BufferStorageException &exception) {
+        qCritical() << exception.getReason();
     }
+    qDebug() << timer.elapsed();
+
     endResetModel();
 }

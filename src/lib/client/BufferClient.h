@@ -25,27 +25,26 @@ public:
     ~BufferClient();
 
     bool isConnected() const;
-    void connectToServer(const QString &host = "127.0.0.1", quint16 port = 14690);
-    bool waitForConnected(int timeout = 1500) const;
-    bool blockingConnectToServer(const QString &host = "127.0.0.1", quint16 port = 14690, int timeout = 1500);    
 
-    bool blockingDisconnectFromServer(int timeout = 1500);    
+    void connectToServer(const QString &host = "127.0.0.1", quint16 port = 14690);
+    bool waitForConnected(int timeout = 1000) const;
+    bool blockingConnectToServer(const QString &host = "127.0.0.1", quint16 port = 14690, int timeout = 1000);
+
+    bool blockingDisconnectFromServer(int timeout = 1000);
 
     void push(const SignalValueVector &signalValues, TimeStamp timeStamp = QDateTime::currentDateTime().toTime_t());
     void blockingPush(const SignalValueVector &signalValues, TimeStamp timeStamp = QDateTime::currentDateTime().toTime_t(), int timeout = 1500);
 
-    qint64 getSignalData(const QVector<BufferId> &bufferIds, TimeStamp timeStamp);
+    void getSignalData(const QVector<BufferId> &bufferIds, TimeStamp timeStamp);
 
     void getBuffer(BufferId bufferId);
-    SignalBuffer blockingGetBuffer(BufferId bufferId, int timeout = 1500);
-
-    SocketError getSocketError() const;
+    SignalBuffer blockingGetBuffer(BufferId bufferId, int timeout = 1000);
 
 Q_SIGNALS:
     void connected();
-    void responseReceived(QSharedPointer<Response> response);
-    void errorReceived(QSharedPointer<ErrorResponse> errorResponse);
+    void stateChanged(QAbstractSocket::SocketState state);
 
-    void stateChanged(QAbstractSocket::SocketState state);    
+    void responseReceived(QSharedPointer<Response> response);
+    void errorReceived(QSharedPointer<ErrorResponse> errorResponse);    
 };
 }

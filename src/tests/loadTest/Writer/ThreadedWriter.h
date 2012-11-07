@@ -7,7 +7,7 @@
 #include <QDateTime>
 
 static const int TIMEOUT = 1000;
-static const int BUFFER_COUNT = 13;
+static const int BUFFER_COUNT = 30;
 
 using namespace BufferStorage;
 class ThreadedWriter : public QThread
@@ -21,8 +21,8 @@ protected:
     void run() {
         qsrand(QDateTime::currentDateTime().toTime_t());
         client = new BufferClient;
-        qRegisterMetaType<BufferResponse>("ErrorResponse");
-        connect(client,SIGNAL(error(ErrorResponse)),SLOT(showError(ErrorResponse)));
+        qRegisterMetaType<QSharedPointer<ErrorResponse> >("QSharedPointer<ErrorResponse>");
+        connect(client, SIGNAL(errorReceived(QSharedPointer<ErrorResponse>)), SLOT(showError(QSharedPointer<ErrorResponse>)));
         client->blockingConnectToServer();
         QTimer::singleShot(TIMEOUT, this, SLOT(push()));
         exec();
@@ -30,22 +30,22 @@ protected:
 
 private slots:
     void push() {
-        QVector<SignalData> signalDatas;
-        signalDatas.reserve(BUFFER_COUNT);        
+        SignalValueVector signalValues;
+        signalValues.reserve(BUFFER_COUNT);
         for (int i = 0; i < BUFFER_COUNT; ++i) {
             float randomValue = qrand() % (100 + i) * 10 / 100.0;
             quint16 randomErrorCode = qrand() % 2;
-            SignalData signalData(randomValue, randomErrorCode);
-            signalDatas.append(signalData);
+            SignalValue signalValue(randomValue, randomErrorCode);
+            signalValues.append(signalValue);
         }
 
         TimeStamp timeStamp = QDateTime::currentDateTime().toTime_t();
-        client->push(signalDatas, timeStamp);
+        client->push(signalValues, timeStamp);
 
         QTimer::singleShot(TIMEOUT, this, SLOT(push()));
     }
 
-    void showError(const ErrorResponse &r) {
-        qDebug() << QString("Error: %1").arg(r.description);
+    void showError(QSharedPointer<ErrorResponse> response) {
+        qDebug() << QString("Error: %1").arg(response->getReason());
     }
 };
