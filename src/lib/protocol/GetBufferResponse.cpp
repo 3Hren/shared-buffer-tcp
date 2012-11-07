@@ -3,17 +3,15 @@
 using namespace BufferStorage;
 
 GetBufferResponse::GetBufferResponse() :
-    Response(RESPONSE_GET_BUFFER, REQUEST_GET_BUFFER),
+    Response(RESPONSE_GET_BUFFER, REQUEST_GET_BUFFER), //! @todo: лучше сделать методы getType и getRequestType виртуальными, чем каждый раз передавать их в конструкторе.
     bufferId(0)
 {
 }
 
-
-GetBufferResponse::GetBufferResponse(BufferId bufferId, const TimeStampVector &bufferTimeStamps, const SignalValueVector &bufferData) :
+GetBufferResponse::GetBufferResponse(BufferId bufferId, const SignalBuffer &signalBuffer) :
     Response(RESPONSE_GET_BUFFER, REQUEST_GET_BUFFER),
     bufferId(bufferId),
-    timeStamps(bufferTimeStamps),
-    signalValues(bufferData)
+    signalBuffer(signalBuffer)
 {
 }
 
@@ -22,22 +20,17 @@ BufferId GetBufferResponse::getBufferId() const
     return bufferId;
 }
 
-TimeStampVector GetBufferResponse::getTimeStamps() const
+SignalBuffer GetBufferResponse::getSignalBuffer() const
 {
-    return timeStamps;
-}
-
-SignalValueVector GetBufferResponse::getSignalValues() const
-{
-    return signalValues;
+    return signalBuffer;
 }
 
 void GetBufferResponse::encodeData(QDataStream *out) const
 {
-    *out << bufferId << timeStamps << signalValues;
+    *out << bufferId << signalBuffer;
 }
 
 void GetBufferResponse::decodeData(QDataStream *in)
 {
-    *in >> bufferId >> timeStamps >> signalValues;
+    *in >> bufferId >> signalBuffer;
 }

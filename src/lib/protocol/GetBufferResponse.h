@@ -3,20 +3,19 @@
 #include "Response.h"
 
 #include "SignalValue.h"
+#include "SignalBuffer.h"
 
 namespace BufferStorage {
 class GetBufferResponse : public Response
 {
     BufferId bufferId;
-    TimeStampVector timeStamps;
-    SignalValueVector signalValues;
+    SignalBuffer signalBuffer;
 public:
-    GetBufferResponse();
-    GetBufferResponse(BufferId bufferId, const TimeStampVector &timeStamps, const SignalValueVector &signalValues);
+    GetBufferResponse();    
+    GetBufferResponse(BufferId bufferId, const SignalBuffer &signalBuffer);
 
     BufferId getBufferId() const;
-    TimeStampVector getTimeStamps() const;
-    SignalValueVector getSignalValues() const;
+    SignalBuffer getSignalBuffer() const;
 
 protected:
     void encodeData(QDataStream *out) const;

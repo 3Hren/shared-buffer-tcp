@@ -18,22 +18,21 @@ GetBufferRequestHandler::GetBufferRequestHandler(Request *requestProtocol, Buffe
 }
 
 void GetBufferRequestHandler::execute()
-{
-    BufferManager *bufferManager = server->getBufferManager();
-    GetBufferRequest *getBufferRequestProtocol = static_cast<GetBufferRequest *>(request);
-
-    BufferId bufferId = getBufferRequestProtocol->getBufferId();
-
-    TimeStampVector bufferTimeStamps;
-    SignalValueVector bufferData;
+{        
     try {
-        bufferTimeStamps = bufferManager->getTimeStampsForBuffer(bufferId);
+        GetBufferRequest *getBufferRequestProtocol = static_cast<GetBufferRequest *>(request);
+        BufferId bufferId = getBufferRequestProtocol->getBufferId();
+
+        BufferManager *bufferManager = server->getBufferManager();
         Buffer *buffer = bufferManager->getBuffer(bufferId);
-        bufferData = buffer->toVector();
+
+        const TimeStampVector &timeStamps = bufferManager->getTimeStampsForBuffer(bufferId);
+        const SignalValueVector &signalValues = buffer->toVector();
+        const SignalBuffer signalBuffer(timeStamps, signalValues);
+
+        GetBufferResponse response(bufferId, signalBuffer);
+        socket->write(response.encode());
     } catch (BufferException &exception) {
         throw exception;
-    }
-
-    GetBufferResponse response(bufferId, bufferTimeStamps, bufferData);
-    socket->write(response.encode());
+    }    
 }

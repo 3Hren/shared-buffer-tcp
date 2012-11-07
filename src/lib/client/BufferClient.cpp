@@ -109,7 +109,7 @@ SignalBuffer BufferClient::blockingGetBuffer(BufferId bufferId, int timeout)
     try {
         listener.listen(timeout);
         GetBufferResponse *response = listener.getResponse<GetBufferResponse *>();
-        signalBuffer = SignalBuffer(response->getTimeStamps(), response->getSignalValues());
+        signalBuffer = response->getSignalBuffer();
     } catch (BufferStorageException &exception) {
         throw;
     }

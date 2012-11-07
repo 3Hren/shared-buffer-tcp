@@ -57,7 +57,6 @@ private Q_SLOTS:
     void testNormalMessageResponseProtocolClass();
     void testNormalMessageRequestSerializing();
     void testGetBufferRequestProtocolSerializing();
-    void testGetBufferResponseProtocolSerializing();
 
     void testServerIsListening();
     void testServerAlreadyRunningError();
@@ -224,24 +223,6 @@ void CyclicBufferTest::testGetBufferRequestProtocolSerializing()
     QCOMPARE(inputRequest->getType(), REQUEST_GET_BUFFER);
     GetBufferRequest *decodedInputRequest = static_cast<GetBufferRequest *>(inputRequest.data());
     QCOMPARE(decodedInputRequest->getBufferId(), bufferId);
-}
-
-void CyclicBufferTest::testGetBufferResponseProtocolSerializing()
-{
-    TimeStamp timeStamp = QDateTime::currentDateTime().toTime_t();
-    quint16 bufferId = 8;
-    TimeStampVector timeStamps;
-    timeStamps << timeStamp << timeStamp + 1 << timeStamp + 2;
-    SignalValueVector datas;
-
-    GetBufferResponse outputRequest(bufferId, timeStamps, datas);
-    QScopedPointer<Request> inputRequest(getInputRequestThroughNetworkSendMock(&outputRequest));
-
-    QCOMPARE(inputRequest->getType(), RESPONSE_GET_BUFFER);
-    GetBufferResponse *decodedInputRequest = static_cast<GetBufferResponse *>(inputRequest.data());
-    QCOMPARE(decodedInputRequest->getBufferId(), bufferId);
-    QCOMPARE(decodedInputRequest->getTimeStamps(), timeStamps);
-    QCOMPARE(decodedInputRequest->getSignalValues(), datas);
 }
 
 void CyclicBufferTest::testServerIsListening()
@@ -550,8 +531,7 @@ void CyclicBufferTest::compareBufferGetResults(QSignalSpy *spy, int spyCount, co
     QSharedPointer<Response> response = arguments.at(0).value<QSharedPointer<Response> >();
     GetBufferResponse *getBufferResponse = static_cast<GetBufferResponse *>(response.data());
     QCOMPARE(getBufferResponse->getRequestType(), REQUEST_GET_BUFFER);
-    QCOMPARE(getBufferResponse->getTimeStamps(), bufferTimeStamps);
-    QCOMPARE(getBufferResponse->getSignalValues(), signalDatas);
+    QCOMPARE(getBufferResponse->getSignalBuffer(), SignalBuffer(bufferTimeStamps, signalDatas));
 }
 
 void CyclicBufferTest::testGetBuffer()

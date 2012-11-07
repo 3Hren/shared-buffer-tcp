@@ -42,3 +42,45 @@ TEST(GetBufferRequest, EncodingDecoding) {
     GetBufferRequest serverRequest = EncodeDecode(clientRequest, REQUEST_GET_BUFFER);
     EXPECT_EQ(10, serverRequest.getBufferId());
 }
+
+#include "protocol/GetBufferResponse.h"
+TEST(GetBufferResponse, Class) {
+    GetBufferResponse response;
+    Q_UNUSED(response);
+}
+
+TEST(GetBufferResponse, BufferIdIsNullByDefault) {
+    GetBufferResponse response;
+    EXPECT_EQ(0, response.getBufferId());
+}
+
+TEST(GetBufferResponse, InitializesType) {
+    GetBufferResponse response;
+    EXPECT_EQ(RESPONSE_GET_BUFFER, response.getType());
+}
+
+TEST(GetBufferResponse, InitializesRequestType) {
+    GetBufferResponse response;
+    EXPECT_EQ(REQUEST_GET_BUFFER, response.getRequestType());
+}
+
+#include "SignalBuffer.h"
+TEST(GetBufferResponse, SignalBufferConstructor) {
+    TimeStampVector timeStamps = {0, 1};
+    SignalValueVector signalValues = {SignalValue(5.0, 0), SignalValue(2.75, 1)};
+    SignalBuffer signalBuffer(timeStamps, signalValues);
+    GetBufferResponse response(10, signalBuffer);
+    EXPECT_EQ(10, response.getBufferId());
+    EXPECT_EQ(signalBuffer, response.getSignalBuffer());
+}
+
+TEST(GetBufferResponse, EncodingDecoding) {
+    TimeStampVector timeStamps = {0, 1};
+    SignalValueVector signalValues = {SignalValue(5.0, 0), SignalValue(2.75, 1)};
+    SignalBuffer signalBuffer(timeStamps, signalValues);
+
+    GetBufferResponse serverResponse(10, signalBuffer);
+    GetBufferResponse clientResponse = EncodeDecode(serverResponse, RESPONSE_GET_BUFFER);
+    EXPECT_EQ(10, clientResponse.getBufferId());
+    EXPECT_EQ(signalBuffer, clientResponse.getSignalBuffer());
+}
