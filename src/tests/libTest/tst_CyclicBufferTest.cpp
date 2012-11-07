@@ -810,9 +810,20 @@ void CyclicBufferTest::testBlockingGetBufferClientNotConnectedError()
     QCOMPARE(error.errorString, QString("Connection refused"));
 }
 
-QTEST_MAIN(CyclicBufferTest)
+#include <gtest/gtest.h>
+#include <gmock/gmock.h>
+
+using namespace ::testing;
+
+#include <QCoreApplication>
+int main(int argc, char *argv[]) {
+    InitGoogleTest(&argc, argv);
+    int googleTestResult = RUN_ALL_TESTS();
+    QCoreApplication app(argc, argv);
+    CyclicBufferTest tc;
+    return googleTestResult & QTest::qExec(&tc, argc, argv);
+}
 
 #include "tst_CyclicBufferTest.moc"
 
-//! @todo: перевести на тестовую архитектуру gtest
 //! @todo: внедрить некоторые особенности: диспетчер, расчет хешей, логгирование.
