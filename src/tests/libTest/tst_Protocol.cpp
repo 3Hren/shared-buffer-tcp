@@ -143,4 +143,28 @@ TEST(PushResponse, EncodingDecoding) {
     EXPECT_STREQ_QT("Ok", clientResponse.getMessage());
 }
 
-//TEST(ErrorResponse, Class)
+#include "protocol/ErrorResponse.h"
+TEST(ErrorResponse, Class) {
+    ErrorResponse response;
+    Q_UNUSED(response);
+}
+
+TEST(ErrorResponse, InitializesType) {
+    ErrorResponse response;
+    EXPECT_EQ(RESPONSE_ERROR, response.getType());
+}
+
+TEST(ErrorResponse, InitializationConstructor) {
+    ErrorResponse response(REQUEST_GET_BUFFER, WRONG_REQUEST_TYPE, "Wrong request type");
+    EXPECT_EQ(REQUEST_GET_BUFFER, response.getRequestType());
+    EXPECT_EQ(WRONG_REQUEST_TYPE, response.getErrorType());
+    EXPECT_STREQ_QT("Wrong request type", response.getReason());
+}
+
+TEST(ErrorResponse, EncodingDecoding) {
+    ErrorResponse serverResponse(REQUEST_GET_BUFFER, WRONG_REQUEST_TYPE, "Wrong request type");
+    ErrorResponse clientResponse = EncodeDecode(serverResponse, RESPONSE_ERROR);
+    EXPECT_EQ(REQUEST_GET_BUFFER, clientResponse.getRequestType());
+    EXPECT_EQ(WRONG_REQUEST_TYPE, clientResponse.getErrorType());
+    EXPECT_STREQ_QT("Wrong request type", clientResponse.getReason());
+}
