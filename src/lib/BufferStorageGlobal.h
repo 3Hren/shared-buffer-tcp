@@ -24,6 +24,7 @@ typedef quint16 BufferId;
 typedef quint16 BufferSize;
 typedef quint16 ErrorCode;
 typedef QMap<BufferId, BufferSize> BufferInfoTable;
+typedef QMapIterator<BufferId, BufferSize> BufferInfoTableIterator;
 typedef quint32 TimeStamp;
 typedef QVector<TimeStamp> TimeStampVector;
 

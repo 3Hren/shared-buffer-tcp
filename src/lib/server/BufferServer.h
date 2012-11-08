@@ -27,6 +27,7 @@ public:
     quint16 getPort() const;
 
     void initBuffers(const BufferInfoTable &bufferInfoTable);
+    void initBuffers(BufferId count, BufferSize maxSize = 1, BufferId startId = 0, BufferId offset = 2);
 
     void run(const QString &host = QString("127.0.0.1"), quint16 port = 14690);
 

@@ -61,3 +61,13 @@ TEST(BufferServer, InitBuffersCallsInitBuffersFromBufferManager) {
     server.setBufferManager(bufferManager);
     server.initBuffers(table);
 }
+
+TEST(BufferServer, SimplifiedInitBuffersCallsSimplifiedInitBuffersFromBufferManager) {
+    BufferManagerMock *bufferManager = new BufferManagerMock;
+    EXPECT_CALL(*bufferManager, initBuffers(300, 1024, 1000, 2))
+            .Times(1);
+
+    BufferServer server;
+    server.setBufferManager(bufferManager);
+    server.initBuffers(300, 1024, 1000, 2);
+}

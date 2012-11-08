@@ -1,6 +1,7 @@
 #include "HashTableBufferManager.h"
 
 #include "exceptions/BufferException.h"
+#include "BufferStorageGlobal.h"
 
 using namespace BufferStorage;
 
@@ -18,31 +19,40 @@ Buffer *HashTableBufferManager::getBuffer(BufferId id) const
 }
 
 void HashTableBufferManager::initBuffers(const BufferInfoTable &bufferInfoTable)
-{    
-    QMapIterator<quint16, quint16> it(bufferInfoTable);
+{        
+    BufferInfoTableIterator it(bufferInfoTable);
     while (it.hasNext()) {
         it.next();
-        quint16 id = it.key();
-        quint16 maximumQueueSize = it.value();        
+        BufferId id = it.key();
+        BufferSize maximumQueueSize = it.value();
 
         Buffer *buffer = new Buffer(maximumQueueSize);
         buffers.insert(id, buffer);
         buffersVector.append(buffer);
     }
 
-    quint16 timeStampsQueueSize = 0;
-    foreach (quint16 maximumQueueSize, bufferInfoTable.values())
+    BufferSize timeStampsQueueSize = 0;
+    foreach (BufferSize maximumQueueSize, bufferInfoTable.values())
         if (maximumQueueSize > timeStampsQueueSize)
             timeStampsQueueSize = maximumQueueSize;
 
     timeStamps.setMaximumSize(timeStampsQueueSize);
 }
 
+void HashTableBufferManager::initBuffers(BufferId count, BufferSize maxSize, BufferId startId, BufferId offset)
+{
+    BufferInfoTable bufferInfoTable;
+    for (BufferId bufferId = startId; bufferId < startId + offset * count; bufferId += offset)
+        bufferInfoTable.insert(bufferId, maxSize);
+
+    initBuffers(bufferInfoTable);
+}
+
 TimeStampVector HashTableBufferManager::getTimeStampsForBuffer(BufferId bufferId) const
 {
     Buffer *buffer = getBuffer(bufferId);
     TimeStampVector timeStamps;
-    quint16 offset = this->timeStamps.size() - buffer->size();
+    BufferSize offset = this->timeStamps.size() - buffer->size();
     timeStamps.reserve(buffer->size());
 
     for (int i = 0; i < buffer->size(); ++i)
@@ -55,7 +65,7 @@ SignalValue HashTableBufferManager::getSignalValue(BufferId bufferId, TimeStamp 
 {
     const QQueue<TimeStamp> &timeStampsQueue = timeStamps.getData();
     Buffer *buffer = getBuffer(bufferId);    
-    quint16 signalDataId = std::distance(timeStampsQueue.begin(), qBinaryFind(timeStampsQueue, timeStamp));    
+    BufferSize signalDataId = std::distance(timeStampsQueue.begin(), qBinaryFind(timeStampsQueue, timeStamp));
     signalDataId -= timeStampsQueue.size() - buffer->size();    
 
     if (signalDataId >= buffer->size())

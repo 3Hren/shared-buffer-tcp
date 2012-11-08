@@ -12,6 +12,7 @@ public:
 
     Buffer *getBuffer(BufferId id) const;
     void initBuffers(const BufferInfoTable &bufferInfoTable);
+    void initBuffers(BufferId count, BufferSize maxSize = 1, BufferId startId = 0, BufferId offset = 2);
 
     TimeStampVector getTimeStampsForBuffer(BufferId bufferId) const;
     SignalValue getSignalValue(BufferId bufferId, TimeStamp timeStamp) const;

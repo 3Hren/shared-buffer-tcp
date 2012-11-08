@@ -3,6 +3,7 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 #include <QTest>
+#include <QSignalSpy>
 
 #include "BufferStorageGlobal.h"
 #include "exceptions/BufferStorageException.h"
@@ -37,6 +38,7 @@ class BufferManagerMock : public BufferManager {
 public:
     MOCK_CONST_METHOD1(getBuffer, Buffer*(BufferId));
     MOCK_METHOD1(initBuffers, void(const BufferInfoTable&));
+    MOCK_METHOD4(initBuffers, void(BufferId, BufferSize, BufferId, BufferId));
     MOCK_METHOD2(pushSignalValues, void(const SignalValueVector&, TimeStamp));
     MOCK_CONST_METHOD1(getTimeStampsForBuffer, TimeStampVector(BufferId));
     MOCK_CONST_METHOD2(getSignalValue, SignalValue(BufferId, TimeStamp));

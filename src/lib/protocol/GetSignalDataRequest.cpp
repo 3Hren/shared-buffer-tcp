@@ -7,7 +7,7 @@ GetSignalDataRequest::GetSignalDataRequest() :
 {
 }
 
-GetSignalDataRequest::GetSignalDataRequest(TimeStamp timeStamp, const QVector<quint16> &bufferIds) :
+GetSignalDataRequest::GetSignalDataRequest(TimeStamp timeStamp, const QVector<BufferId> &bufferIds) :
     Request(REQUEST_GET_SIGNAL_DATA),
     timeStamp(timeStamp),
     bufferIds(bufferIds)

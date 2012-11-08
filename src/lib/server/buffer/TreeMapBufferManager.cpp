@@ -19,28 +19,36 @@ Buffer *TreeMapBufferManager::getBuffer(BufferId id) const
 
 void TreeMapBufferManager::initBuffers(const BufferInfoTable &bufferInfoTable)
 {
-    QMapIterator<quint16, quint16> it(bufferInfoTable);
+    BufferInfoTableIterator it(bufferInfoTable);
     while (it.hasNext()) {
         it.next();
-        quint16 id = it.key();
-        quint16 maximumQueueSize = it.value();
+        BufferId id = it.key();
+        BufferSize maximumQueueSize = it.value();
 
         buffers.insert(id, new Buffer(maximumQueueSize));
     }
 
-    quint16 timeStampsQueueSize = 0;
-    foreach (quint16 maximumQueueSize, bufferInfoTable.values())
+    BufferSize timeStampsQueueSize = 0;
+    foreach (BufferSize maximumQueueSize, bufferInfoTable.values())
         if (maximumQueueSize > timeStampsQueueSize)
             timeStampsQueueSize = maximumQueueSize;
 
     timeStamps.setMaximumSize(timeStampsQueueSize);
 }
 
+void TreeMapBufferManager::initBuffers(BufferId count, BufferSize maxSize, BufferId startId, BufferId offset)
+{
+    Q_UNUSED(count);
+    Q_UNUSED(maxSize);
+    Q_UNUSED(startId);
+    Q_UNUSED(offset);
+}
+
 TimeStampVector TreeMapBufferManager::getTimeStampsForBuffer(BufferId bufferId) const
 {
     Buffer *buffer = getBuffer(bufferId);
     TimeStampVector timeStamps;
-    quint16 offset = this->timeStamps.size() - buffer->size();
+    BufferSize offset = this->timeStamps.size() - buffer->size();
     timeStamps.reserve(buffer->size());
 
     for (int i = 0; i < buffer->size(); ++i)
@@ -53,7 +61,7 @@ SignalValue TreeMapBufferManager::getSignalValue(BufferId bufferId, TimeStamp ti
 {
     const QQueue<TimeStamp> &timeStampsQueue = timeStamps.getData();
     Buffer *buffer = getBuffer(bufferId);
-    quint16 signalDataId = std::distance(timeStampsQueue.begin(), qBinaryFind(timeStampsQueue, timeStamp));
+    BufferSize signalDataId = std::distance(timeStampsQueue.begin(), qBinaryFind(timeStampsQueue, timeStamp));
     signalDataId -= timeStampsQueue.size() - buffer->size();
 
     if (signalDataId >= buffer->size())

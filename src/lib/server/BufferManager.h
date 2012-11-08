@@ -13,6 +13,7 @@ public:
 
     virtual Buffer *getBuffer(BufferId id) const = 0;
     virtual void initBuffers(const BufferInfoTable &bufferInfoTable) = 0;
+    virtual void initBuffers(BufferId count, BufferSize maxSize = 1, BufferId startId = 0, BufferId offset = 2) = 0;
 
     virtual void pushSignalValues(const SignalValueVector &signalValues, TimeStamp timeStamp) = 0;
 

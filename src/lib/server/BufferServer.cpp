@@ -49,6 +49,11 @@ void BufferServer::initBuffers(const BufferInfoTable &bufferInfoTable)
     bufferManager->initBuffers(bufferInfoTable);
 }
 
+void BufferServer::initBuffers(BufferId count, BufferSize maxSize, BufferId startId, BufferId offset)
+{
+    bufferManager->initBuffers(count, maxSize, startId, offset);
+}
+
 void BufferServer::run(const QString &host, quint16 port)
 {
     if (!server->listen(QHostAddress(host), port))
