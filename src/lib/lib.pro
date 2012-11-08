@@ -19,7 +19,6 @@ MOC_DIR = .moc
 headers.path = ../../lib/include
 headers.files += \
     BufferStorageGlobal.h \
-    Runnable.h \
     SignalValue.h \
     SignalBuffer.h \
     server/BufferServer.h \

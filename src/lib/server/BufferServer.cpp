@@ -12,7 +12,7 @@
 using namespace BufferStorage;
 
 BufferServer::BufferServer(QObject *parent) :
-    Runnable(parent),
+    QObject(parent),
     server(new QTcpServer(this)),
     bufferManager(new HashTableBufferManager)
 {
@@ -33,16 +33,6 @@ void BufferServer::run(const QString &host, quint16 port)
 {
     if (!server->listen(QHostAddress(host), port))
         throw ServerCouldNotStartException(host, port);
-}
-
-void BufferServer::run(const QString &host)
-{
-    run(host, getStandardPort());
-}
-
-void BufferServer::run()
-{
-    run(QHostAddress(QHostAddress::LocalHost).toString());
 }
 
 bool BufferServer::isListening() const
@@ -70,7 +60,7 @@ BufferManager *BufferServer::getBufferManager() const
     return bufferManager;
 }
 
-//! После выполнения этого метода сервер отвечает за удаление BufferManager'а.
+//! Сервер отвечает за удаление BufferManager'а.
 void BufferServer::setBufferManager(BufferManager *bufferManager)
 {
     delete this->bufferManager;

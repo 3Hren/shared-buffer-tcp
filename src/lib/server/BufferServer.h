@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Runnable.h"
+#include <QObject>
 
 #include "BufferStorageGlobal.h"
 
@@ -10,7 +10,7 @@ class QTcpServer;
 
 namespace BufferStorage {
 class BufferManager;
-class BufferServer : public Runnable
+class BufferServer : public QObject
 {
     Q_OBJECT
     QTcpServer *server;
@@ -21,9 +21,7 @@ public:
 
     static quint16 getStandardPort();
 
-    void run(const QString &host, quint16 port);
-    void run(const QString &host);
-    void run();
+    virtual void run(const QString &host = QString("127.0.0.1"), quint16 port = 14690);
 
     bool isListening() const;
 

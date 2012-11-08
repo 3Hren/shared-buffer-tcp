@@ -53,7 +53,6 @@ private Q_SLOTS:
     void testGetSignalDataRequestSerializing();
     void testGetSignalDataResponseSerializing();
 
-    void testServerIsListening();
     void testServerAlreadyRunningError();
     void testClientConnectionToServer();
     void testClientConnectionToServerWithEmptyParameterList();
@@ -143,17 +142,6 @@ void CyclicBufferTest::testGetSignalDataResponseSerializing()
     GetSignalDataResponse *decodedInputRequest = static_cast<GetSignalDataResponse *>(inputRequest.data());
     QCOMPARE(decodedInputRequest->getTimeStamp(), timeStamp);
     QCOMPARE(decodedInputRequest->getSignalValues(), signalValues);
-}
-
-void CyclicBufferTest::testServerIsListening()
-{
-    BufferServer server;
-
-    server.run();
-
-    QCOMPARE(server.isListening(), true);
-    QCOMPARE(server.getHost(), QString("127.0.0.1"));
-    QCOMPARE(server.getPort(), BufferServer::getStandardPort());
 }
 
 void CyclicBufferTest::testServerAlreadyRunningError()

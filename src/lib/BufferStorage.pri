@@ -1,6 +1,5 @@
 HEADERS += \
     exceptions/ServerException.h \
-    Runnable.h \
     server/BufferManager.h \
     Buffer.h \
     exceptions/BufferException.h \
