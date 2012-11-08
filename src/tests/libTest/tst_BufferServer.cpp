@@ -1,6 +1,5 @@
 #include "Mocks.h"
 
-
 TEST(BufferServer, Class) {
     BufferServer server;
     Q_UNUSED(server);

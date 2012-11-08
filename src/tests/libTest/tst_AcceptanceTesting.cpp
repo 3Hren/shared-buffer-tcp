@@ -151,34 +151,6 @@ TEST(AcceptanceTest, BlockingGetBufferWithWrongIndexResultsInException) {
     EXPECT_THROW(client.blockingGetBuffer(1), BufferStorageException);
 }
 
-#include <QTimer>
-class SpyListener : public QObject {
-    Q_OBJECT
-    QSignalSpy *spy;
-    QTimer *timer;
-    volatile bool isListening;
-public:
-    SpyListener(QSignalSpy *spy, QObject *parent = 0) :
-        QObject(parent),
-        spy(spy),
-        timer(new QTimer(this)),
-        isListening(false)
-    {
-        connect(timer, SIGNAL(timeout()), SLOT(stopListening()));
-    }
-
-    void listen(int timeout = 1000) {
-        timer->start(timeout);
-        isListening = true;
-        while (isListening && spy->isEmpty())
-            qApp->processEvents();
-    }
-
-    Q_SLOT void stopListening() {
-        isListening = false;
-    }
-};
-
 TEST(AcceptanceTest, PushRequest) {
     BufferServer server;
     server.initBuffers(300, 10, 0, 1);
@@ -194,8 +166,10 @@ TEST(AcceptanceTest, PushRequest) {
 
     qRegisterMetaType<QSharedPointer<Response> >("QSharedPointer<Response>");
     QSignalSpy spy(&client, SIGNAL(responseReceived(QSharedPointer<Response>)));
-    SpyListener listener(&spy);
-    listener.listen();
+    Listener listener(&spy);
+    listener.listenUntil([&](){
+        return !spy.isEmpty();
+    });
 
     for (int i = 0; i < 300; ++i)
         ASSERT_EQ(signalValues[i], server.getBufferManager()->getSignalValue(i, 10000));

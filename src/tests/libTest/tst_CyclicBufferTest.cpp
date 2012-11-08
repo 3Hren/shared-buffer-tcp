@@ -53,10 +53,6 @@ private Q_SLOTS:
     void testGetSignalDataRequestSerializing();
     void testGetSignalDataResponseSerializing();
 
-    void testClientConnectionToServer();
-    void testClientConnectionToServerWithEmptyParameterList();
-
-    void testPushDataToServer();
     void testPushDataToServerWithMoreDatasThanOnServer();
     void testPushDataToServerWithLessDatasThanOnServer();
 
@@ -139,63 +135,6 @@ void CyclicBufferTest::testGetSignalDataResponseSerializing()
     GetSignalDataResponse *decodedInputRequest = static_cast<GetSignalDataResponse *>(inputRequest.data());
     QCOMPARE(decodedInputRequest->getTimeStamp(), timeStamp);
     QCOMPARE(decodedInputRequest->getSignalValues(), signalValues);
-}
-
-void CyclicBufferTest::testClientConnectionToServer()
-{
-    BufferServer server;
-    BufferClient client;
-    QSignalSpy spy(&client, SIGNAL(connected()));
-
-    server.run();
-    client.connectToServer("127.0.0.1", BufferServer::getStandardPort());
-    client.waitForConnected();
-
-    QCOMPARE(client.isConnected(), true);
-    QCOMPARE(spy.count(), 1);
-}
-
-void CyclicBufferTest::testClientConnectionToServerWithEmptyParameterList()
-{
-    BufferServer server;
-    BufferClient client;
-    QSignalSpy spy(&client, SIGNAL(connected()));
-
-    server.run();
-    client.connectToServer();
-    client.waitForConnected();
-
-    QCOMPARE(client.isConnected(), true);
-    QCOMPARE(spy.count(), 1);
-}
-
-void CyclicBufferTest::testPushDataToServer()
-{
-    const int MAX_BUFFERS = 10;
-    const int START_INDEX = 1000;
-
-    // Initialize
-    BufferServer server;
-    BufferClient client;
-    initializeBufferTable(&server, MAX_BUFFERS, START_INDEX);
-    SignalValueVector data;
-    data.fill(SignalValue(55.5, 0), MAX_BUFFERS);
-
-    // Run
-    server.run();
-    client.connectToServer();
-    client.waitForConnected();
-    client.push(data);
-    QTest::qWait(WAIT_MSEC);
-
-    // Compare
-    BufferManager *bM = server.getBufferManager();
-    for (int i = 0; i < MAX_BUFFERS; ++i) {
-        Buffer *buffer = bM->getBuffer(START_INDEX + i);
-        Q_ASSERT(buffer);
-        QCOMPARE(buffer->size(), (quint16)1);
-        QCOMPARE(buffer->first(), data.at(i));
-    }
 }
 
 void CyclicBufferTest::tryPushWrongDataCountToServerAndCompareError(quint16 dataCount, quint16 wrongDataCount, ErrorType errorType) const

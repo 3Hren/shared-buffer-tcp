@@ -4,6 +4,8 @@
 #include <gmock/gmock.h>
 #include <QTest>
 #include <QSignalSpy>
+#include <QTimer>
+#include <functional>
 
 #include "BufferStorageGlobal.h"
 #include "exceptions/BufferStorageException.h"
@@ -27,6 +29,31 @@ void TestStructSerializing(Serializable outSerializable) {
 
     EXPECT_EQ(outSerializable, inSerializable);
 }
+
+class Listener : public QObject {
+    Q_OBJECT
+    QTimer *timer;
+    volatile bool isListening;
+public:
+    Listener(QObject *parent = 0) :
+        QObject(parent),
+        timer(new QTimer(this)),
+        isListening(false)
+    {
+        connect(timer, SIGNAL(timeout()), SLOT(stopListening()));
+    }
+
+    void listenUntil(std::function<bool(void)> breakCondition, int timeout = 1000) {
+        timer->start(timeout);
+        isListening = true;
+        while (isListening && !breakCondition())
+            qApp->processEvents();
+    }
+
+    Q_SLOT void stopListening() {
+        isListening = false;
+    }
+};
 
 using namespace BufferStorage;
 
