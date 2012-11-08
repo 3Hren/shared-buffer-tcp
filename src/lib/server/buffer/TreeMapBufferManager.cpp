@@ -17,7 +17,7 @@ Buffer *TreeMapBufferManager::getBuffer(BufferId id) const
     return buffers.value(id);
 }
 
-void TreeMapBufferManager::setBuffers(const BufferInfoTable &bufferInfoTable)
+void TreeMapBufferManager::initBuffers(const BufferInfoTable &bufferInfoTable)
 {
     QMapIterator<quint16, quint16> it(bufferInfoTable);
     while (it.hasNext()) {

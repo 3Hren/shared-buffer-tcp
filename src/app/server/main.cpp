@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
     for (int i = 0; i < count; ++i)
         map.insert(startAddress + 2 * i, maximumSize);
 
-    server.initializeBuffers(map);
+    server.initBuffers(map);
     server.run();
     
     return a.exec();

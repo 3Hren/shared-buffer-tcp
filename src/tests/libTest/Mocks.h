@@ -6,6 +6,8 @@
 
 #include "BufferStorageGlobal.h"
 #include "exceptions/BufferStorageException.h"
+#include "exceptions/ServerException.h"
+#include "exceptions/BufferException.h"
 
 #define EXPECT_STREQ_QT(expected, actual) \
     QString e(expected); \
@@ -34,7 +36,7 @@ using namespace BufferStorage;
 class BufferManagerMock : public BufferManager {
 public:
     MOCK_CONST_METHOD1(getBuffer, Buffer*(BufferId));
-    MOCK_METHOD1(setBuffers, void(const BufferInfoTable&));
+    MOCK_METHOD1(initBuffers, void(const BufferInfoTable&));
     MOCK_METHOD2(pushSignalValues, void(const SignalValueVector&, TimeStamp));
     MOCK_CONST_METHOD1(getTimeStampsForBuffer, TimeStampVector(BufferId));
     MOCK_CONST_METHOD2(getSignalValue, SignalValue(BufferId, TimeStamp));

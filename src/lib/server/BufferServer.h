@@ -19,16 +19,16 @@ public:
     BufferServer(QObject *parent = 0);
     ~BufferServer();
 
-    static quint16 getStandardPort();
-
-    virtual void run(const QString &host = QString("127.0.0.1"), quint16 port = 14690);
+    static quint16 getStandardPort();    
 
     bool isListening() const;
 
     QString getHost() const;
     quint16 getPort() const;
 
-    void initializeBuffers(const BufferInfoTable &bufferInfoTable);
+    void initBuffers(const BufferInfoTable &bufferInfoTable);
+
+    void run(const QString &host = QString("127.0.0.1"), quint16 port = 14690);
 
     BufferManager *getBufferManager() const;
     void setBufferManager(BufferManager *bufferManager);

@@ -53,13 +53,10 @@ private Q_SLOTS:
     void testGetSignalDataRequestSerializing();
     void testGetSignalDataResponseSerializing();
 
-    void testServerAlreadyRunningError();
     void testClientConnectionToServer();
     void testClientConnectionToServerWithEmptyParameterList();
-    void testInitializingBufferManager();
-    void testBufferNotFoundInBufferManager();
 
-    void testPushDataToServer();    
+    void testPushDataToServer();
     void testPushDataToServerWithMoreDatasThanOnServer();
     void testPushDataToServerWithLessDatasThanOnServer();
 
@@ -87,7 +84,7 @@ void CyclicBufferTest::initializeBufferTable(BufferServer *server, quint16 maxim
     for (quint16 i = 0; i < maximumIds; ++i)
         bufferInfoTable.insert(initialOffset + elementOffset * i, maximumBufferSize);
 
-    server->initializeBuffers(bufferInfoTable);
+    server->initBuffers(bufferInfoTable);
 }
 
 Request *CyclicBufferTest::getInputRequestThroughNetworkSendMock(Request *outputRequest) const
@@ -144,18 +141,6 @@ void CyclicBufferTest::testGetSignalDataResponseSerializing()
     QCOMPARE(decodedInputRequest->getSignalValues(), signalValues);
 }
 
-void CyclicBufferTest::testServerAlreadyRunningError()
-{
-    BufferServer server;
-    BufferServer serverDublicate;
-
-    server.run();
-
-    QCOMPARE(server.isListening(), true);
-    QVERIFY_THROW(serverDublicate.run(), ServerCouldNotStartException);
-    QCOMPARE(serverDublicate.isListening(), false);
-}
-
 void CyclicBufferTest::testClientConnectionToServer()
 {
     BufferServer server;
@@ -182,27 +167,6 @@ void CyclicBufferTest::testClientConnectionToServerWithEmptyParameterList()
 
     QCOMPARE(client.isConnected(), true);
     QCOMPARE(spy.count(), 1);
-}
-
-void CyclicBufferTest::testInitializingBufferManager()
-{
-    BufferServer server;
-    initializeBufferTable(&server, 3, 1000, 10, 40);
-
-    BufferManager *bufferManager = server.getBufferManager();
-
-    QCOMPARE(bufferManager->getBuffer(1000)->getMaximumSize(), (quint16)40);
-    QCOMPARE(bufferManager->getBuffer(1010)->getMaximumSize(), (quint16)40);
-    QCOMPARE(bufferManager->getBuffer(1020)->getMaximumSize(), (quint16)40);
-}
-
-void CyclicBufferTest::testBufferNotFoundInBufferManager()
-{
-    BufferServer server;
-
-    BufferManager *bufferManager = server.getBufferManager();
-
-    QVERIFY_THROW(bufferManager->getBuffer(1030), BufferNotFoundException);
 }
 
 void CyclicBufferTest::testPushDataToServer()
@@ -519,7 +483,7 @@ void CyclicBufferTest::createBuffers(BufferManager *bufferManager) const
     for (int bufferId = 0; bufferId < BUFFERS_COUNT; ++bufferId)
         map.insert(bufferId, BUFFER_MAX_SIZE);
 
-    bufferManager->setBuffers(map);
+    bufferManager->initBuffers(map);
 }
 
 SignalValueVector CyclicBufferTest::createSignalDatas() const
@@ -581,7 +545,7 @@ public Q_SLOTS:
         for (int i = 0; i < bufferCount; ++i)
             map.insert(i, bufferMaxSize);
 
-        server->initializeBuffers(map);
+        server->initBuffers(map);
         server->run();
     }
 };

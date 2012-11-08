@@ -3,6 +3,7 @@
 #include <exception>
 
 #include <QObject>
+#include <QCoreApplication>
 #include <QString>
 
 namespace BufferStorage {

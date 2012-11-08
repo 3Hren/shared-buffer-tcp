@@ -13,7 +13,7 @@ public:
     ~HashTableBufferManager();
 
     Buffer *getBuffer(BufferId id) const;
-    void setBuffers(const BufferInfoTable &bufferInfoTable);
+    void initBuffers(const BufferInfoTable &bufferInfoTable);
 
     TimeStampVector getTimeStampsForBuffer(BufferId bufferId) const;
     SignalValue getSignalValue(BufferId bufferId, TimeStamp timeStamp) const;

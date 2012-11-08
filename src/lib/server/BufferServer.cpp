@@ -29,12 +29,6 @@ quint16 BufferServer::getStandardPort()
     return static_cast<quint16>(14690);
 }
 
-void BufferServer::run(const QString &host, quint16 port)
-{
-    if (!server->listen(QHostAddress(host), port))
-        throw ServerCouldNotStartException(host, port);
-}
-
 bool BufferServer::isListening() const
 {
     return server->isListening();
@@ -50,10 +44,17 @@ quint16 BufferServer::getPort() const
     return server->serverPort();
 }
 
-void BufferServer::initializeBuffers(const BufferInfoTable &bufferInfoTable)
+void BufferServer::initBuffers(const BufferInfoTable &bufferInfoTable)
 {    
-    bufferManager->setBuffers(bufferInfoTable);
+    bufferManager->initBuffers(bufferInfoTable);
 }
+
+void BufferServer::run(const QString &host, quint16 port)
+{
+    if (!server->listen(QHostAddress(host), port))
+        throw ServerException(QString("Server could not start at '%1:%2': %3").arg(host).arg(port).arg(server->errorString()));
+}
+
 
 BufferManager *BufferServer::getBufferManager() const
 {
@@ -71,6 +72,6 @@ void BufferServer::acceptConnection()
 {
     QTcpSocket *socket = server->nextPendingConnection();     
     ConnectionHandler *requestHandler = new ServerConnectionHandler(socket, this);
-    qDebug() << QString("New connection from: %1:%2").arg(socket->peerAddress().toString()).arg(socket->peerPort());
+    qDebug() << QString("New connection from: '%1:%2'").arg(socket->peerAddress().toString()).arg(socket->peerPort());
     Q_UNUSED(requestHandler);
 }

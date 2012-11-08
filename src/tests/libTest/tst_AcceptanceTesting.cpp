@@ -32,7 +32,7 @@ public:
         for (BufferId bufferId = 0; bufferId < 2 * bufferCount; bufferId += 2)
             table.insert(bufferId, bufferMaxSize);
 
-        bufferManager->setBuffers(table);
+        bufferManager->initBuffers(table);
 
         initializeBufferManager(bufferManager);
 
@@ -153,5 +153,5 @@ TEST(AcceptanceTest, BlockingGetBufferWithWrongIndexResultsInException) {
     EXPECT_THROW(client.blockingGetBuffer(1), BufferStorageException);
 }
 
-TEST(AcceptanceTest, PushRequest) {
-}
+/*TEST(AcceptanceTest, PushRequest) {
+}*/

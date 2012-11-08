@@ -41,3 +41,23 @@ TEST(BufferServer, ServerIsBindedToStandardPortBeingRun) {
     server.run();
     EXPECT_EQ(14690, server.getPort());
 }
+
+TEST(BufferServer, ThrowsExceptionWhenCannotBind) {
+    BufferServer server, anotherServer;
+    server.run();
+    EXPECT_THROW(anotherServer.run(), ServerException);
+    EXPECT_FALSE(anotherServer.isListening());
+}
+
+TEST(BufferServer, InitBuffersCallsInitBuffersFromBufferManager) {
+    BufferInfoTable table;
+    table.insert(0, 10);
+
+    BufferManagerMock *bufferManager = new BufferManagerMock;
+    EXPECT_CALL(*bufferManager, initBuffers(table))
+            .Times(1);
+
+    BufferServer server;
+    server.setBufferManager(bufferManager);
+    server.initBuffers(table);
+}

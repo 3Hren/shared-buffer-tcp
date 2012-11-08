@@ -17,7 +17,7 @@ Buffer *HashTableBufferManager::getBuffer(BufferId id) const
     return buffers.value(id);
 }
 
-void HashTableBufferManager::setBuffers(const BufferInfoTable &bufferInfoTable)
+void HashTableBufferManager::initBuffers(const BufferInfoTable &bufferInfoTable)
 {    
     QMapIterator<quint16, quint16> it(bufferInfoTable);
     while (it.hasNext()) {
