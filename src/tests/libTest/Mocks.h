@@ -5,6 +5,7 @@
 #include <QTest>
 
 #include "BufferStorageGlobal.h"
+#include "exceptions/BufferStorageException.h"
 
 #define EXPECT_STREQ_QT(expected, actual) \
     QString e(expected); \

@@ -597,13 +597,13 @@ void CyclicBufferTest::testHighLoad()
     }
 }
 
-class ServerRunner : public QObject {
+class DeprecatedServerRunner : public QObject {
     Q_OBJECT
     BufferServer *server;
     quint16 bufferCount;
     quint16 bufferMaxSize;
 public:
-    ServerRunner(quint16 bufferCount, quint16 bufferMaxSize, QObject *parent = 0) :
+    DeprecatedServerRunner(quint16 bufferCount, quint16 bufferMaxSize, QObject *parent = 0) :
         QObject(parent),
         bufferCount(bufferCount),
         bufferMaxSize(bufferMaxSize)
@@ -632,7 +632,7 @@ void CyclicBufferTest::testBlockingPushDataToServer()
     // Initialize
     BufferClient client;
     QThread thread;
-    ServerRunner serverRunner(MAX_BUFFERS, 1000);
+    DeprecatedServerRunner serverRunner(MAX_BUFFERS, 1000);
     serverRunner.moveToThread(&thread);
     thread.start();
     connect(&thread,SIGNAL(started()),&serverRunner,SLOT(run()));
@@ -661,7 +661,7 @@ void CyclicBufferTest::testBlockingPushDataToServer()
 void CyclicBufferTest::testBlockingGetEmptyBuffer()
 {
     QThread thread;
-    ServerRunner serverRunner(10, 10);
+    DeprecatedServerRunner serverRunner(10, 10);
     serverRunner.moveToThread(&thread);
     thread.start();
     connect(&thread,SIGNAL(started()),&serverRunner,SLOT(run()));
@@ -683,7 +683,7 @@ void CyclicBufferTest::testBlockingGetBufferWrongIndex()
 {
     qWarning() << "While testing BLOCKING requests server MUST be started in separate thread or process";
     QThread thread;
-    ServerRunner serverRunner(10, 10);
+    DeprecatedServerRunner serverRunner(10, 10);
     serverRunner.moveToThread(&thread);
     thread.start();
     connect(&thread,SIGNAL(started()),&serverRunner,SLOT(run()));
