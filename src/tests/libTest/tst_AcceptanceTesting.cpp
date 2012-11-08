@@ -6,6 +6,7 @@
 class ServerRunner : public QObject {
     Q_OBJECT
     volatile bool isRunning;
+protected:
     BufferId bufferCount;
     BufferSize bufferMaxSize;
 public:
@@ -32,15 +33,14 @@ public:
             table.insert(bufferId, bufferMaxSize);
 
         bufferManager->setBuffers(table);
-        for (BufferSize timeStamp = 0; timeStamp < bufferMaxSize; ++timeStamp) {
-            SignalValueVector signalValues;
-            for (BufferId bufferId = 0; bufferId < 2 * bufferCount; bufferId += 2)
-                signalValues.append(SignalValue(timeStamp * bufferMaxSize + bufferId, 0));
 
-            bufferManager->pushSignalValues(signalValues, timeStamp);
-        }
+        initializeBufferManager(bufferManager);
 
         return bufferManager;
+    }
+
+    virtual void initializeBufferManager(BufferManager *bufferManager) const {
+        Q_UNUSED(bufferManager);
     }
 
     Q_SLOT void run() {
@@ -56,6 +56,23 @@ public:
             usleep(1000);
     }
 };
+
+class AutoFilledServerRunner : public ServerRunner {
+    Q_OBJECT
+public:
+    AutoFilledServerRunner(QObject *parent = 0) : ServerRunner(parent) {}
+
+    void initializeBufferManager(BufferManager *bufferManager) const {
+        for (BufferSize timeStamp = 0; timeStamp < bufferMaxSize; ++timeStamp) {
+            SignalValueVector signalValues;
+            for (BufferId bufferId = 0; bufferId < 2 * bufferCount; bufferId += 2)
+                signalValues.append(SignalValue(timeStamp * bufferMaxSize + bufferId, 0));
+
+            bufferManager->pushSignalValues(signalValues, timeStamp);
+        }
+    }
+};
+
 #include "tst_AcceptanceTesting.moc"
 
 template<typename T>
@@ -100,8 +117,8 @@ private:
  */
 TEST(AcceptanceTest, BlockingGetBuffer) {    
     const BufferId BUFFER_COUNT = 300;
-    const BufferSize BUFFER_MAX_SIZE = 100;
-    ThreadedServerRunnerManager<ServerRunner> runner(BUFFER_COUNT, BUFFER_MAX_SIZE);
+    const BufferSize BUFFER_MAX_SIZE = 1024;
+    ThreadedServerRunnerManager<AutoFilledServerRunner> runner(BUFFER_COUNT, BUFFER_MAX_SIZE);
     runner.start();
 
     TimeStampVector expectedTimeStamps;
@@ -120,4 +137,21 @@ TEST(AcceptanceTest, BlockingGetBuffer) {
     } catch (BufferStorageException &exception) {
         qFatal("Error while testing '%s': '%s'", Q_FUNC_INFO, exception.getReason().toUtf8().constData());
     }
+}
+
+/*!
+ * \brief Интеграционный тест, который проверяет способность метода blockingGetBuffer выбрасывать исключение в случае неправильно заданного индекса буфера.
+ */
+TEST(AcceptanceTest, BlockingGetBufferWithWrongIndexResultsInException) {
+    const BufferId BUFFER_COUNT = 300;
+    const BufferSize BUFFER_MAX_SIZE = 1024;
+    ThreadedServerRunnerManager<AutoFilledServerRunner> runner(BUFFER_COUNT, BUFFER_MAX_SIZE);
+    runner.start();
+
+    BufferClient client;
+    client.blockingConnectToServer();
+    EXPECT_THROW(client.blockingGetBuffer(1), BufferStorageException);
+}
+
+TEST(AcceptanceTest, PushRequest) {
 }

@@ -75,12 +75,7 @@ private Q_SLOTS:
     void benchmarkHashTableBufferManager();
     void benchmarkTreeBufferManager();
 
-    void testHighLoad();
-
     void testBlockingPushDataToServer();
-
-    void testBlockingGetEmptyBuffer();
-    void testBlockingGetBufferWrongIndex();
 };
 
 CyclicBufferTest::CyclicBufferTest()
@@ -575,28 +570,6 @@ void CyclicBufferTest::benchmarkTreeBufferManager()
     }
 }
 
-void CyclicBufferTest::testHighLoad()
-{
-    QSKIP("testHighLoad", SkipSingle);
-    quint16 MAX_SIZE = 65535;
-    // Initialize
-    BufferServer server;
-    initializeBufferTable(&server, MAX_SIZE, 0, 1, 100);
-    BufferClient client;
-    SignalValueVector data(MAX_SIZE);
-
-    server.run();
-    client.blockingConnectToServer();
-
-    for (int times = 0; times < 10; ++times) {
-        for (quint16 i = 0; i < MAX_SIZE; ++i)
-            data.replace(i, SignalValue(qrand() % 100 / 10, 0));
-        TimeStamp timeStamp = QDateTime::currentDateTime().toTime_t();
-        client.push(data, timeStamp);
-        QTest::qWait(WAIT_MSEC);
-    }
-}
-
 class DeprecatedServerRunner : public QObject {
     Q_OBJECT
     BufferServer *server;
@@ -656,51 +629,6 @@ void CyclicBufferTest::testBlockingPushDataToServer()
 
     thread.quit();
     thread.wait();
-}
-
-void CyclicBufferTest::testBlockingGetEmptyBuffer()
-{
-    QThread thread;
-    DeprecatedServerRunner serverRunner(10, 10);
-    serverRunner.moveToThread(&thread);
-    thread.start();
-    connect(&thread,SIGNAL(started()),&serverRunner,SLOT(run()));
-    QTest::qWait(50); // Wait for thread is started and server run state.
-
-    BufferClient client;
-    bool isConnected = client.blockingConnectToServer();
-    const SignalBuffer &response = client.blockingGetBuffer(0, 10000);
-
-    QCOMPARE(isConnected, true);
-    QCOMPARE(response.timeStampVector.size(), 0);
-    QCOMPARE(response.signalValueVector.size(), 0);
-
-    thread.quit();
-    thread.wait();
-}
-
-void CyclicBufferTest::testBlockingGetBufferWrongIndex()
-{
-    qWarning() << "While testing BLOCKING requests server MUST be started in separate thread or process";
-    QThread thread;
-    DeprecatedServerRunner serverRunner(10, 10);
-    serverRunner.moveToThread(&thread);
-    thread.start();
-    connect(&thread,SIGNAL(started()),&serverRunner,SLOT(run()));
-    QTest::qWait(50); // Wait for thread is started and server run state.
-
-    BufferClient client;
-    client.blockingConnectToServer();
-    try {
-        client.blockingGetBuffer(500, 10000);
-        QFAIL("failed");
-    } catch (ProtocolException &e) {
-        QCOMPARE(e.getRequestType(), REQUEST_GET_BUFFER);
-        QCOMPARE(e.getErrorType(), WRONG_BUFFER_ID);
-
-        thread.quit();
-        thread.wait();
-    }
 }
 
 #include <gtest/gtest.h>
