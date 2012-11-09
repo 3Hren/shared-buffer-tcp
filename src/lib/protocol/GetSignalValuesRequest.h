@@ -5,13 +5,13 @@
 #include <QVector>
 
 namespace BufferStorage {
-class GetSignalDataRequest : public Request
+class GetSignalValuesRequest : public Request
 {
     TimeStamp timeStamp;
     QVector<BufferId> bufferIds;
 public:
-    GetSignalDataRequest();
-    GetSignalDataRequest(TimeStamp timeStamp, const QVector<BufferId> &bufferIds);
+    GetSignalValuesRequest();
+    GetSignalValuesRequest(TimeStamp timeStamp, const QVector<BufferId> &bufferIds);
 
     TimeStamp getTimeStamp() const;
     QVector<BufferId> getRequestedBufferIndexes() const;

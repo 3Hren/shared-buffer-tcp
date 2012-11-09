@@ -47,11 +47,11 @@ typedef QVector<TimeStamp> TimeStampVector;
 static const Magic MAGIC = 927932743;
 enum ProtocolType {
     REQUEST_PUSH = 0,
-    REQUEST_GET_SIGNAL_DATA = 1,
+    REQUEST_GET_SIGNAL_VALUES = 1,
     REQUEST_GET_BUFFER = 2,
 
     RESPONSE_PUSH = 100 + 0,
-    RESPONSE_GET_SIGNAL_DATA = 100 + 1,
+    RESPONSE_GET_SIGNAL_VALUES = 100 + 1,
     RESPONSE_GET_BUFFER = 100 + 2,
     RESPONSE_ERROR = 100 + 3,
 

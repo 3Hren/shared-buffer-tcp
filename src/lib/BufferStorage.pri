@@ -23,8 +23,6 @@ HEADERS += \
     exceptions/ClientException.h \
     protocol/Response.h \
     protocol/PushRequest.h \
-    protocol/GetSignalDataResponse.h \
-    protocol/GetSignalDataRequest.h \
     protocol/GetBufferResponse.h \
     protocol/GetBufferRequest.h \
     protocol/Request.h \
@@ -34,7 +32,9 @@ HEADERS += \
     SignalBuffer.h \
     SignalValue.h \
     client/listener/BlockingListener.h \
-    server/buffer/TreeMapBufferManager.h
+    server/buffer/TreeMapBufferManager.h \
+    protocol/GetSignalValuesRequest.h \
+    protocol/GetSignalValuesResponse.h
 
 SOURCES += \
     ConnectionHandler.cpp \
@@ -52,13 +52,13 @@ SOURCES += \
     client/BufferClientPrivate.cpp \
     protocol/GetBufferRequest.cpp \
     protocol/GetBufferResponse.cpp \
-    protocol/GetSignalDataRequest.cpp \
     protocol/PushRequest.cpp \
     protocol/Request.cpp \
     protocol/Response.cpp \
     protocol/RequestFactory.cpp \
-    protocol/GetSignalDataResponse.cpp \
     protocol/ErrorResponse.cpp \
     protocol/PushResponse.cpp \
     client/listener/BlockingListener.cpp \
-    server/buffer/TreeMapBufferManager.cpp
+    server/buffer/TreeMapBufferManager.cpp \
+    protocol/GetSignalValuesRequest.cpp \
+    protocol/GetSignalValuesResponse.cpp

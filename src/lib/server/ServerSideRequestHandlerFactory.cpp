@@ -15,7 +15,7 @@ RequestHandler *ServerSideRequestHandlerFactory::createHandler(Request *requestP
     switch (type) {
     case REQUEST_PUSH:
         return new PushRequestHandler(requestProtocol, server, socket);
-    case REQUEST_GET_SIGNAL_DATA:
+    case REQUEST_GET_SIGNAL_VALUES:
         return new GetSignalDataRequestHandler(requestProtocol, server, socket);
     case REQUEST_GET_BUFFER:
         return new GetBufferRequestHandler(requestProtocol, server, socket);

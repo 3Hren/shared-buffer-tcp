@@ -3,8 +3,8 @@
 
 #include "protocol/PushRequest.h"
 #include "protocol/PushResponse.h"
-#include "protocol/GetSignalDataRequest.h"
-#include "protocol/GetSignalDataResponse.h"
+#include "protocol/GetSignalValuesRequest.h"
+#include "protocol/GetSignalValuesResponse.h"
 #include "protocol/GetBufferRequest.h"
 #include "protocol/GetBufferResponse.h"
 
@@ -82,7 +82,7 @@ void BufferClient::blockingPush(const SignalValueVector &signalValues, TimeStamp
 void BufferClient::getSignalData(const QVector<BufferId> &bufferIds, TimeStamp timeStamp)
 {
     Q_D(BufferClient);
-    GetSignalDataRequest request(timeStamp, bufferIds);
+    GetSignalValuesRequest request(timeStamp, bufferIds);
     d->sendRequest(&request);
 }
 

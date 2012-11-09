@@ -7,13 +7,13 @@
 #include <QVector>
 
 namespace BufferStorage {
-class GetSignalDataResponse : public Response
+class GetSignalValuesResponse : public Response
 {
     TimeStamp timeStamp;
     SignalValueVector signalValues;
 public:
-    GetSignalDataResponse();
-    GetSignalDataResponse(TimeStamp timeStamp, const SignalValueVector &signalValues);
+    GetSignalValuesResponse();
+    GetSignalValuesResponse(TimeStamp timeStamp, const SignalValueVector &signalValues);
 
     TimeStamp getTimeStamp() const;
     SignalValueVector getSignalValues() const;
@@ -23,5 +23,3 @@ protected:
     void decodeData(QDataStream *in);
 };
 }
-
-Q_DECLARE_METATYPE(BufferStorage::GetSignalDataResponse*)

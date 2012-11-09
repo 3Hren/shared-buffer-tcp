@@ -12,8 +12,8 @@
 
 #include "protocol/Request.h"
 #include "protocol/PushRequest.h"
-#include "protocol/GetSignalDataRequest.h"
-#include "protocol/GetSignalDataResponse.h"
+#include "protocol/GetSignalValuesRequest.h"
+#include "protocol/GetSignalValuesResponse.h"
 #include "protocol/ErrorResponse.h"
 #include "protocol/GetBufferRequest.h"
 #include "protocol/RequestFactory.h"
@@ -43,15 +43,11 @@ public:
 
 private:
     void initializeBufferTable(BufferServer *server, quint16 maximumIds, quint16 initialOffset, quint16 elementOffset, quint16 maximumBufferSize) const;
-    Request *getInputRequestThroughNetworkSendMock(Request *outputRequest) const;
     void compareBufferGetResults(QSignalSpy *spy, int spyCount, const TimeStampVector &bufferTimeStamps, const SignalValueVector &signalValues) const;
     void createBuffers(BufferManager *bufferManager) const;
     SignalValueVector createSignalDatas() const;
 
 private Q_SLOTS:
-    void testGetSignalDataRequestSerializing();
-    void testGetSignalDataResponseSerializing();
-
     void testGetValueFromServer();
     void testGetValuesFromServer();
     void testGetValuesWrongSomeIndexes();
@@ -77,60 +73,6 @@ void CyclicBufferTest::initializeBufferTable(BufferServer *server, quint16 maxim
         bufferInfoTable.insert(initialOffset + elementOffset * i, maximumBufferSize);
 
     server->initBuffers(bufferInfoTable);
-}
-
-Request *CyclicBufferTest::getInputRequestThroughNetworkSendMock(Request *outputRequest) const
-{
-    const QByteArray &outputMessage = outputRequest->encode();
-
-    // Типа пересылаем по сети
-    QByteArray inputByteArray(outputMessage);
-    QDataStream in(&inputByteArray, QIODevice::ReadOnly);
-    in.setVersion(QDataStream::Qt_4_8);
-    in.setFloatingPointPrecision(QDataStream::SinglePrecision);
-    // Считаем размер сообщения и магическое число, т.к. это должен делать сервер, чтобы определить, что дейтаграмма доставлена полностью и она вообще не случайна.
-    MessageSize messageSize;
-    Magic magic;
-    in >> messageSize >> magic;
-
-    RequestFactory factory;
-    return factory.createRequestProtocol(&in);
-}
-
-void CyclicBufferTest::testGetSignalDataRequestSerializing()
-{
-    // Initialize
-    TimeStamp timeStamp = QDateTime::currentDateTime().addSecs(-5).toTime_t();
-    QVector<quint16> bufferIds;
-    bufferIds << 0 << 1 << 3 << 4 << 6 << 9 << 12;
-
-    // Run
-    GetSignalDataRequest outputRequest(timeStamp, bufferIds);
-    QScopedPointer<Request> inputRequest(getInputRequestThroughNetworkSendMock(&outputRequest));
-
-    // Compare
-    QCOMPARE(inputRequest->getType(), REQUEST_GET_SIGNAL_DATA);
-    GetSignalDataRequest *decodedInputRequest = static_cast<GetSignalDataRequest *>(inputRequest.data());
-    QCOMPARE(decodedInputRequest->getTimeStamp(), timeStamp);
-    QCOMPARE(decodedInputRequest->getRequestedBufferIndexes(), bufferIds);
-}
-
-void CyclicBufferTest::testGetSignalDataResponseSerializing()
-{
-    // Initialize
-    TimeStamp timeStamp = QDateTime::currentDateTime().addSecs(-5).toTime_t();
-    SignalValueVector signalValues;
-    signalValues << SignalValue(1.0, 0) << SignalValue(2.5, 1) << SignalValue(3.0, 2) << SignalValue(-235.23, 0);
-
-    // Run
-    GetSignalDataResponse outputRequest(timeStamp, signalValues);
-    QScopedPointer<Request> inputRequest(getInputRequestThroughNetworkSendMock(&outputRequest));
-
-    // Compare
-    QCOMPARE(inputRequest->getType(), RESPONSE_GET_SIGNAL_DATA);
-    GetSignalDataResponse *decodedInputRequest = static_cast<GetSignalDataResponse *>(inputRequest.data());
-    QCOMPARE(decodedInputRequest->getTimeStamp(), timeStamp);
-    QCOMPARE(decodedInputRequest->getSignalValues(), signalValues);
 }
 
 void CyclicBufferTest::testGetValueFromServer()
@@ -165,8 +107,8 @@ void CyclicBufferTest::testGetValueFromServer()
     QVariantList arguments = spy.takeAt(1);
     QCOMPARE(arguments.at(0).canConvert<SharedResponse>(), true);
     SharedResponse response = arguments.at(0).value<SharedResponse>();
-    QCOMPARE(response->getType(), RESPONSE_GET_SIGNAL_DATA);
-    GetSignalDataResponse *getSignalDataResponse = static_cast<GetSignalDataResponse *>(response.data());
+    QCOMPARE(response->getType(), RESPONSE_GET_SIGNAL_VALUES);
+    GetSignalValuesResponse *getSignalDataResponse = static_cast<GetSignalValuesResponse *>(response.data());
     QCOMPARE(getSignalDataResponse->getTimeStamp(), pushTimeStamp);
     QCOMPARE(getSignalDataResponse->getSignalValues().size(), 1);
     QCOMPARE(getSignalDataResponse->getSignalValues().at(0), SignalValue(100.0, 0));
@@ -204,8 +146,8 @@ void CyclicBufferTest::testGetValuesFromServer()
     QCOMPARE(arguments.at(0).canConvert<SharedResponse>(), true);
 
     SharedResponse response = arguments.at(0).value<SharedResponse>();
-    QCOMPARE(response->getRequestType(), REQUEST_GET_SIGNAL_DATA);
-    GetSignalDataResponse *getSignalDataResponse = static_cast<GetSignalDataResponse *>(response.data());
+    QCOMPARE(response->getRequestType(), REQUEST_GET_SIGNAL_VALUES);
+    GetSignalValuesResponse *getSignalDataResponse = static_cast<GetSignalValuesResponse *>(response.data());
     QCOMPARE(getSignalDataResponse->getTimeStamp(), pushTimeStamp);
     QCOMPARE(getSignalDataResponse->getSignalValues().size(), data.size());
     QCOMPARE(getSignalDataResponse->getSignalValues(), data.values().toVector());
@@ -244,7 +186,7 @@ void CyclicBufferTest::testGetValuesWrongSomeIndexes()
     QCOMPARE(arguments.at(0).canConvert<SharedErrorResponse >(), true);
 
     SharedErrorResponse response = arguments.at(0).value<SharedErrorResponse >();
-    QCOMPARE(response->getRequestType(), REQUEST_GET_SIGNAL_DATA);
+    QCOMPARE(response->getRequestType(), REQUEST_GET_SIGNAL_VALUES);
     QCOMPARE(response->getErrorType(), WRONG_BUFFER_ID);
 }
 
@@ -280,7 +222,7 @@ void CyclicBufferTest::testGetValuesWrongTimeStamp()
     QCOMPARE(arguments.at(0).canConvert<SharedErrorResponse >(), true);
 
     SharedErrorResponse response = arguments.at(0).value<SharedErrorResponse >();
-    QCOMPARE(response->getRequestType(), REQUEST_GET_SIGNAL_DATA);
+    QCOMPARE(response->getRequestType(), REQUEST_GET_SIGNAL_VALUES);
     QCOMPARE(response->getErrorType(), WRONG_TIME_STAMP);
 }
 

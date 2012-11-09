@@ -3,8 +3,8 @@
 #include "server/BufferServer.h"
 #include "server/BufferManager.h"
 
-#include "protocol/GetSignalDataRequest.h"
-#include "protocol/GetSignalDataResponse.h"
+#include "protocol/GetSignalValuesRequest.h"
+#include "protocol/GetSignalValuesResponse.h"
 
 #include "exceptions/BufferException.h"
 
@@ -20,7 +20,7 @@ GetSignalDataRequestHandler::GetSignalDataRequestHandler(Request *requestProtoco
 void GetSignalDataRequestHandler::execute()
 {        
     try {
-        GetSignalDataRequest *getSignalDataRequest = static_cast<GetSignalDataRequest *>(request);
+        GetSignalValuesRequest *getSignalDataRequest = static_cast<GetSignalValuesRequest *>(request);
         const QVector<BufferId> &bufferIds = getSignalDataRequest->getRequestedBufferIndexes();
         TimeStamp timeStamp = getSignalDataRequest->getTimeStamp();
 
@@ -33,7 +33,7 @@ void GetSignalDataRequestHandler::execute()
             signalValues.append(signalValue);
         }
 
-        GetSignalDataResponse response(timeStamp, signalValues);
+        GetSignalValuesResponse response(timeStamp, signalValues);
         socket->write(response.encode());
     } catch (BufferException &exception) {
         throw exception;

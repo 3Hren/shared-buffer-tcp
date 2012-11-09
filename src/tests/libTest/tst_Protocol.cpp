@@ -168,3 +168,70 @@ TEST(ErrorResponse, EncodingDecoding) {
     EXPECT_EQ(WRONG_REQUEST_TYPE, clientResponse.getErrorType());
     EXPECT_STREQ_QT("Wrong request type", clientResponse.getReason());
 }
+
+#include "protocol/GetSignalValuesRequest.h"
+TEST(GetSignalValuesRequest, Class) {
+    GetSignalValuesRequest request;
+    Q_UNUSED(request);
+}
+
+TEST(GetSignalValuesRequest, TimeStampIsNullByDefault) {
+    GetSignalValuesRequest request;
+    EXPECT_EQ(TimeStamp(0), request.getTimeStamp());
+}
+
+TEST(GetSignalValuesRequest, InitializesType) {
+    GetSignalValuesRequest request;
+    EXPECT_EQ(REQUEST_GET_SIGNAL_VALUES, request.getType());
+}
+
+TEST(GetSignalValuesRequest, InitializingConstructor) {
+    QVector<BufferId> bufferIds = {0, 1, 2, 3};
+    GetSignalValuesRequest request(10, bufferIds);
+    EXPECT_EQ(TimeStamp(10), request.getTimeStamp());
+    EXPECT_EQ(bufferIds, request.getRequestedBufferIndexes());
+}
+
+TEST(GetSignalValuesRequest, EncodingDecoding) {
+    QVector<BufferId> bufferIds = {0, 1, 2, 3};
+    GetSignalValuesRequest clientRequest(10, bufferIds);
+    GetSignalValuesRequest serverRequest = EncodeDecode(clientRequest, REQUEST_GET_SIGNAL_VALUES);
+    EXPECT_EQ(TimeStamp(10), serverRequest.getTimeStamp());
+    EXPECT_EQ(bufferIds, serverRequest.getRequestedBufferIndexes());
+}
+
+#include "protocol/GetSignalValuesResponse.h"
+TEST(GetSignalValuesResponse, Class) {
+    GetSignalValuesResponse response;
+    Q_UNUSED(response);
+}
+
+TEST(GetSignalValuesResponse, TimeStampIsNullByDefault) {
+    GetSignalValuesResponse response;
+    EXPECT_EQ(TimeStamp(0), response.getTimeStamp());
+}
+
+TEST(GetSignalValuesResponse, InitializesType) {
+    GetSignalValuesResponse response;
+    EXPECT_EQ(RESPONSE_GET_SIGNAL_VALUES, response.getType());
+}
+
+TEST(GetSignalValuesResponse, InitializesRequestType) {
+    GetSignalValuesResponse response;
+    EXPECT_EQ(REQUEST_GET_SIGNAL_VALUES, response.getRequestType());
+}
+
+TEST(GetSignalValuesResponse, InitializationConstructor) {
+    SignalValueVector signalValues = {SignalValue(0.89, 0), SignalValue(5.25, 1)};
+    GetSignalValuesResponse response(10, signalValues);
+    EXPECT_EQ(TimeStamp(10), response.getTimeStamp());
+    EXPECT_EQ(signalValues, response.getSignalValues());
+}
+
+TEST(GetSignalValuesResponse, EncodingDecoding) {
+    SignalValueVector signalValues = {SignalValue(0.89, 0), SignalValue(5.25, 1)};
+    GetSignalValuesResponse serverResponse(10, signalValues);
+    GetSignalValuesResponse clientResponse = EncodeDecode(serverResponse, RESPONSE_GET_SIGNAL_VALUES);
+    EXPECT_EQ(TimeStamp(10), clientResponse.getTimeStamp());
+    EXPECT_EQ(signalValues, clientResponse.getSignalValues());
+}

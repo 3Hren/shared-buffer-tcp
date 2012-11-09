@@ -4,7 +4,6 @@
 
 #include "BufferStorageGlobal.h"
 
-//! @todo: remove #include "protocol/Request.h"
 #include "protocol/Response.h"
 #include "protocol/ErrorResponse.h"
 

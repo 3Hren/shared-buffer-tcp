@@ -22,6 +22,3 @@ protected:
     void decodeData(QDataStream *in);
 };
 }
-
-#include <QSharedPointer>
-Q_DECLARE_METATYPE(QSharedPointer<BufferStorage::GetBufferResponse>)

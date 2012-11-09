@@ -3,8 +3,8 @@
 #include "BufferStorageGlobal.h"
 
 #include "PushRequest.h"
-#include "GetSignalDataRequest.h"
-#include "GetSignalDataResponse.h"
+#include "GetSignalValuesRequest.h"
+#include "GetSignalValuesResponse.h"
 #include "GetBufferRequest.h"
 #include "GetBufferResponse.h"
 #include "ErrorResponse.h"
@@ -29,11 +29,11 @@ Request *RequestFactory::createRequestProtocol(QDataStream *inputStream) const
     case REQUEST_PUSH:
         requestProtocol = new PushRequest();
         break;
-    case REQUEST_GET_SIGNAL_DATA:
-        requestProtocol = new GetSignalDataRequest();
+    case REQUEST_GET_SIGNAL_VALUES:
+        requestProtocol = new GetSignalValuesRequest();
         break;
-    case RESPONSE_GET_SIGNAL_DATA:
-        requestProtocol = new GetSignalDataResponse();
+    case RESPONSE_GET_SIGNAL_VALUES:
+        requestProtocol = new GetSignalValuesResponse();
         break;
     case REQUEST_GET_BUFFER:
         requestProtocol = new GetBufferRequest();
