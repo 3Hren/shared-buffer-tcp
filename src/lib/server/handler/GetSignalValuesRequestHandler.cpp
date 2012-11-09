@@ -1,4 +1,4 @@
-#include "GetSignalDataRequestHandler.h"
+#include "GetSignalValuesRequestHandler.h"
 
 #include "server/BufferServer.h"
 #include "server/BufferManager.h"
@@ -12,12 +12,12 @@
 
 using namespace BufferStorage;
 
-GetSignalDataRequestHandler::GetSignalDataRequestHandler(Request *requestProtocol, BufferServer *server, QTcpSocket *socket) :
+GetSignalValuesRequestHandler::GetSignalValuesRequestHandler(Request *requestProtocol, BufferServer *server, QTcpSocket *socket) :
     ServerSideRequestHandler(requestProtocol, server, socket)
 {
 }
 
-void GetSignalDataRequestHandler::execute()
+void GetSignalValuesRequestHandler::execute()
 {        
     try {
         GetSignalValuesRequest *getSignalDataRequest = static_cast<GetSignalValuesRequest *>(request);

@@ -18,13 +18,16 @@
     }
 
 namespace Utils {
+static QHash<QString, int> registeredMetaTypes = QHash<QString, int>();
 //! Metatype auto-registrator
 template<typename T>
 class MetaTypeRegistrator {
 public:
     MetaTypeRegistrator(const QString &typeName) {
-        qDebug() << typeName;
-        qRegisterMetaType<T>(typeName.toUtf8());
+        if (!registeredMetaTypes.contains(typeName)) {
+            int metaTypeId = qRegisterMetaType<T>(typeName.toUtf8());
+            registeredMetaTypes.insert(typeName, metaTypeId);
+        }
     }
 };
 }

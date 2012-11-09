@@ -4,8 +4,7 @@
 #include "ConnectionHandler.h"
 #include "ClientConnectionHandler.h"
 
-#include "protocol/Response.h"
-#include "protocol/ErrorResponse.h"
+#include "protocol/Request.h"
 
 #include "exceptions/ClientException.h"
 #include "exceptions/ProtocolException.h"

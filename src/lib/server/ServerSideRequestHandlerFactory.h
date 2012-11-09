@@ -4,11 +4,11 @@ class QTcpSocket;
 
 namespace BufferStorage {
 class RequestHandler;
-class Request;
+class ProtocolMessage;
 class BufferServer;
 class ServerSideRequestHandlerFactory
 {
 public:
-    static RequestHandler *createHandler(Request *requestProtocol, BufferServer *server, QTcpSocket *socket);
+    static RequestHandler *createHandler(ProtocolMessage *protocolMessage, BufferServer *server, QTcpSocket *socket);
 };
 }

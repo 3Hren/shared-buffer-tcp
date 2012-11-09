@@ -3,7 +3,7 @@
 using namespace BufferStorage;
 
 GetBufferResponse::GetBufferResponse() :
-    Response(RESPONSE_GET_BUFFER, REQUEST_GET_BUFFER), //! @todo: лучше сделать методы getType и getRequestType виртуальными, чем каждый раз передавать их в конструкторе.
+    Response(RESPONSE_GET_BUFFER, REQUEST_GET_BUFFER),
     bufferId(0)
 {
 }

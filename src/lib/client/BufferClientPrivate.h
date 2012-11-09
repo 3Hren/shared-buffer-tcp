@@ -15,8 +15,7 @@ class QTcpSocket;
 namespace BufferStorage {
 class ConnectionHandler;
 class BufferClient;
-class Response;
-class ErrorResponse;
+class Request;
 class BufferClientPrivate : public QObject
 {
     Q_OBJECT

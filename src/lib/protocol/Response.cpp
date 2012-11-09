@@ -3,7 +3,7 @@
 using namespace BufferStorage;
 
 Response::Response(ProtocolType type, ProtocolType requestType) :
-    Request(type),
+    ProtocolMessage(type),
     requestType(requestType)
 {
 }

@@ -1,13 +1,10 @@
 #include "ClientConnectionHandler.h"
 
-#include "BufferClient.h"
 #include "BufferClientPrivate.h"
 
-#include "RequestHandler.h"
-
+#include "protocol/ProtocolMessage.h"
+#include "protocol/Response.h"
 #include "protocol/ErrorResponse.h"
-
-#include "exceptions/ProtocolException.h"
 
 #include <QDebug>
 
@@ -19,13 +16,13 @@ ClientConnectionHandler::ClientConnectionHandler(QTcpSocket *socket, QObject *vi
 {
 }
 
-void ClientConnectionHandler::processRequest(QSharedPointer<Request> request)
+void ClientConnectionHandler::processProtocolMessage(QSharedPointer<ProtocolMessage> protocolMessage)
 {
-    if (request->getType() == RESPONSE_ERROR) {
-        SharedErrorResponse errorResponse = request.staticCast<ErrorResponse>();
+    if (protocolMessage->getType() == RESPONSE_ERROR) {
+        SharedErrorResponse errorResponse = protocolMessage.staticCast<ErrorResponse>();
         clientPrivate->callErrorReceived(errorResponse);
     } else {
-        SharedResponse response = request.staticCast<Response>();
+        SharedResponse response = protocolMessage.staticCast<Response>();
         clientPrivate->callResponseReceived(response);
     }
 }

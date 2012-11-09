@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Request.h"
+#include "ProtocolMessage.h"
 
 namespace BufferStorage {
-class Response : public Request
+class Response : public ProtocolMessage
 {
 protected:
     ProtocolType requestType;

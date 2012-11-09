@@ -10,7 +10,6 @@ HEADERS += \
     client/ClientConnectionHandler.h \
     server/ServerSideRequestHandlerFactory.h \
     server/handler/PushRequestHandler.h \
-    server/handler/GetSignalDataRequestHandler.h \
     server/handler/GetBufferRequestHandler.h \
     server/handler/ServerSideRequestHandler.h \
     server/buffer/HashTableBufferManager.h \
@@ -26,7 +25,7 @@ HEADERS += \
     protocol/GetBufferResponse.h \
     protocol/GetBufferRequest.h \
     protocol/Request.h \
-    protocol/RequestFactory.h \
+    protocol/ProtocolMessageFactory.h \
     protocol/ErrorResponse.h \
     protocol/PushResponse.h \
     SignalBuffer.h \
@@ -34,7 +33,9 @@ HEADERS += \
     client/listener/BlockingListener.h \
     server/buffer/TreeMapBufferManager.h \
     protocol/GetSignalValuesRequest.h \
-    protocol/GetSignalValuesResponse.h
+    protocol/GetSignalValuesResponse.h \
+    server/handler/GetSignalValuesRequestHandler.h \
+    protocol/ProtocolMessage.h
 
 SOURCES += \
     ConnectionHandler.cpp \
@@ -45,7 +46,6 @@ SOURCES += \
     client/BufferClient.cpp \
     server/ServerSideRequestHandlerFactory.cpp \
     server/handler/PushRequestHandler.cpp \
-    server/handler/GetSignalDataRequestHandler.cpp \
     server/handler/GetBufferRequestHandler.cpp \
     server/handler/ServerSideRequestHandler.cpp \
     server/buffer/HashTableBufferManager.cpp \
@@ -55,10 +55,12 @@ SOURCES += \
     protocol/PushRequest.cpp \
     protocol/Request.cpp \
     protocol/Response.cpp \
-    protocol/RequestFactory.cpp \
     protocol/ErrorResponse.cpp \
     protocol/PushResponse.cpp \
     client/listener/BlockingListener.cpp \
     server/buffer/TreeMapBufferManager.cpp \
     protocol/GetSignalValuesRequest.cpp \
-    protocol/GetSignalValuesResponse.cpp
+    protocol/GetSignalValuesResponse.cpp \
+    server/handler/GetSignalValuesRequestHandler.cpp \
+    protocol/ProtocolMessage.cpp \
+    protocol/ProtocolMessageFactory.cpp

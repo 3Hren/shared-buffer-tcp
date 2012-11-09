@@ -4,21 +4,22 @@
 #include "protocol/Request.h"
 
 #include "handler/PushRequestHandler.h"
-#include "handler/GetSignalDataRequestHandler.h"
+#include "handler/GetSignalValuesRequestHandler.h"
 #include "handler/GetBufferRequestHandler.h"
 
 using namespace BufferStorage;
 
-RequestHandler *ServerSideRequestHandlerFactory::createHandler(Request *requestProtocol, BufferServer *server, QTcpSocket *socket)
+RequestHandler *ServerSideRequestHandlerFactory::createHandler(ProtocolMessage *protocolMessage, BufferServer *server, QTcpSocket *socket)
 {
-    quint8 type = requestProtocol->getType();
+    ProtocolType type = protocolMessage->getType();
+    Request *request = static_cast<Request *>(protocolMessage);
     switch (type) {
     case REQUEST_PUSH:
-        return new PushRequestHandler(requestProtocol, server, socket);
+        return new PushRequestHandler(request, server, socket);
     case REQUEST_GET_SIGNAL_VALUES:
-        return new GetSignalDataRequestHandler(requestProtocol, server, socket);
+        return new GetSignalValuesRequestHandler(request, server, socket);
     case REQUEST_GET_BUFFER:
-        return new GetBufferRequestHandler(requestProtocol, server, socket);
+        return new GetBufferRequestHandler(request, server, socket);
     default:
         Q_ASSERT(false);
     }

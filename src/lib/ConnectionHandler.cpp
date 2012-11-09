@@ -1,8 +1,9 @@
 #include "ConnectionHandler.h"
 
 #include "BufferStorageGlobal.h"
+#include "protocol/ProtocolMessage.h"
 #include "protocol/Request.h"
-#include "protocol/RequestFactory.h"
+#include "protocol/ProtocolMessageFactory.h"
 
 #include <QTcpSocket>
 #include <QSharedPointer>
@@ -40,9 +41,13 @@ void ConnectionHandler::readPendingData()
         return;
     }
 
-    RequestFactory protocolFactory;
-    QSharedPointer<Request> inputRequest(protocolFactory.createRequestProtocol(&in));
-    processRequest(inputRequest);
+    ProtocolType type = UNKNOWN_PROTOCOL_TYPE;
+    in >> type;
+
+    ProtocolMessageFactory protocolFactory;
+    QSharedPointer<ProtocolMessage> protocolMessage(protocolFactory.createProtocolMessage(type));
+    protocolMessage->decode(&in);
+    processProtocolMessage(protocolMessage);
 
     requestSize = 0;
 }
