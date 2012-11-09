@@ -179,6 +179,10 @@ TEST(AcceptanceTest, PushRequest) {
 
 /*!
  * \brief Два приемочных теста, которые проверяет способность сервера реагировать на ошибочные push-запросы.
+ *
+ *  В первом из них мы формируем запрос, состоящий из 301 сигнала, тогда как на сервере только 300. Ожидается, что сервер отклонит такой запрос,
+ *  сгенерирует ошибку и вернет ее. В буферами при этом ничего сделано не будет.
+ *  Второй тест проверяет аналогичную ситуацию с отличием лишь в том, что посылается запрос из 299 сигналов. Ожидания - те же самые.
  */
 void TestPushRequestWithWrongSignalValuesCount(const SignalValueVector &signalValues) {
     BufferServer server;
@@ -209,4 +213,93 @@ TEST(AcceptanceTest, PushRequestWithLessThanExpectedSignalValuesCountResultsInEr
     const SignalValueVector lessThanExpectedSignalValues = SignalValueVector().fill(SignalValue(), 299);
     TestPushRequestWithWrongSignalValuesCount(lessThanExpectedSignalValues);
 }
+
+#include "protocol/GetSignalValuesResponse.h"
+/*!
+ * \brief Приемочный тест, провещяющий асинхронный getSignalValues запрос.
+ *
+ *  Формируется сервер, который инициализируется 300 буферами, которые в свою очередь заполняются значениями по следующей схеме:
+ *  100 [0 0 ... 0]
+ *  101 [1 1 ... 1]
+ *  . ...
+ *  105 [5 5 ... 5]
+ *  . ...
+ *  109 [9 9 ... 9]
+ *  и так далее, где первое число - временная метка, а числа в скобках - значения SignalValue.
+ *  Затем из него запрашиваются значения из 0, 150 и 299 буферов с временной меткой 105. Ожидается получение трех значений SignalValue(5, 0).
+ */
+TEST(AcceptanceTest, GetSignalValuesRequest) {
+    BufferServer server;
+    server.initBuffers(300, 10, 0, 1);
+    for (int i = 0; i < 10; ++i) {
+        SignalValueVector signalValues = SignalValueVector().fill(SignalValue(i, 0), 300);
+        server.getBufferManager()->pushSignalValues(signalValues, 100 + i);
+    }
+    server.run();
+
+    BufferClient client;
+    QSignalSpy spy(&client, SIGNAL(responseReceived(SharedResponse)));
+    client.blockingConnectToServer();
+
+    TimeStamp timeStamp = 105;
+    QVector<BufferId> ids = {0, 150, 299};
+    client.getSignalData(ids, timeStamp);
+
+    Listener listener;
+    listener.listenUntil([&](){
+        return !spy.isEmpty();
+    });
+    ASSERT_EQ(1, spy.count());
+
+    QVariantList args = spy.takeFirst();
+    ASSERT_TRUE(args.at(0).canConvert<SharedResponse>());
+    SharedResponse response = args.at(0).value<SharedResponse>();
+    ASSERT_EQ(RESPONSE_GET_SIGNAL_VALUES, response->getType());
+    GetSignalValuesResponse *getSignalValuesResponse = static_cast<GetSignalValuesResponse *>(response.data());
+    EXPECT_EQ(timeStamp, getSignalValuesResponse->getTimeStamp());
+    SignalValueVector expectedValues = {SignalValue(5, 0), SignalValue(5, 0), SignalValue(5, 0)};
+    EXPECT_EQ(expectedValues, getSignalValuesResponse->getSignalValues());
+}
+
+/*!
+ * \brief Два приемочных теста, которые проверяют способность сервера отвечать на неправильный get values запрос.
+ *
+ *  В этих тестах создается сервер, наполняющийся аналогично тому, как это происходило в приемочном тесте на корректный get values запрос.
+ *  Первый тест задает временную метку, равную 99 (в сервере инициализируется диапазон [100; 109]. Ожидается ответ, содержащий ошибку и ее разъяснение.
+ *  Второй тест задает корректную временную метку, но указывает индекс запрашиваемого буфера, равный 300 (при инициализации максимум был 299).
+ *  Ожидания те же самые, как и в первом тесте.
+ */
+void TestGetSignalValuesWithWrongRequestParametres(TimeStamp timeStamp, const QVector<BufferId> &bufferIds) {
+    BufferServer server;
+    server.initBuffers(300, 10, 0, 1);
+    for (int i = 0; i < 10; ++i) {
+        SignalValueVector signalValues = SignalValueVector().fill(SignalValue(i, 0), 300);
+        server.getBufferManager()->pushSignalValues(signalValues, 100 + i);
+    }
+    server.run();
+
+    BufferClient client;
+    QSignalSpy spy(&client, SIGNAL(errorReceived(SharedErrorResponse)));
+    client.blockingConnectToServer();
+    client.getSignalData(bufferIds, timeStamp);
+
+    Listener listener;
+    listener.listenUntil([&](){
+        return !spy.isEmpty();
+    });
+    EXPECT_EQ(1, spy.count());
+}
+
+TEST(AcceptanceTest, GetSignalValuesWithWrongTimeStampResultsInError) {
+    TimeStamp timeStamp = 99;
+    QVector<BufferId> bufferIds = {0, 150, 299};
+    TestGetSignalValuesWithWrongRequestParametres(timeStamp, bufferIds);
+}
+
+TEST(AcceptanceTest, GetSignalValuesWithWrongSomeBufferIndexesResultsInError) {
+    TimeStamp timeStamp = 105;
+    QVector<BufferId> bufferIds = {0, 150, 300};
+    TestGetSignalValuesWithWrongRequestParametres(timeStamp, bufferIds);
+}
+
 #include "tst_AcceptanceTesting.moc"

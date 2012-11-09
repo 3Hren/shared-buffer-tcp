@@ -44,20 +44,10 @@ public:
 private:
     void initializeBufferTable(BufferServer *server, quint16 maximumIds, quint16 initialOffset, quint16 elementOffset, quint16 maximumBufferSize) const;
     void compareBufferGetResults(QSignalSpy *spy, int spyCount, const TimeStampVector &bufferTimeStamps, const SignalValueVector &signalValues) const;
-    void createBuffers(BufferManager *bufferManager) const;
-    SignalValueVector createSignalDatas() const;
 
 private Q_SLOTS:
-    void testGetValueFromServer();
-    void testGetValuesFromServer();
-    void testGetValuesWrongSomeIndexes();
-    void testGetValuesWrongTimeStamp();
-
     void testGetBuffer();
     void testGetBufferWrongIndex();    
-
-    void benchmarkHashTableBufferManager();
-    void benchmarkTreeBufferManager();
 
     void testBlockingPushDataToServer();
 };
@@ -73,157 +63,6 @@ void CyclicBufferTest::initializeBufferTable(BufferServer *server, quint16 maxim
         bufferInfoTable.insert(initialOffset + elementOffset * i, maximumBufferSize);
 
     server->initBuffers(bufferInfoTable);
-}
-
-void CyclicBufferTest::testGetValueFromServer()
-{
-    // Initialize
-    BufferServer server;
-    BufferClient client;
-    QSignalSpy spy(&client, SIGNAL(responseReceived(SharedResponse)));
-
-    initializeBufferTable(&server, 4, 1000, 1, 1024);
-    QMap<quint16, SignalValue> data;
-    data.insert(1000, SignalValue(100.0, 0));
-    data.insert(1001, SignalValue(120.0, 0));
-    data.insert(1002, SignalValue(-20.5, 1));
-    data.insert(1003, SignalValue(300.1, 1));
-    QDateTime pushCurrentDateTime = QDateTime::currentDateTime();
-    TimeStamp pushTimeStamp = pushCurrentDateTime.toTime_t();
-
-    // Run
-    server.run();
-    client.blockingConnectToServer();
-    client.push(data.values().toVector(), pushTimeStamp);
-    QTest::qWait(WAIT_MSEC);
-
-    QVector<quint16> bufferIds;
-    bufferIds << 1000;
-    client.getSignalData(bufferIds, pushTimeStamp);
-    QTest::qWait(WAIT_MSEC);
-
-    // Compare
-    QCOMPARE(spy.count(), 2);
-    QVariantList arguments = spy.takeAt(1);
-    QCOMPARE(arguments.at(0).canConvert<SharedResponse>(), true);
-    SharedResponse response = arguments.at(0).value<SharedResponse>();
-    QCOMPARE(response->getType(), RESPONSE_GET_SIGNAL_VALUES);
-    GetSignalValuesResponse *getSignalDataResponse = static_cast<GetSignalValuesResponse *>(response.data());
-    QCOMPARE(getSignalDataResponse->getTimeStamp(), pushTimeStamp);
-    QCOMPARE(getSignalDataResponse->getSignalValues().size(), 1);
-    QCOMPARE(getSignalDataResponse->getSignalValues().at(0), SignalValue(100.0, 0));
-}
-
-void CyclicBufferTest::testGetValuesFromServer()
-{
-    // Initialize
-    BufferServer server;
-    BufferClient client;
-    QSignalSpy spy(&client, SIGNAL(responseReceived(SharedResponse)));
-
-    initializeBufferTable(&server, 4, 1000, 1, 1024);
-    QMap<quint16, SignalValue> data;
-    data.insert(1000, SignalValue(100.0, 0));
-    data.insert(1001, SignalValue(120.0, 0));
-    data.insert(1002, SignalValue(-20.5, 1));
-    data.insert(1003, SignalValue(300.1, 1));
-    QDateTime pushCurrentDateTime = QDateTime::currentDateTime();
-    TimeStamp pushTimeStamp = pushCurrentDateTime.toTime_t();
-
-    // Run
-    server.run();
-    client.blockingConnectToServer();
-    client.push(data.values().toVector(), pushTimeStamp);
-    QTest::qWait(WAIT_MSEC);
-
-    QVector<quint16> bufferIds = data.keys().toVector();
-    client.getSignalData(bufferIds, pushTimeStamp);
-    QTest::qWait(WAIT_MSEC);
-
-    // Compare
-    QCOMPARE(spy.count(), 2);
-    QVariantList arguments = spy.takeAt(1);
-    QCOMPARE(arguments.at(0).canConvert<SharedResponse>(), true);
-
-    SharedResponse response = arguments.at(0).value<SharedResponse>();
-    QCOMPARE(response->getRequestType(), REQUEST_GET_SIGNAL_VALUES);
-    GetSignalValuesResponse *getSignalDataResponse = static_cast<GetSignalValuesResponse *>(response.data());
-    QCOMPARE(getSignalDataResponse->getTimeStamp(), pushTimeStamp);
-    QCOMPARE(getSignalDataResponse->getSignalValues().size(), data.size());
-    QCOMPARE(getSignalDataResponse->getSignalValues(), data.values().toVector());
-}
-
-void CyclicBufferTest::testGetValuesWrongSomeIndexes()
-{
-    // Initialize
-    BufferServer server;
-    BufferClient client;
-    QSignalSpy spy(&client, SIGNAL(errorReceived(SharedErrorResponse)));
-
-    initializeBufferTable(&server, 4, 1000, 1, 1024);
-    QMap<quint16, SignalValue> data;
-    data.insert(1000, SignalValue(100.0, 0));
-    data.insert(1001, SignalValue(120.0, 0));
-    data.insert(1002, SignalValue(-20.5, 1));
-    data.insert(1003, SignalValue(300.1, 1));
-    QDateTime pushCurrentDateTime = QDateTime::currentDateTime();
-    TimeStamp pushTimeStamp = pushCurrentDateTime.toTime_t();
-
-    // Run
-    server.run();
-    client.blockingConnectToServer();
-    client.push(data.values().toVector(), pushTimeStamp);
-    QTest::qWait(WAIT_MSEC);
-
-    QVector<quint16> bufferIds = data.keys().toVector();
-    bufferIds << 1004;
-    client.getSignalData(bufferIds, pushTimeStamp);
-    QTest::qWait(WAIT_MSEC);
-
-    // Compare
-    QCOMPARE(spy.count(), 1);
-    QVariantList arguments = spy.takeFirst();
-    QCOMPARE(arguments.at(0).canConvert<SharedErrorResponse >(), true);
-
-    SharedErrorResponse response = arguments.at(0).value<SharedErrorResponse >();
-    QCOMPARE(response->getRequestType(), REQUEST_GET_SIGNAL_VALUES);
-    QCOMPARE(response->getErrorType(), WRONG_BUFFER_ID);
-}
-
-void CyclicBufferTest::testGetValuesWrongTimeStamp()
-{
-    // Initialize
-    BufferServer server;
-    BufferClient client;
-    QSignalSpy spy(&client, SIGNAL(errorReceived(SharedErrorResponse)));
-
-    initializeBufferTable(&server, 4, 1000, 1, 1024);
-    QMap<quint16, SignalValue> data;
-    data.insert(1000, SignalValue(100.0, 0));
-    data.insert(1001, SignalValue(120.0, 0));
-    data.insert(1002, SignalValue(-20.5, 1));
-    data.insert(1003, SignalValue(300.1, 1));
-    QDateTime pushCurrentDateTime = QDateTime::currentDateTime();
-    TimeStamp pushTimeStamp = pushCurrentDateTime.toTime_t();
-
-    // Run
-    server.run();
-    client.blockingConnectToServer();
-    client.push(data.values().toVector(), pushTimeStamp);
-    QTest::qWait(WAIT_MSEC);
-
-    QVector<quint16> bufferIds = data.keys().toVector();
-    client.getSignalData(bufferIds, pushTimeStamp - 1);
-    QTest::qWait(WAIT_MSEC);
-
-    // Compare
-    QCOMPARE(spy.count(), 1);
-    QVariantList arguments = spy.takeFirst();
-    QCOMPARE(arguments.at(0).canConvert<SharedErrorResponse >(), true);
-
-    SharedErrorResponse response = arguments.at(0).value<SharedErrorResponse >();
-    QCOMPARE(response->getRequestType(), REQUEST_GET_SIGNAL_VALUES);
-    QCOMPARE(response->getErrorType(), WRONG_TIME_STAMP);
 }
 
 void CyclicBufferTest::compareBufferGetResults(QSignalSpy *spy, int spyCount, const TimeStampVector &bufferTimeStamps, const SignalValueVector &signalValues) const
@@ -304,54 +143,6 @@ void CyclicBufferTest::testGetBufferWrongIndex()
     SharedErrorResponse response = arguments.at(0).value<SharedErrorResponse >();
     QCOMPARE(response->getRequestType(), REQUEST_GET_BUFFER);
     QCOMPARE(response->getErrorType(), WRONG_BUFFER_ID);
-}
-
-const int BUFFERS_COUNT = 3000;
-const int BUFFER_MAX_SIZE = 1024;
-
-void CyclicBufferTest::createBuffers(BufferManager *bufferManager) const
-{
-    BufferInfoTable map;
-    for (int bufferId = 0; bufferId < BUFFERS_COUNT; ++bufferId)
-        map.insert(bufferId, BUFFER_MAX_SIZE);
-
-    bufferManager->initBuffers(map);
-}
-
-SignalValueVector CyclicBufferTest::createSignalDatas() const
-{
-    SignalValueVector signalValues;
-    signalValues.reserve(BUFFERS_COUNT);
-    for (int i = 0; i < BUFFERS_COUNT; ++i) {
-        SignalValue signalData(qrand() % 10000 / 100.0, qrand() % 2);
-        signalValues.append(signalData);
-    }
-
-    return signalValues;
-}
-
-void CyclicBufferTest::benchmarkHashTableBufferManager()
-{
-    HashTableBufferManager bufferManager;
-    createBuffers(&bufferManager);
-    SignalValueVector signalValues = createSignalDatas();
-
-    TimeStamp tS = 0;
-    QBENCHMARK {
-        bufferManager.pushSignalValues(signalValues, tS++);
-    }
-}
-
-void CyclicBufferTest::benchmarkTreeBufferManager()
-{
-    TreeMapBufferManager bM;
-    createBuffers(&bM);
-    SignalValueVector sD = createSignalDatas();
-
-    TimeStamp tS = 0;
-    QBENCHMARK {
-        bM.pushSignalValues(sD, tS++);
-    }
 }
 
 class DeprecatedServerRunner : public QObject {
