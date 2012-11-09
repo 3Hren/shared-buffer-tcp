@@ -31,7 +31,7 @@ LIBS += -L$$LIB_GMOCK_PATH -lgmock
 
 include($$LIB_SOURCE_PATH/BufferStorage.pri)
 
-SOURCES += tst_CyclicBufferTest.cpp \
+SOURCES += \
     _main.cpp \
     tst_Protocol.cpp \
     tst_FixedSizeQueue.cpp \

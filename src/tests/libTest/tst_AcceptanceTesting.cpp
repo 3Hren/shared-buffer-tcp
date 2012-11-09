@@ -302,4 +302,6 @@ TEST(AcceptanceTest, GetSignalValuesWithWrongSomeBufferIndexesResultsInError) {
     TestGetSignalValuesWithWrongRequestParametres(timeStamp, bufferIds);
 }
 
+//! @note: Тестировать асинхронные запросы когда есть блокирующие смысла особого не имеет, т.к. в реализации блокирующего запроса используется асинхронный в связке с циклом ожидания событий.
+
 #include "tst_AcceptanceTesting.moc"
