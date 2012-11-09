@@ -11,8 +11,8 @@ BlockingListener::BlockingListener(BufferClient *client, QObject *parent) :
     QObject(parent),
     listening(false)
 {    
-    connect(client, SIGNAL(responseReceived(QSharedPointer<Response>)), SLOT(saveResponse(QSharedPointer<Response>)));
-    connect(client, SIGNAL(errorReceived(QSharedPointer<ErrorResponse>)), SLOT(saveErrorResponse(QSharedPointer<ErrorResponse>)));    
+    connect(client, SIGNAL(responseReceived(SharedResponse)), SLOT(saveResponse(SharedResponse)));
+    connect(client, SIGNAL(errorReceived(SharedErrorResponse)), SLOT(saveErrorResponse(SharedErrorResponse)));
 }
 
 void BlockingListener::listen(int timeout)
@@ -31,13 +31,13 @@ void BlockingListener::stopListening()
     listening = false;
 }
 
-void BlockingListener::saveResponse(QSharedPointer<Response> response)
+void BlockingListener::saveResponse(SharedResponse response)
 {
     this->response = response;
     stopListening();
 }
 
-void BlockingListener::saveErrorResponse(QSharedPointer<ErrorResponse> errorResponse)
+void BlockingListener::saveErrorResponse(SharedErrorResponse errorResponse)
 {
     this->response = errorResponse;
     stopListening();

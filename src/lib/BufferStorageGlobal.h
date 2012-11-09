@@ -29,6 +29,10 @@ public:
 };
 }
 
+#define Q_BS_REGISTER_METATYPE(Class) \
+    Q_DECLARE_METATYPE(Class) \
+    static Utils::MetaTypeRegistrator<Class> Class##Registrator(#Class);
+
 namespace BufferStorage {
 typedef quint32 MessageSize;
 typedef quint32 Magic;

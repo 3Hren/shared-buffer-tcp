@@ -164,7 +164,7 @@ TEST(AcceptanceTest, PushRequest) {
         signalValues.append(SignalValue(i, 0));
 
     BufferClient client;
-    QSignalSpy spy(&client, SIGNAL(responseReceived(QSharedPointer<Response>)));
+    QSignalSpy spy(&client, SIGNAL(responseReceived(SharedResponse)));
     client.blockingConnectToServer();
     client.push(signalValues, 10000);
 
@@ -186,7 +186,7 @@ void TestPushRequestWithWrongSignalValuesCount(const SignalValueVector &signalVa
     server.run();
 
     BufferClient client;
-    QSignalSpy spy(&client, SIGNAL(errorReceived(QSharedPointer<ErrorResponse>)));
+    QSignalSpy spy(&client, SIGNAL(errorReceived(SharedErrorResponse)));
     client.blockingConnectToServer();
     client.push(signalValues, 10000);
 

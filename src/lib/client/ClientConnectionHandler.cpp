@@ -22,10 +22,10 @@ ClientConnectionHandler::ClientConnectionHandler(QTcpSocket *socket, QObject *vi
 void ClientConnectionHandler::processRequest(QSharedPointer<Request> request)
 {
     if (request->getType() == RESPONSE_ERROR) {
-        QSharedPointer<ErrorResponse> errorResponse = request.staticCast<ErrorResponse>();
+        SharedErrorResponse errorResponse = request.staticCast<ErrorResponse>();
         clientPrivate->callErrorReceived(errorResponse);
     } else {
-        QSharedPointer<Response> response = request.staticCast<Response>();
+        SharedResponse response = request.staticCast<Response>();
         clientPrivate->callResponseReceived(response);
     }
 }

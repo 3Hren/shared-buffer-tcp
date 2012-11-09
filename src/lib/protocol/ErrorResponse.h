@@ -21,5 +21,5 @@ protected:
 }
 
 #include <QSharedPointer>
-Q_DECLARE_METATYPE(QSharedPointer<BufferStorage::ErrorResponse>)
-static Utils::MetaTypeRegistrator<QSharedPointer<BufferStorage::ErrorResponse> > SharedPointerErrorResponseRegistrator("QSharedPointer<ErrorResponse>");
+typedef QSharedPointer<BufferStorage::ErrorResponse> SharedErrorResponse;
+Q_BS_REGISTER_METATYPE(SharedErrorResponse)

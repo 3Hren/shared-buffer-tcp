@@ -44,7 +44,7 @@ Q_SIGNALS:
     void connected();
     void stateChanged(QAbstractSocket::SocketState state);
 
-    void responseReceived(QSharedPointer<Response> response);
-    void errorReceived(QSharedPointer<ErrorResponse> errorResponse);    
+    void responseReceived(SharedResponse response);
+    void errorReceived(SharedErrorResponse errorResponse);
 };
 }

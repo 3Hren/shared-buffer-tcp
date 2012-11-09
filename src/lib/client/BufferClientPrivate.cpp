@@ -73,18 +73,18 @@ bool BufferClientPrivate::blockingDisconnectFromHost(int timeout)
     return waitForDisconnected(timeout);
 }
 
-void BufferClientPrivate::callResponseReceived(QSharedPointer<Response> response)
+void BufferClientPrivate::callResponseReceived(SharedResponse response)
 {
     client->responseReceived(response);
 }
 
-void BufferClientPrivate::callErrorReceived(QSharedPointer<ErrorResponse> errorResponse)
+void BufferClientPrivate::callErrorReceived(SharedErrorResponse errorResponse)
 {
     client->errorReceived(errorResponse);
 }
 
 void BufferClientPrivate::emitSocketError(QAbstractSocket::SocketError abstractSocketError)
 {
-    QSharedPointer<ErrorResponse> errorResponse(new ErrorResponse(RESPONSE_ERROR, static_cast<ErrorType>(abstractSocketError), socket->errorString()));
+    SharedErrorResponse errorResponse(new ErrorResponse(RESPONSE_ERROR, static_cast<ErrorType>(abstractSocketError), socket->errorString()));
     callErrorReceived(errorResponse);
 }

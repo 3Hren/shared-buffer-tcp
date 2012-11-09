@@ -16,7 +16,7 @@ class BlockingListener : public QObject
 {    
     Q_OBJECT
     volatile bool listening;
-    QSharedPointer<Response> response;
+    SharedResponse response;
 public:
     BlockingListener(BufferClient *client, QObject *parent = 0);
 
@@ -38,7 +38,7 @@ public:
     Q_SLOT void stopListening();
 
 private:
-    Q_SLOT void saveResponse(QSharedPointer<Response> response);
-    Q_SLOT void saveErrorResponse(QSharedPointer<ErrorResponse> errorResponse);
+    Q_SLOT void saveResponse(SharedResponse response);
+    Q_SLOT void saveErrorResponse(SharedErrorResponse errorResponse);
 };
 }

@@ -4,7 +4,9 @@
 
 #include "BufferStorageGlobal.h"
 
-#include "protocol/Request.h"
+//! @todo: remove #include "protocol/Request.h"
+#include "protocol/Response.h"
+#include "protocol/ErrorResponse.h"
 
 #include <QAbstractSocket>
 #include <QSharedPointer>
@@ -37,8 +39,8 @@ public:
 
     qint64 sendRequest(Request *request);        
 
-    void callResponseReceived(QSharedPointer<Response> response);
-    void callErrorReceived(QSharedPointer<ErrorResponse> errorResponse);
+    void callResponseReceived(SharedResponse response);
+    void callErrorReceived(SharedErrorResponse errorResponse);
 
 private:
     Q_SLOT void emitSocketError(QAbstractSocket::SocketError abstractSocketError);
