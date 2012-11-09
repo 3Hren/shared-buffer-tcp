@@ -17,3 +17,4 @@ public:
 
 #include <QSharedPointer>
 Q_DECLARE_METATYPE(QSharedPointer<BufferStorage::Response>)
+static Utils::MetaTypeRegistrator<QSharedPointer<BufferStorage::Response> > SharedPointerResponseRegistrator("QSharedPointer<Response>");

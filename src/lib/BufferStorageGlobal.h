@@ -17,6 +17,18 @@
     return in; \
     }
 
+namespace Utils {
+//! Metatype auto-registrator
+template<typename T>
+class MetaTypeRegistrator {
+public:
+    MetaTypeRegistrator(const QString &typeName) {
+        qDebug() << typeName;
+        qRegisterMetaType<T>(typeName.toUtf8());
+    }
+};
+}
+
 namespace BufferStorage {
 typedef quint32 MessageSize;
 typedef quint32 Magic;

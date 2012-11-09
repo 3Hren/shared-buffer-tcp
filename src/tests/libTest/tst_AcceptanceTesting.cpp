@@ -102,7 +102,7 @@ private:
 };
 
 /*!
- * \brief Интеграционный тест, который тестирует всю клиент-серверную архитектуру на примере блокирующего get-запроса.
+ * \brief Приемочный тест, который тестирует всю клиент-серверную архитектуру на примере блокирующего get-запроса.
  *
  * В этом тесте создается экземпляр шаблонного класса ThreadedServerRunnerManager, который управляет жизненным циклом
  * класса ServerRunner. Он создает объект класса ServerRunner, передает ему параметры инициализации сервера (кол-во буферов и
@@ -138,7 +138,7 @@ TEST(AcceptanceTest, BlockingGetBuffer) {
 }
 
 /*!
- * \brief Интеграционный тест, который проверяет способность метода blockingGetBuffer выбрасывать исключение в случае неправильно заданного индекса буфера.
+ * \brief Приемочный тест, который проверяет способность метода blockingGetBuffer выбрасывать исключение в случае неправильно заданного индекса буфера.
  */
 TEST(AcceptanceTest, BlockingGetBufferWithWrongIndexResultsInException) {
     const BufferId BUFFER_COUNT = 300;
@@ -151,6 +151,9 @@ TEST(AcceptanceTest, BlockingGetBufferWithWrongIndexResultsInException) {
     EXPECT_THROW(client.blockingGetBuffer(1), BufferStorageException);
 }
 
+/*!
+ * \brief Приемочный тест, который проверяет способность отправлять push-запросы.
+ */
 TEST(AcceptanceTest, PushRequest) {
     BufferServer server;
     server.initBuffers(300, 10, 0, 1);
@@ -161,12 +164,11 @@ TEST(AcceptanceTest, PushRequest) {
         signalValues.append(SignalValue(i, 0));
 
     BufferClient client;
+    QSignalSpy spy(&client, SIGNAL(responseReceived(QSharedPointer<Response>)));
     client.blockingConnectToServer();
     client.push(signalValues, 10000);
 
-    qRegisterMetaType<QSharedPointer<Response> >("QSharedPointer<Response>");
-    QSignalSpy spy(&client, SIGNAL(responseReceived(QSharedPointer<Response>)));
-    Listener listener(&spy);
+    Listener listener;
     listener.listenUntil([&](){
         return !spy.isEmpty();
     });
@@ -175,4 +177,36 @@ TEST(AcceptanceTest, PushRequest) {
         ASSERT_EQ(signalValues[i], server.getBufferManager()->getSignalValue(i, 10000));
 }
 
+/*!
+ * \brief Два приемочных теста, которые проверяет способность сервера реагировать на ошибочные push-запросы.
+ */
+void TestPushRequestWithWrongSignalValuesCount(const SignalValueVector &signalValues) {
+    BufferServer server;
+    server.initBuffers(300, 10, 0, 1);
+    server.run();
+
+    BufferClient client;
+    QSignalSpy spy(&client, SIGNAL(errorReceived(QSharedPointer<ErrorResponse>)));
+    client.blockingConnectToServer();
+    client.push(signalValues, 10000);
+
+    Listener listener;
+    listener.listenUntil([&](){
+        return !spy.isEmpty();
+    });
+    EXPECT_EQ(1, spy.count());
+
+    for (int i = 0; i < 300; ++i)
+        EXPECT_THROW(server.getBufferManager()->getSignalValue(i, 10000), BufferException);
+}
+
+TEST(AcceptanceTest, PushRequestWithMoreThanExpectedSignalValuesCountResultsInError) {
+    const SignalValueVector moreThanExpectedSignalValues = SignalValueVector().fill(SignalValue(), 301);
+    TestPushRequestWithWrongSignalValuesCount(moreThanExpectedSignalValues);
+}
+
+TEST(AcceptanceTest, PushRequestWithLessThanExpectedSignalValuesCountResultsInError) {
+    const SignalValueVector lessThanExpectedSignalValues = SignalValueVector().fill(SignalValue(), 299);
+    TestPushRequestWithWrongSignalValuesCount(lessThanExpectedSignalValues);
+}
 #include "tst_AcceptanceTesting.moc"
