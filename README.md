@@ -2,32 +2,48 @@
 Библиотека и прикладные приложения для создания и работы с клиент/серверной связкой циклического буфера сигналов.
 Включает в себя TCP-сервер и API для доступа к нему.
 
+#### Сборка
+	:::java
+	qmake
+	make
+	make install
+
+Для использования клиентского API необходимо подключить заголовочный файл BufferClient.h
+
 #### Пример (асинхронная отправка сообщений)
 	:::java
+	#include <BufferClient.h>
+
 	using namespace BufferStorage;
 
 	// Где-то создаем экземпляр класса клиента и устанавливаем подключение к серверу
 	BufferClient *client = new BufferClient;
-	connect(client, SIGNAL(error(ErrorResponse)), SLOT(showError(ErrorResponse)));
+	connect(client, SIGNAL(errorReceived(SharedErrorResponse)), SLOT(handleError(SharedErrorResponse)));
 	client->blockingConnectToServer();
 
 	...
 
-	QVector<SignalData> signalDatas;
-	... // Заполняем вектор
-	TimeStamp timeStamp = QDateTime::currentDateTime().toTime_t();
-	client->push(signalDatas, timeStamp); 
+	TimeStamp timeStamp(QDateTime::currentDateTime().toTime_t()); 
+	SignalValueVector signalValues;
+	signalValues.fill(SignalValue(5.5, 0), 100); // Заполняем вектор сигналов
+	client->push(signalValues, timeStamp); 
 
 #### Пример (блокирующее получение буфера)
 	:::java
+	#include <BufferClient.h>
+
+	using namespace BufferStorage;
+
+	...
+
 	BufferClient *client = new BuffetClient;
 	client->blockingConnectToServer();
 
 	try {
-		quint16 bufferId = 1;
-		const BufferResponse &response = client->blockingGetBuffer(bufferId);
-		handleSignals(response.timeStamps, response.signalDatas);
-	} catch (ProtocolException &exception) {
+		BufferId bufferId = 150;
+		const SignalBuffer &signalBuffer = client->blockingGetBuffer(bufferId);
+		// обработка полученного буфера
+	} catch (BufferStorageException &exception) {
 		// обработка ошибки
 	}
 
