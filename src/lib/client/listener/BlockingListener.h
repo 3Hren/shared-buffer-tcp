@@ -11,14 +11,14 @@
 
 namespace BufferStorage {
 class Response;
-class BufferClient;
+class BufferClientImplementation;
 class BlockingListener : public QObject
 {    
     Q_OBJECT
     volatile bool listening;
     SharedResponse response;
 public:
-    BlockingListener(BufferClient *client, QObject *parent = 0);
+    BlockingListener(BufferClientImplementation *client, QObject *parent = 0);
 
     void listen(int timeout);
 

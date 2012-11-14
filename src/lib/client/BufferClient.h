@@ -10,35 +10,29 @@
 #include "protocol/ErrorResponse.h"
 
 #include <QDateTime>
-#include <QSharedPointer>
 
 namespace BufferStorage {
-class BufferClientPrivate;
 class BufferClient : public QObject
-{        
+{
     Q_OBJECT
-
-    BufferClientPrivate * const d_ptr;
-    Q_DECLARE_PRIVATE(BufferClient)
 public:
-    explicit BufferClient(QObject *parent = 0);
-    ~BufferClient();
+    explicit BufferClient(QObject *parent = 0) : QObject(parent) {}
 
-    bool isConnected() const;
+    virtual bool isConnected() const = 0;
 
-    void connectToServer(const QString &host = "127.0.0.1", quint16 port = 14690);
-    bool waitForConnected(int timeout = 1000) const;
-    bool blockingConnectToServer(const QString &host = "127.0.0.1", quint16 port = 14690, int timeout = 1000);
+    virtual void connectToServer(const QString &host = "127.0.0.1", quint16 port = 14690) = 0;
+    virtual bool waitForConnected(int timeout = 1000) const = 0;
+    virtual bool blockingConnectToServer(const QString &host = "127.0.0.1", quint16 port = 14690, int timeout = 1000) = 0;
 
-    bool blockingDisconnectFromServer(int timeout = 1000);
+    virtual bool blockingDisconnectFromServer(int timeout = 1000) = 0;
 
-    void push(const SignalValueVector &signalValues, TimeStamp timeStamp = QDateTime::currentDateTime().toTime_t());
-    void blockingPush(const SignalValueVector &signalValues, TimeStamp timeStamp = QDateTime::currentDateTime().toTime_t(), int timeout = 1500);
+    virtual void push(const SignalValueVector &signalValues, TimeStamp timeStamp = QDateTime::currentDateTime().toTime_t()) = 0;
+    virtual void blockingPush(const SignalValueVector &signalValues, TimeStamp timeStamp = QDateTime::currentDateTime().toTime_t(), int timeout = 1500) = 0;
 
-    void getSignalData(const QVector<BufferId> &bufferIds, TimeStamp timeStamp);
+    virtual void getSignalData(const QVector<BufferId> &bufferIds, TimeStamp timeStamp) = 0;
 
-    void getBuffer(BufferId bufferId);
-    SignalBuffer blockingGetBuffer(BufferId bufferId, int timeout = 1000);
+    virtual void getBuffer(BufferId bufferId) = 0;
+    virtual SignalBuffer blockingGetBuffer(BufferId bufferId, int timeout = 1000) = 0;
 
 Q_SIGNALS:
     void connected();

@@ -1,6 +1,6 @@
 #include "ClientConnectionHandler.h"
 
-#include "BufferClientPrivate.h"
+#include "BufferClientImplementationPrivate.h"
 
 #include "protocol/ProtocolMessage.h"
 #include "protocol/Response.h"
@@ -12,7 +12,7 @@ using namespace BufferStorage;
 
 ClientConnectionHandler::ClientConnectionHandler(QTcpSocket *socket, QObject *visitor) :
     ConnectionHandler(socket, visitor),
-    clientPrivate(qobject_cast<BufferClientPrivate *>(visitor))
+    clientPrivate(qobject_cast<BufferClientImplementationPrivate *>(visitor))
 {
 }
 

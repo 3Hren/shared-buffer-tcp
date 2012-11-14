@@ -1,5 +1,5 @@
-#include "BufferClient.h"
-#include "BufferClientPrivate.h"
+#include "BufferClientImplementation.h"
+#include "BufferClientImplementationPrivate.h"
 
 #include "protocol/PushRequest.h"
 #include "protocol/PushResponse.h"
@@ -15,57 +15,57 @@
 #include <QDebug>
 
 using namespace BufferStorage;
-BufferClient::BufferClient(QObject *parent) :
-    QObject(parent),
-    d_ptr(new BufferClientPrivate(this))
+BufferClientImplementation::BufferClientImplementation(QObject *parent) :
+    BufferClient(parent),
+    d_ptr(new BufferClientImplementationPrivate(this))
 {    
 }
 
-BufferClient::~BufferClient()
+BufferClientImplementation::~BufferClientImplementation()
 {
     delete d_ptr;
 }
 
-bool BufferClient::isConnected() const
+bool BufferClientImplementation::isConnected() const
 {
-    Q_D(const BufferClient);
+    Q_D(const BufferClientImplementation);
     return d->isConnected();
 }
 
-void BufferClient::connectToServer(const QString &host, quint16 port)
+void BufferClientImplementation::connectToServer(const QString &host, quint16 port)
 {
-    Q_D(BufferClient);
+    Q_D(BufferClientImplementation);
     d->connectToHost(host, port);
 }
 
-bool BufferClient::waitForConnected(int timeout) const
+bool BufferClientImplementation::waitForConnected(int timeout) const
 {
-    Q_D(const BufferClient);
+    Q_D(const BufferClientImplementation);
     return d->waitForConnected(timeout);
 }
 
-bool BufferClient::blockingConnectToServer(const QString &host, quint16 port, int timeout)
+bool BufferClientImplementation::blockingConnectToServer(const QString &host, quint16 port, int timeout)
 {
-    Q_D(BufferClient);
+    Q_D(BufferClientImplementation);
     return d->blockingConnectToHost(host, port, timeout);
 }
 
-bool BufferClient::blockingDisconnectFromServer(int timeout)
+bool BufferClientImplementation::blockingDisconnectFromServer(int timeout)
 {    
-    Q_D(BufferClient);
+    Q_D(BufferClientImplementation);
     return d->blockingDisconnectFromHost(timeout);
 }
 
-void BufferClient::push(const SignalValueVector &signalValues, TimeStamp timeStamp)
+void BufferClientImplementation::push(const SignalValueVector &signalValues, TimeStamp timeStamp)
 {
-    Q_D(BufferClient);
+    Q_D(BufferClientImplementation);
     PushRequest request(timeStamp, signalValues);
     d->sendRequest(&request);
 }
 
-void BufferClient::blockingPush(const SignalValueVector &signalValues, TimeStamp timeStamp, int timeout)
+void BufferClientImplementation::blockingPush(const SignalValueVector &signalValues, TimeStamp timeStamp, int timeout)
 {
-    Q_D(BufferClient);
+    Q_D(BufferClientImplementation);
     if (!d->isConnected())
         throw BufferStorageException("There is no connection to the server");
 
@@ -79,23 +79,23 @@ void BufferClient::blockingPush(const SignalValueVector &signalValues, TimeStamp
     }
 }
 
-void BufferClient::getSignalData(const QVector<BufferId> &bufferIds, TimeStamp timeStamp)
+void BufferClientImplementation::getSignalData(const QVector<BufferId> &bufferIds, TimeStamp timeStamp)
 {
-    Q_D(BufferClient);
+    Q_D(BufferClientImplementation);
     GetSignalValuesRequest request(timeStamp, bufferIds);
     d->sendRequest(&request);
 }
 
-void BufferClient::getBuffer(BufferId bufferId)
+void BufferClientImplementation::getBuffer(BufferId bufferId)
 {
-    Q_D(BufferClient);
+    Q_D(BufferClientImplementation);
     GetBufferRequest request(bufferId);
     d->sendRequest(&request);
 }
 
-SignalBuffer BufferClient::blockingGetBuffer(BufferId bufferId, int timeout)
+SignalBuffer BufferClientImplementation::blockingGetBuffer(BufferId bufferId, int timeout)
 {    
-    Q_D(BufferClient);
+    Q_D(BufferClientImplementation);
     if (!d->isConnected())
         throw BufferStorageException("There is no connection to the server");
 

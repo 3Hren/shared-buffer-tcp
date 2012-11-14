@@ -128,7 +128,7 @@ TEST(AcceptanceTest, BlockingGetBuffer) {
     SignalBuffer expectedSignalBuffer(expectedTimeStamps, expectedSignalValues);
 
     try {
-        BufferClient client;
+        BufferClientImplementation client;
         client.blockingConnectToServer();
         const SignalBuffer &signalBuffer = client.blockingGetBuffer(150);
         EXPECT_EQ(expectedSignalBuffer, signalBuffer);
@@ -146,7 +146,7 @@ TEST(AcceptanceTest, BlockingGetBufferWithWrongIndexResultsInException) {
     ThreadedServerRunnerManager<AutoFilledServerRunner> runner(BUFFER_COUNT, BUFFER_MAX_SIZE);
     runner.start();
 
-    BufferClient client;
+    BufferClientImplementation client;
     client.blockingConnectToServer();
     EXPECT_THROW(client.blockingGetBuffer(1), BufferStorageException);
 }
@@ -163,7 +163,7 @@ TEST(AcceptanceTest, PushRequest) {
     for (int i = 0; i < 300; ++i)
         signalValues.append(SignalValue(i, 0));
 
-    BufferClient client;
+    BufferClientImplementation client;
     QSignalSpy spy(&client, SIGNAL(responseReceived(SharedResponse)));
     client.blockingConnectToServer();
     client.push(signalValues, 10000);
@@ -189,7 +189,7 @@ void TestPushRequestWithWrongSignalValuesCount(const SignalValueVector &signalVa
     server.initBuffers(300, 10, 0, 1);
     server.run();
 
-    BufferClient client;
+    BufferClientImplementation client;
     QSignalSpy spy(&client, SIGNAL(errorReceived(SharedErrorResponse)));
     client.blockingConnectToServer();
     client.push(signalValues, 10000);
@@ -237,7 +237,7 @@ TEST(AcceptanceTest, GetSignalValuesRequest) {
     }
     server.run();
 
-    BufferClient client;
+    BufferClientImplementation client;
     QSignalSpy spy(&client, SIGNAL(responseReceived(SharedResponse)));
     client.blockingConnectToServer();
 
@@ -278,7 +278,7 @@ void TestGetSignalValuesWithWrongRequestParametres(TimeStamp timeStamp, const QV
     }
     server.run();
 
-    BufferClient client;
+    BufferClientImplementation client;
     QSignalSpy spy(&client, SIGNAL(errorReceived(SharedErrorResponse)));
     client.blockingConnectToServer();
     client.getSignalData(bufferIds, timeStamp);

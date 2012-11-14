@@ -1,15 +1,15 @@
 #include "Mocks.h"
 
-TEST(BufferClient, Class) {
-    BufferClient client;
+TEST(BufferClientImplementation, Class) {
+    BufferClientImplementation client;
     Q_UNUSED(client);
 }
 
-TEST(BufferClient, AsynchronousConnectToServer) {
+TEST(BufferClientImplementation, AsynchronousConnectToServer) {
     BufferServer server;
     server.run();
 
-    BufferClient client;
+    BufferClientImplementation client;
     client.connectToServer();
 
     Listener listener;
@@ -19,21 +19,21 @@ TEST(BufferClient, AsynchronousConnectToServer) {
     EXPECT_TRUE(client.isConnected());
 }
 
-TEST(BufferClient, WaitForConnected) {
+TEST(BufferClientImplementation, WaitForConnected) {
     BufferServer server;
     server.run();
 
-    BufferClient client;
+    BufferClientImplementation client;
     client.connectToServer();
     EXPECT_TRUE(client.waitForConnected());
     EXPECT_TRUE(client.isConnected());
 }
 
-TEST(BufferClient, BlockingConnectToServer) {
+TEST(BufferClientImplementation, BlockingConnectToServer) {
     BufferServer server;
     server.run();
 
-    BufferClient client;
+    BufferClientImplementation client;
     EXPECT_TRUE(client.blockingConnectToServer());
     EXPECT_TRUE(client.isConnected());
 }

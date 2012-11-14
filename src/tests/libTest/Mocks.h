@@ -58,7 +58,7 @@ public:
 using namespace BufferStorage;
 
 #include "server/BufferServer.h"
-#include "client/BufferClient.h"
+#include "client/BufferClientImplementation.h"
 
 #include "server/BufferManager.h"
 class BufferManagerMock : public BufferManager {

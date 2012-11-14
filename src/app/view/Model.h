@@ -2,7 +2,7 @@
 
 #include <QAbstractTableModel>
 
-#include <BufferClient.h>
+#include <BufferClientImplementation.h>
 
 #include <QList>
 #include <QVector>
@@ -12,7 +12,7 @@ using namespace BufferStorage;
 class Model : public QAbstractTableModel
 {
     Q_OBJECT
-    BufferClient *client;
+    BufferClientImplementation *client;
     TimeStampVector timeStamps;
     QList<SignalValueVector> signalDatas;
 

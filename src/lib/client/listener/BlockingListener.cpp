@@ -1,13 +1,13 @@
 #include "BlockingListener.h"
 
-#include "client/BufferClient.h"
+#include "client/BufferClientImplementation.h"
 
 #include <QCoreApplication>
 #include <QTimer>
 
 using namespace BufferStorage;
 
-BlockingListener::BlockingListener(BufferClient *client, QObject *parent) :
+BlockingListener::BlockingListener(BufferClientImplementation *client, QObject *parent) :
     QObject(parent),
     listening(false)
 {    

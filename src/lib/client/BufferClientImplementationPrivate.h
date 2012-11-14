@@ -14,16 +14,16 @@ class QTcpSocket;
 
 namespace BufferStorage {
 class ConnectionHandler;
-class BufferClient;
+class BufferClientImplementation;
 class Request;
-class BufferClientPrivate : public QObject
+class BufferClientImplementationPrivate : public QObject
 {
     Q_OBJECT
-    BufferClient *client;
+    BufferClientImplementation *client;
     QTcpSocket *socket;
     ConnectionHandler *handler;
 public:        
-    BufferClientPrivate(BufferClient *bufferClient); //! @todo: rename to ConnectionDispatcher
+    BufferClientImplementationPrivate(BufferClientImplementation *bufferClient); //! @todo: rename to ConnectionDispatcher
 
     bool isConnected() const;
 

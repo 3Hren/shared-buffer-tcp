@@ -1,6 +1,6 @@
 #include "Model.h"
 
-#include <BufferClient.h>
+#include <BufferClientImplementation.h>
 #include <exceptions/BufferStorageException.h>
 
 #include <QTimer>
@@ -10,7 +10,7 @@
 
 Model::Model(quint16 startAddress, quint16 buffersCount, QObject *parent) :
     QAbstractTableModel(parent),
-    client(new BufferClient(this)),
+    client(new BufferClientImplementation(this)),
     startAddress(startAddress),
     buffersCount(buffersCount)
 {

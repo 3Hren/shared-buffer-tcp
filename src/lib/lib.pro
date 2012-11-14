@@ -16,18 +16,19 @@ SOURCES += main.cpp
 OBJECTS_DIR = .obj
 MOC_DIR = .moc
 
-headers.path = ../../lib/include
+headers.path = $${DESTDIR}/include
 headers.files += \
     BufferStorageGlobal.h \
     SignalValue.h \
     SignalBuffer.h \
     server/BufferServer.h \
-    client/BufferClient.h \    
+    client/BufferClient.h \
+    client/BufferClientImplementation.h
 
-protocol.path = ../../lib/include/protocol
+protocol.path = $${DESTDIR}/include/protocol
 protocol.files += protocol/*.h
 
-exceptions.path = ../../lib/include/exceptions
+exceptions.path = $${DESTDIR}/include/exceptions
 exceptions.files += exceptions/*.h
 
 INSTALLS += headers protocol exceptions

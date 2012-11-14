@@ -14,10 +14,8 @@ HEADERS += \
     server/handler/ServerSideRequestHandler.h \
     server/buffer/HashTableBufferManager.h \
     FixedSizeQueue.h \
-    client/BufferClient.h \
     server/BufferServer.h \
     BufferStorageGlobal.h \
-    client/BufferClientPrivate.h \
     exceptions/BufferStorageException.h \
     exceptions/ClientException.h \
     protocol/Response.h \
@@ -35,7 +33,10 @@ HEADERS += \
     protocol/GetSignalValuesRequest.h \
     protocol/GetSignalValuesResponse.h \
     server/handler/GetSignalValuesRequestHandler.h \
-    protocol/ProtocolMessage.h
+    protocol/ProtocolMessage.h \
+    client/BufferClientImplementation.h \
+    client/BufferClientImplementationPrivate.h \
+    client/BufferClient.h
 
 SOURCES += \
     ConnectionHandler.cpp \
@@ -43,13 +44,11 @@ SOURCES += \
     server/ServerConnectionHandler.cpp \
     client/ClientConnectionHandler.cpp \
     server/BufferServer.cpp \
-    client/BufferClient.cpp \
     server/ServerSideRequestHandlerFactory.cpp \
     server/handler/PushRequestHandler.cpp \
     server/handler/GetBufferRequestHandler.cpp \
     server/handler/ServerSideRequestHandler.cpp \
     server/buffer/HashTableBufferManager.cpp \
-    client/BufferClientPrivate.cpp \
     protocol/GetBufferRequest.cpp \
     protocol/GetBufferResponse.cpp \
     protocol/PushRequest.cpp \
@@ -63,4 +62,6 @@ SOURCES += \
     protocol/GetSignalValuesResponse.cpp \
     server/handler/GetSignalValuesRequestHandler.cpp \
     protocol/ProtocolMessage.cpp \
-    protocol/ProtocolMessageFactory.cpp
+    protocol/ProtocolMessageFactory.cpp \
+    client/BufferClientImplementation.cpp \
+    client/BufferClientImplementationPrivate.cpp
