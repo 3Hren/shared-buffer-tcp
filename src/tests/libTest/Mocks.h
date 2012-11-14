@@ -7,10 +7,10 @@
 #include <QTimer>
 #include <functional>
 
-#include "BufferStorageGlobal.h"
-#include "exceptions/BufferStorageException.h"
-#include "exceptions/ServerException.h"
-#include "exceptions/BufferException.h"
+#include "ru/diaprom/bufferstorage/BufferStorageGlobal.h"
+#include "ru/diaprom/bufferstorage/exceptions/BufferStorageException.h"
+#include "ru/diaprom/bufferstorage/exceptions/ServerException.h"
+#include "ru/diaprom/bufferstorage/exceptions/BufferException.h"
 
 #define EXPECT_STREQ_QT(expected, actual) \
     QString e(expected); \
@@ -57,10 +57,10 @@ public:
 
 using namespace BufferStorage;
 
-#include "server/BufferServer.h"
-#include "client/BufferClientImplementation.h"
+#include "ru/diaprom/bufferstorage/server/BufferServer.h"
+#include "ru/diaprom/bufferstorage/client/BufferClientImplementation.h"
 
-#include "server/BufferManager.h"
+#include "ru/diaprom/bufferstorage/server/BufferManager.h"
 class BufferManagerMock : public BufferManager {
 public:
     MOCK_CONST_METHOD1(getBuffer, Buffer*(BufferId));

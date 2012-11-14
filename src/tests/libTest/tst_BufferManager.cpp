@@ -1,6 +1,6 @@
 #include "Mocks.h"
 
-#include "server/buffer/HashTableBufferManager.h"
+#include "ru/diaprom/bufferstorage/server/buffer/HashTableBufferManager.h"
 TEST(HashTableBufferManager, Class) {
     HashTableBufferManager bufferManager;
     Q_UNUSED(bufferManager);

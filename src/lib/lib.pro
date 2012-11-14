@@ -1,5 +1,6 @@
 TARGET = bufferstorage
 TEMPLATE = lib
+PATH = ru/diaprom/bufferstorage
 DESTDIR = ../../lib
 
 QT       += core network
@@ -11,24 +12,22 @@ CONFIG   -= app_bundle
 
 include(BufferStorage.pri)
 
-SOURCES += main.cpp
-
 OBJECTS_DIR = .obj
 MOC_DIR = .moc
 
-headers.path = $${DESTDIR}/include
+headers.path = $${DESTDIR}/include/$${PATH}
 headers.files += \
-    BufferStorageGlobal.h \
-    SignalValue.h \
-    SignalBuffer.h \
-    server/BufferServer.h \
-    client/BufferClient.h \
-    client/BufferClientImplementation.h
+    $${PATH}/BufferStorageGlobal.h \
+    $${PATH}/SignalValue.h \
+    $${PATH}/SignalBuffer.h \
+    $${PATH}/server/BufferServer.h \
+    $${PATH}/client/BufferClient.h \
+    $${PATH}/client/BufferClientImplementation.h
 
-protocol.path = $${DESTDIR}/include/protocol
-protocol.files += protocol/*.h
+protocol.path = $${DESTDIR}/include/$${PATH}/protocol
+protocol.files += $${PATH}/protocol/*.h
 
-exceptions.path = $${DESTDIR}/include/exceptions
-exceptions.files += exceptions/*.h
+exceptions.path = $${DESTDIR}/include/$${PATH}/exceptions
+exceptions.files += $${PATH}/exceptions/*.h
 
 INSTALLS += headers protocol exceptions

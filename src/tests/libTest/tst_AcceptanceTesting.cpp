@@ -2,7 +2,7 @@
 
 #include <QThread>
 
-#include "server/buffer/HashTableBufferManager.h"
+#include "ru/diaprom/bufferstorage/server/buffer/HashTableBufferManager.h"
 class ServerRunner : public QObject {
     Q_OBJECT
     volatile bool isRunning;
@@ -214,7 +214,7 @@ TEST(AcceptanceTest, PushRequestWithLessThanExpectedSignalValuesCountResultsInEr
     TestPushRequestWithWrongSignalValuesCount(lessThanExpectedSignalValues);
 }
 
-#include "protocol/GetSignalValuesResponse.h"
+#include "ru/diaprom/bufferstorage/protocol/GetSignalValuesResponse.h"
 /*!
  * \brief Приемочный тест, провещяющий асинхронный getSignalValues запрос.
  *

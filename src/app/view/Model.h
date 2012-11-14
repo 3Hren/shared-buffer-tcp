@@ -2,7 +2,7 @@
 
 #include <QAbstractTableModel>
 
-#include <BufferClientImplementation.h>
+#include <ru/diaprom/bufferstorage/BufferClientImplementation.h>
 
 #include <QList>
 #include <QVector>

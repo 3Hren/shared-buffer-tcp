@@ -1,6 +1,6 @@
 #include "Mocks.h"
 
-#include "protocol/GetBufferRequest.h"
+#include "ru/diaprom/bufferstorage/protocol/GetBufferRequest.h"
 TEST(GetBufferRequest, Class) {
     GetBufferRequest request;
     Q_UNUSED(request);
@@ -43,7 +43,7 @@ TEST(GetBufferRequest, EncodingDecoding) {
     EXPECT_EQ(10, serverRequest.getBufferId());
 }
 
-#include "protocol/GetBufferResponse.h"
+#include "ru/diaprom/bufferstorage/protocol/GetBufferResponse.h"
 TEST(GetBufferResponse, Class) {
     GetBufferResponse response;
     Q_UNUSED(response);
@@ -64,7 +64,7 @@ TEST(GetBufferResponse, InitializesRequestType) {
     EXPECT_EQ(REQUEST_GET_BUFFER, response.getRequestType());
 }
 
-#include "SignalBuffer.h"
+#include "ru/diaprom/bufferstorage/SignalBuffer.h"
 TEST(GetBufferResponse, SignalBufferConstructor) {
     TimeStampVector timeStamps = {0, 1};
     SignalValueVector signalValues = {SignalValue(5.0, 0), SignalValue(2.75, 1)};
@@ -85,7 +85,7 @@ TEST(GetBufferResponse, EncodingDecoding) {
     EXPECT_EQ(signalBuffer, clientResponse.getSignalBuffer());
 }
 
-#include "protocol/PushRequest.h"
+#include "ru/diaprom/bufferstorage/protocol/PushRequest.h"
 TEST(PushRequest, Class) {
     PushRequest request;
     Q_UNUSED(request);
@@ -116,7 +116,7 @@ TEST(PushRequest, EncodingDecoding) {
     EXPECT_EQ(signalValues, serverRequest.getSignalValues());
 }
 
-#include "protocol/PushResponse.h"
+#include "ru/diaprom/bufferstorage/protocol/PushResponse.h"
 TEST(PushResponse, Class) {
     PushResponse response;
     Q_UNUSED(response);
@@ -143,7 +143,7 @@ TEST(PushResponse, EncodingDecoding) {
     EXPECT_STREQ_QT("Ok", clientResponse.getMessage());
 }
 
-#include "protocol/ErrorResponse.h"
+#include "ru/diaprom/bufferstorage/protocol/ErrorResponse.h"
 TEST(ErrorResponse, Class) {
     ErrorResponse response;
     Q_UNUSED(response);
@@ -169,7 +169,7 @@ TEST(ErrorResponse, EncodingDecoding) {
     EXPECT_STREQ_QT("Wrong request type", clientResponse.getReason());
 }
 
-#include "protocol/GetSignalValuesRequest.h"
+#include "ru/diaprom/bufferstorage/protocol/GetSignalValuesRequest.h"
 TEST(GetSignalValuesRequest, Class) {
     GetSignalValuesRequest request;
     Q_UNUSED(request);
@@ -200,7 +200,7 @@ TEST(GetSignalValuesRequest, EncodingDecoding) {
     EXPECT_EQ(bufferIds, serverRequest.getRequestedBufferIndexes());
 }
 
-#include "protocol/GetSignalValuesResponse.h"
+#include "ru/diaprom/bufferstorage/protocol/GetSignalValuesResponse.h"
 TEST(GetSignalValuesResponse, Class) {
     GetSignalValuesResponse response;
     Q_UNUSED(response);

@@ -1,6 +1,6 @@
 #include "Mocks.h"
 
-#include "SignalValue.h"
+#include "ru/diaprom/bufferstorage/SignalValue.h"
 TEST(SignalValue, Class) {
     SignalValue signalValue;
     Q_UNUSED(signalValue);
@@ -23,7 +23,7 @@ TEST(SignalValue, Serializing) {
     TestStructSerializing(signalValue);
 }
 
-#include "SignalBuffer.h"
+#include "ru/diaprom/bufferstorage/SignalBuffer.h"
 TEST(SignalBuffer, Class) {
     SignalBuffer signalBuffer;
     Q_UNUSED(signalBuffer);

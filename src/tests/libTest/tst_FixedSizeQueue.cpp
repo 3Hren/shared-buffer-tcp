@@ -1,6 +1,6 @@
 #include "Mocks.h"
 
-#include "FixedSizeQueue.h"
+#include "ru/diaprom/bufferstorage/FixedSizeQueue.h"
 TEST(FixedSizeQueue, Class) {
     FixedSizeQueue<int> queue;
     Q_UNUSED(queue);

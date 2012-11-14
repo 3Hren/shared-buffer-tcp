@@ -1,7 +1,7 @@
 #include "Model.h"
 
-#include <BufferClientImplementation.h>
-#include <exceptions/BufferStorageException.h>
+#include <ru/diaprom/bufferstorage/BufferClientImplementation.h>
+#include <ru/diaprom/bufferstorage/exceptions/BufferStorageException.h>
 
 #include <QTimer>
 #include <QDateTime>
