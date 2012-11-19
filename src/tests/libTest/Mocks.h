@@ -8,9 +8,10 @@
 #include <functional>
 
 #include "ru/diaprom/bufferstorage/BufferStorageGlobal.h"
-#include "ru/diaprom/bufferstorage/exceptions/BufferStorageException.h"
-#include "ru/diaprom/bufferstorage/exceptions/ServerException.h"
-#include "ru/diaprom/bufferstorage/exceptions/BufferException.h"
+
+#include "ru/diaprom/bufferstorage/exception/BufferStorageException.h"
+#include "ru/diaprom/bufferstorage/exception/ServerException.h"
+#include "ru/diaprom/bufferstorage/exception/BufferException.h"
 
 #define EXPECT_STREQ_QT(expected, actual) \
     QString e(expected); \

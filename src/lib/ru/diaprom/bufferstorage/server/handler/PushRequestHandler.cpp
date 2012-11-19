@@ -6,7 +6,7 @@
 #include "ru/diaprom/bufferstorage/protocol/PushRequest.h"
 #include "ru/diaprom/bufferstorage/protocol/PushResponse.h"
 
-#include "ru/diaprom/bufferstorage/exceptions/BufferException.h"
+#include "ru/diaprom/bufferstorage/exception/BufferException.h"
 
 #include <QTcpSocket>
 

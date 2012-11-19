@@ -5,8 +5,8 @@
 
 #include "ru/diaprom/bufferstorage/protocol/Request.h"
 
-#include "ru/diaprom/bufferstorage/exceptions/ClientException.h"
-#include "ru/diaprom/bufferstorage/exceptions/ProtocolException.h"
+#include "ru/diaprom/bufferstorage/exception/ClientException.h"
+#include "ru/diaprom/bufferstorage/exception/ProtocolException.h"
 
 #include <QTcpSocket>
 #include <QCoreApplication>

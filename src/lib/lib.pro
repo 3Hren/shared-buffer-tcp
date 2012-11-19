@@ -27,7 +27,7 @@ headers.files += \
 protocol.path = $${DESTDIR}/include/$${PATH}/protocol
 protocol.files += $${PATH}/protocol/*.h
 
-exceptions.path = $${DESTDIR}/include/$${PATH}/exceptions
-exceptions.files += $${PATH}/exceptions/*.h
+exception.path = $${DESTDIR}/include/$${PATH}/exception
+exception.files += $${PATH}/exception/*.h
 
-INSTALLS += headers protocol exceptions
+INSTALLS += headers protocol exception

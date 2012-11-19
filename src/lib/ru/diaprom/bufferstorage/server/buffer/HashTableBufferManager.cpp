@@ -2,7 +2,7 @@
 
 #include "ru/diaprom/bufferstorage/BufferStorageGlobal.h"
 
-#include "ru/diaprom/bufferstorage/exceptions/BufferException.h"
+#include "ru/diaprom/bufferstorage/exception/BufferException.h"
 
 using namespace BufferStorage;
 

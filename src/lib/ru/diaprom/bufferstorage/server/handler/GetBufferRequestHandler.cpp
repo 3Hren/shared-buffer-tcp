@@ -6,7 +6,7 @@
 #include "ru/diaprom/bufferstorage/protocol/GetBufferRequest.h"
 #include "ru/diaprom/bufferstorage/protocol/GetBufferResponse.h"
 
-#include "ru/diaprom/bufferstorage/exceptions/BufferException.h"
+#include "ru/diaprom/bufferstorage/exception/BufferException.h"
 
 #include <QTcpSocket>
 

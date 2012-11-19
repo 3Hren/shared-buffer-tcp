@@ -5,7 +5,7 @@
 #include "ru/diaprom/bufferstorage/protocol/Response.h"
 #include "ru/diaprom/bufferstorage/protocol/ErrorResponse.h"
 
-#include "ru/diaprom/bufferstorage/exceptions/ProtocolException.h"
+#include "ru/diaprom/bufferstorage/exception/ProtocolException.h"
 
 #include <QSharedPointer>
 

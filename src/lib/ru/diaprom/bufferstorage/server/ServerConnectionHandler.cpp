@@ -5,9 +5,10 @@
 #include "ru/diaprom/bufferstorage/server/BufferServer.h"
 #include "ru/diaprom/bufferstorage/server/ServerSideRequestHandlerFactory.h"
 #include "ru/diaprom/bufferstorage/RequestHandler.h"
-#include "ru/diaprom/bufferstorage/exceptions/BufferException.h"
 #include "ru/diaprom/bufferstorage/protocol/Request.h"
 #include "ru/diaprom/bufferstorage/protocol/ErrorResponse.h"
+
+#include "ru/diaprom/bufferstorage/exception/BufferException.h"
 
 #include <QTcpSocket>
 

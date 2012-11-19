@@ -4,7 +4,7 @@
 
 #include "buffer/HashTableBufferManager.h"
 
-#include "ru/diaprom/bufferstorage/exceptions/ServerException.h"
+#include "ru/diaprom/bufferstorage/exception/ServerException.h"
 
 #include <QTcpServer>
 #include <QTcpSocket>

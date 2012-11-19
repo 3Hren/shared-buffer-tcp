@@ -1,9 +1,9 @@
 HEADERS += \
-    ru/diaprom/bufferstorage/exceptions/ServerException.h \
-    ru/diaprom/bufferstorage/exceptions/BufferException.h \
-    ru/diaprom/bufferstorage/exceptions/ProtocolException.h \
-    ru/diaprom/bufferstorage/exceptions/BufferStorageException.h \
-    ru/diaprom/bufferstorage/exceptions/ClientException.h \
+    ru/diaprom/bufferstorage/exception/ServerException.h \
+    ru/diaprom/bufferstorage/exception/BufferException.h \
+    ru/diaprom/bufferstorage/exception/ProtocolException.h \
+    ru/diaprom/bufferstorage/exception/BufferStorageException.h \
+    ru/diaprom/bufferstorage/exception/ClientException.h \
     ru/diaprom/bufferstorage/server/BufferManager.h \
     ru/diaprom/bufferstorage/server/ServerConnectionHandler.h \
     ru/diaprom/bufferstorage/Buffer.h \
