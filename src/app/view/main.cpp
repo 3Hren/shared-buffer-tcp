@@ -30,6 +30,7 @@ int main(int argc, char *argv[])
     View v;
     v.setModel(&model);
     v.show();
+    v.connect(&model, SIGNAL(modelReset()), &v, SLOT(scrollToBottom()));
 
     return a.exec();
 }

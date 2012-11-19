@@ -1,7 +1,7 @@
 #include "Model.h"
 
 #include <ru/diaprom/bufferstorage/BufferClientImplementation.h>
-#include <ru/diaprom/bufferstorage/exceptions/BufferStorageException.h>
+#include <ru/diaprom/bufferstorage/exception/BufferStorageException.h>
 
 #include <QTimer>
 #include <QDateTime>
@@ -99,7 +99,7 @@ void Model::updateValues()
     } catch (BufferStorageException &exception) {
         qCritical() << exception.getReason();
     }
-    qDebug() << QString("'SELECT *' was done in %1 msecs").arg(timer.elapsed());
+    qDebug() << QString("'SELECT *' was done in %1 msecs").arg(timer.elapsed());    
 
     endResetModel();
 }
