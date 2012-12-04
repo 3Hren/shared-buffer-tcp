@@ -3,9 +3,6 @@ TARGET = lib_tests
 
 ROOT_PATH = ../../..
 LIB_SOURCE_PATH = $$ROOT_PATH/src/lib
-LIB_GMOCK_PATH = $$ROOT_PATH/../GMock
-GMOCK_PATH = $$ROOT_PATH/../GMock/gmock-1.6.0
-GTEST_PATH = $$GMOCK_PATH/gtest
 
 DESTDIR = $$ROOT_PATH/bin
 
@@ -20,14 +17,9 @@ QT       -= gui
 CONFIG   += console warn_on #debug_and_release build_all
 CONFIG   -= app_bundle
 
-INCLUDEPATH += \
-    $$LIB_SOURCE_PATH \
-    $$GTEST_PATH/include \
-    $$GMOCK_PATH/include
-
-DEPENDPATH += $$INCLUDEPATH
-
-LIBS += -L$$LIB_GMOCK_PATH -lgmock
+INCLUDEPATH += $$LIB_SOURCE_PATH
+DEPENDPATH += $$LIB_SOURCE_PATH
+LIBS += -lgmock -lgtest
 
 include($$LIB_SOURCE_PATH/BufferStorage.pri)
 
