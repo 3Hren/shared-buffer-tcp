@@ -9,7 +9,8 @@ DESTDIR = $$ROOT_PATH/bin
 OBJECTS_DIR = .obj
 MOC_DIR = .moc
 
-QMAKE_CXXFLAGS += -std=c++0x
+DEFINES += Q_COMPILER_INITIALIZER_LISTS
+QMAKE_CXXFLAGS += -std=c++11
 
 QT       += network testlib
 QT       -= gui

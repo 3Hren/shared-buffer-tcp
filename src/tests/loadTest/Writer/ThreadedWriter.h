@@ -1,38 +1,40 @@
 #pragma once
 
 #include <QThread>
-#include <BufferClient.h>
+#include <ru/diaprom/bufferstorage/BufferClientImplementation.h>
 
 #include <QTimer>
 #include <QDateTime>
-
-static const int TIMEOUT = 1000;
-static const int BUFFER_COUNT = 30;
 
 using namespace BufferStorage;
 class ThreadedWriter : public QThread
 {
     Q_OBJECT
     BufferClient *client;
+    const int timeout;
+    const int bufferCount;
 public:
-    ThreadedWriter(QObject *parent = 0) : QThread(parent) {}
+    ThreadedWriter(int timeout, int bufferCount, QObject *parent = 0) :
+        QThread(parent),
+        timeout(timeout),
+        bufferCount(bufferCount)
+    {}
 
 protected:
     void run() {
         qsrand(QDateTime::currentDateTime().toTime_t());
-        client = new BufferClient;
-        qRegisterMetaType<QSharedPointer<ErrorResponse> >("QSharedPointer<ErrorResponse>");
-        connect(client, SIGNAL(errorReceived(QSharedPointer<ErrorResponse>)), SLOT(showError(QSharedPointer<ErrorResponse>)));
+        client = new BufferClientImplementation;
+        connect(client, SIGNAL(errorReceived(SharedErrorResponse)), SLOT(showError(SharedErrorResponse)));
         client->blockingConnectToServer();
-        QTimer::singleShot(TIMEOUT, this, SLOT(push()));
-        exec();
+        QTimer::singleShot(timeout, this, SLOT(push()));
+        QThread::run();
     }
 
 private slots:
     void push() {
         SignalValueVector signalValues;
-        signalValues.reserve(BUFFER_COUNT);
-        for (int i = 0; i < BUFFER_COUNT; ++i) {
+        signalValues.reserve(bufferCount);
+        for (int i = 0; i < bufferCount; ++i) {
             float randomValue = qrand() % (100 + i) * 10 / 100.0;
             quint16 randomErrorCode = qrand() % 2;
             SignalValue signalValue(randomValue, randomErrorCode);
@@ -42,10 +44,10 @@ private slots:
         TimeStamp timeStamp = QDateTime::currentDateTime().toTime_t();
         client->push(signalValues, timeStamp);
 
-        QTimer::singleShot(TIMEOUT, this, SLOT(push()));
+        QTimer::singleShot(timeout, this, SLOT(push()));
     }
 
-    void showError(QSharedPointer<ErrorResponse> response) {
-        qDebug() << QString("Error: %1").arg(response->getReason());
+    void showError(SharedErrorResponse response) {
+        qDebug() << response->getReason();
     }
 };

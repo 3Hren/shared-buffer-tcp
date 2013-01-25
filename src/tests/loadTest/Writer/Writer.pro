@@ -4,6 +4,8 @@ QT       -= gui
 TARGET = MultiThreadedWriterLoadTest
 DESTDIR = ../../../../bin/tests
 
+QMAKE_CXXFLAGS += -std=c++11
+
 CONFIG   += console
 CONFIG   -= app_bundle
 

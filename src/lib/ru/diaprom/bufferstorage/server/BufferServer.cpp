@@ -77,6 +77,6 @@ void BufferServer::acceptConnection()
 {
     QTcpSocket *socket = server->nextPendingConnection();     
     ConnectionHandler *requestHandler = new ServerConnectionHandler(socket, this);
-    qDebug() << QString("New connection from: '%1:%2'").arg(socket->peerAddress().toString()).arg(socket->peerPort());
+    //qDebug() << QString("New connection from: '%1:%2'").arg(socket->peerAddress().toString()).arg(socket->peerPort());
     Q_UNUSED(requestHandler);
 }
