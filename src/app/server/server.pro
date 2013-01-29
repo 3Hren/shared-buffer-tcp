@@ -13,8 +13,10 @@ CONFIG   -= app_bundle
 OBJECTS_DIR = .obj/debug
 MOC_DIR = .moc/debug
 
-INCLUDEPATH += $$LIBRARY_PATH/include
-DEPENDPATH += $LIBRARY_PATH/include
-LIBS += -L$$LIBRARY_PATH -lbufferstorage
+LIB_PATH = $${ROOT_PATH}/src/lib
+include($${LIB_PATH}/BufferStorage.pri)
+INCLUDEPATH += $${LIB_PATH}
+DEPENDPATH += $${LIB_PATH}
+#LIBS += -L$$LIBRARY_PATH -lbufferstorage
 
 SOURCES += main.cpp

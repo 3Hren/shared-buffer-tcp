@@ -24,7 +24,7 @@ public:
 
 protected:
     void run() {
-        client = new BufferClientImplementation(this);
+        client = new BufferClientImplementation;
         connect(client, SIGNAL(errorReceived(SharedErrorResponse)), SLOT(showError(SharedErrorResponse)));
         client->blockingConnectToServer();
         QTimer::singleShot(timeout, this, SLOT(readAll()));

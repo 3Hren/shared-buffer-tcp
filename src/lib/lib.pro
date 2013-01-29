@@ -6,8 +6,9 @@ DESTDIR = ../../lib
 QT       += core network
 QT       -= gui
 
-CONFIG   += console static
-#CONFIG   += debug_and_release build_all warn_on
+VERSION = 1.0.0
+
+CONFIG   += console static build_all warn_on
 CONFIG   -= app_bundle
 
 include(BufferStorage.pri)

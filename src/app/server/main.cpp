@@ -1,6 +1,6 @@
 #include <QCoreApplication>
 
-#include <ru/diaprom/bufferstorage/BufferServer.h>
+#include "ru/diaprom/bufferstorage/server/BufferServer.h"
 
 #include <QDebug>
 
