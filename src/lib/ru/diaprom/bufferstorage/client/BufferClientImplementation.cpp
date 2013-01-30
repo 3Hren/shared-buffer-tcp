@@ -7,6 +7,8 @@
 #include "ru/diaprom/bufferstorage/protocol/GetSignalValuesResponse.h"
 #include "ru/diaprom/bufferstorage/protocol/GetBufferRequest.h"
 #include "ru/diaprom/bufferstorage/protocol/GetBufferResponse.h"
+#include "ru/diaprom/bufferstorage/protocol/GetBuffersDumpRequest.h"
+#include "ru/diaprom/bufferstorage/protocol/GetBuffersDumpResponse.h"
 
 #include "listener/BlockingListener.h"
 
@@ -107,8 +109,37 @@ SignalBuffer BufferClientImplementation::blockingGetBuffer(BufferId bufferId, in
         GetBufferResponse *response = listener.getResponse<GetBufferResponse *>();
         signalBuffer = response->getSignalBuffer();
     } catch (BufferStorageException &exception) {
-        throw;
+        throw exception;
     }
 
     return signalBuffer;
+}
+
+void BufferClientImplementation::getBuffersDump()
+{
+    Q_D(BufferClientImplementation);
+    GetBuffersDumpRequest request;
+    d->sendRequest(&request);
+}
+
+//! @todo: Подумать насчет cv-квантификаторов
+BuffersDump BufferClientImplementation::blockingGetBuffersDump(int timeout)
+{
+    Q_D(BufferClientImplementation);
+    if (!d->isConnected())
+        throw BufferStorageException("There is no connection to the server");
+
+    BuffersDump buffersDump;
+    getBuffersDump();
+    BlockingListener listener(this);
+    try {
+        listener.listen(timeout);
+        GetBuffersDumpResponse *response = listener.getResponse<GetBuffersDumpResponse *>();
+        buffersDump.timeStamps = response->getTimeStamps();
+        buffersDump.buffers = response->getBuffers();
+    } catch (BufferStorageException &exception) {
+        throw exception;
+    }
+
+    return buffersDump;
 }

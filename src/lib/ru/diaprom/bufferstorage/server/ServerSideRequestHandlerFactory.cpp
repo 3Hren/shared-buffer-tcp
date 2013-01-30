@@ -6,6 +6,7 @@
 #include "handler/PushRequestHandler.h"
 #include "handler/GetSignalValuesRequestHandler.h"
 #include "handler/GetBufferRequestHandler.h"
+#include "handler/GetBuffersDumpRequestHandler.h"
 
 using namespace BufferStorage;
 
@@ -20,6 +21,8 @@ RequestHandler *ServerSideRequestHandlerFactory::createHandler(ProtocolMessage *
         return new GetSignalValuesRequestHandler(request, server, socket);
     case REQUEST_GET_BUFFER:
         return new GetBufferRequestHandler(request, server, socket);
+    case REQUEST_GET_BUFFERS_DUMP:
+        return new GetBuffersDumpRequestHandler(request, server, socket);
     default:
         Q_ASSERT(false);
     }

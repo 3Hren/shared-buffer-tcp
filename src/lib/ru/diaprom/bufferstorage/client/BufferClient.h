@@ -5,6 +5,7 @@
 #include "ru/diaprom/bufferstorage/BufferStorageGlobal.h"
 #include "ru/diaprom/bufferstorage/SignalBuffer.h"
 #include "ru/diaprom/bufferstorage/SignalValue.h"
+#include "ru/diaprom/bufferstorage/BuffersDump.h"
 
 #include "ru/diaprom/bufferstorage/protocol/Response.h"
 #include "ru/diaprom/bufferstorage/protocol/ErrorResponse.h"
@@ -33,6 +34,9 @@ public:
 
     virtual void getBuffer(BufferId bufferId) = 0;
     virtual SignalBuffer blockingGetBuffer(BufferId bufferId, int timeout = 1000) = 0;
+
+    virtual void getBuffersDump() = 0;
+    virtual BuffersDump blockingGetBuffersDump(int timeout = 1000) = 0;
 
 Q_SIGNALS:
     void connected();

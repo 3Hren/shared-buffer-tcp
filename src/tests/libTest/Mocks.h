@@ -8,6 +8,7 @@
 #include <functional>
 
 #include "ru/diaprom/bufferstorage/BufferStorageGlobal.h"
+#include "ru/diaprom/bufferstorage/BuffersDump.h"
 
 #include "ru/diaprom/bufferstorage/exception/BufferStorageException.h"
 #include "ru/diaprom/bufferstorage/exception/ServerException.h"
@@ -71,4 +72,5 @@ public:
     MOCK_CONST_METHOD0(getTimeStamps, TimeStampVector());
     MOCK_CONST_METHOD1(getTimeStampsForBuffer, TimeStampVector(BufferId));
     MOCK_CONST_METHOD2(getSignalValue, SignalValue(BufferId, TimeStamp));
+    MOCK_CONST_METHOD0(getBuffers, Buffers());
 };

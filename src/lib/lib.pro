@@ -21,6 +21,7 @@ headers.files += \
     $${PATH}/BufferStorageGlobal.h \
     $${PATH}/SignalValue.h \
     $${PATH}/SignalBuffer.h \
+    $${PATH}/BuffersDump.h \
     $${PATH}/server/BufferServer.h \
     $${PATH}/client/BufferClient.h \
     $${PATH}/client/BufferClientImplementation.h

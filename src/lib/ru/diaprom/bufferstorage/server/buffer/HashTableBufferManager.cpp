@@ -11,14 +11,6 @@ HashTableBufferManager::~HashTableBufferManager()
     qDeleteAll(buffers);
 }
 
-Buffer *HashTableBufferManager::getBuffer(BufferId id) const
-{
-    if (!buffers.contains(id))
-        throw BufferNotFoundException(id);
-
-    return buffers.value(id);
-}
-
 void HashTableBufferManager::initBuffers(const BufferInfoTable &bufferInfoTable)
 {        
     BufferInfoTableIterator it(bufferInfoTable);
@@ -47,6 +39,23 @@ void HashTableBufferManager::initBuffers(BufferId count, BufferSize maxSize, Buf
         bufferInfoTable.insert(bufferId, maxSize);
 
     initBuffers(bufferInfoTable);
+}
+
+Buffer *HashTableBufferManager::getBuffer(BufferId id) const
+{
+    if (!buffers.contains(id))
+        throw BufferNotFoundException(id);
+
+    return buffers.value(id);
+}
+
+QHash<BufferId, SignalValueVector> HashTableBufferManager::getBuffers() const
+{
+    QHash<BufferId, SignalValueVector> dump;
+    foreach (BufferId id, buffers.keys())
+        dump.insert(id, buffers.value(id)->toVector());
+
+    return dump;
 }
 
 TimeStampVector HashTableBufferManager::getTimeStamps() const
@@ -92,13 +101,4 @@ void HashTableBufferManager::pushSignalValues(const SignalValueVector &signalVal
     }
 
     timeStamps.enqueue(timeStamp);
-}
-
-QHash<BufferId, SignalValueVector> HashTableBufferManager::getDataDump() const
-{
-    QHash<BufferId, SignalValueVector> dump;
-    foreach (BufferId id, buffers.keys())
-        dump.insert(id, buffers.value(id)->toVector());
-
-    return dump;
 }

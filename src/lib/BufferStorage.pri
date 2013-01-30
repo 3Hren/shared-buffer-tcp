@@ -37,8 +37,10 @@ HEADERS += \
     ru/diaprom/bufferstorage/client/BufferClientImplementation.h \
     ru/diaprom/bufferstorage/client/BufferClientImplementationPrivate.h \
     ru/diaprom/bufferstorage/client/BufferClient.h \
-    ru/diaprom/bufferstorage/protocol/GetDataDumpRequest.h \
-    ru/diaprom/bufferstorage/protocol/GetDataDumpResponse.h
+    ru/diaprom/bufferstorage/protocol/GetBuffersDumpRequest.h \
+    ru/diaprom/bufferstorage/protocol/GetBuffersDumpResponse.h \
+    ru/diaprom/bufferstorage/BuffersDump.h \
+    ru/diaprom/bufferstorage/server/handler/GetBuffersDumpRequestHandler.h
 
 SOURCES += \
     ru/diaprom/bufferstorage/ConnectionHandler.cpp \
@@ -67,5 +69,6 @@ SOURCES += \
     ru/diaprom/bufferstorage/protocol/ProtocolMessageFactory.cpp \
     ru/diaprom/bufferstorage/client/BufferClientImplementation.cpp \
     ru/diaprom/bufferstorage/client/BufferClientImplementationPrivate.cpp \
-    ru/diaprom/bufferstorage/protocol/GetDataDumpRequest.cpp \
-    ru/diaprom/bufferstorage/protocol/GetDataDumpResponse.cpp
+    ru/diaprom/bufferstorage/protocol/GetBuffersDumpRequest.cpp \
+    ru/diaprom/bufferstorage/protocol/GetBuffersDumpResponse.cpp \
+    ru/diaprom/bufferstorage/server/handler/GetBuffersDumpRequestHandler.cpp

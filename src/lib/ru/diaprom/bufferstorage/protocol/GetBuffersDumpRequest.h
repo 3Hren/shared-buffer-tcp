@@ -3,10 +3,10 @@
 #include "Request.h"
 
 namespace BufferStorage {
-class GetDataDumpRequest : public Request
+class GetBuffersDumpRequest : public Request
 {
 public:
-    GetDataDumpRequest();
+    GetBuffersDumpRequest();
 
 protected:
     void encodeData(QDataStream *out) const;

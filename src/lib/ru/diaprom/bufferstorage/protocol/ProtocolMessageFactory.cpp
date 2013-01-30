@@ -7,6 +7,8 @@
 #include "GetBufferResponse.h"
 #include "ErrorResponse.h"
 #include "PushResponse.h"
+#include "GetBuffersDumpRequest.h"
+#include "GetBuffersDumpResponse.h"
 
 #include <QDebug>
 
@@ -33,6 +35,10 @@ ProtocolMessage *ProtocolMessageFactory::createProtocolMessage(ProtocolType type
         return new ErrorResponse();
     case RESPONSE_PUSH:
         return new PushResponse();
+    case REQUEST_GET_BUFFERS_DUMP:
+        return new GetBuffersDumpRequest();
+    case RESPONSE_GET_BUFFERS_DUMP:
+        return new GetBuffersDumpResponse();
     default:
         Q_ASSERT_X(false, "protocol factory method", QString("can't find protocol with type %1").arg(type).toUtf8());
     }

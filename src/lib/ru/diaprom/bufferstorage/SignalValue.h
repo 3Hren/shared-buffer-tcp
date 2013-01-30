@@ -34,4 +34,5 @@ inline QDebug operator <<(QDebug debug, const SignalValue &signalValue) {
 
 #include <QVector>
 typedef QVector<SignalValue> SignalValueVector;
+typedef QHash<BufferId, SignalValueVector> Buffers;
 }

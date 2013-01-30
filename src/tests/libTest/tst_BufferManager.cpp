@@ -33,13 +33,13 @@ TEST(HashTableBufferManager, SimplifiedInitBuffers) {
     EXPECT_TRUE(bufferManager.getBuffer(1002)->isEmpty());
 }
 
-TEST(HashTableBufferManager, GetEmptyDataDumpByDefault) {
+TEST(HashTableBufferManager, GetEmptyBuffersDumpByDefault) {
     HashTableBufferManager manager;
-    QHash<BufferId, SignalValueVector> emptyDump;
-    EXPECT_EQ(emptyDump, manager.getDataDump());
+    Buffers emptyBuffers;
+    EXPECT_EQ(emptyBuffers, manager.getBuffers());
 }
 
-TEST(HashTableBufferManager, GetDataDump) {
+TEST(HashTableBufferManager, GetBuffersDump) {
     HashTableBufferManager manager;
     manager.initBuffers(3, 5);
     const QList<SignalValueVector> &data = {
@@ -61,12 +61,12 @@ TEST(HashTableBufferManager, GetDataDump) {
         {{1.5, 0}, {2.5, 0}, {1.5, 0}, {2.5, 0}, {1.5, 0}},
         {{2.5, 1}, {0.5, 1}, {2.4, 1} ,{2.2, 0} ,{2.1, 1}}
     };
-    QHash<BufferId, SignalValueVector> dump;
-    dump.insert(0, transposedData.at(0));
-    dump.insert(2, transposedData.at(1));
-    dump.insert(4, transposedData.at(2));
+    Buffers buffers;
+    buffers.insert(0, transposedData.at(0));
+    buffers.insert(2, transposedData.at(1));
+    buffers.insert(4, transposedData.at(2));
 
-    EXPECT_EQ(dump, manager.getDataDump());
+    EXPECT_EQ(buffers, manager.getBuffers());
 }
 
 TEST(HashTableBufferManager, GetTimeStamps) {

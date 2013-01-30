@@ -304,4 +304,47 @@ TEST(AcceptanceTest, GetSignalValuesWithWrongSomeBufferIndexesResultsInError) {
 
 //! @note: Тестировать асинхронные запросы когда есть блокирующие смысла особого не имеет, т.к. в реализации блокирующего запроса используется асинхронный в связке с циклом ожидания событий.
 
+/*!
+ * \brief Приемочный тест, который тестирует всю клиент-серверную архитектуру на примере блокирующего getDatDump-запроса.
+ *
+ * В этом тесте создается экземпляр шаблонного класса ThreadedServerRunnerManager, который управляет жизненным циклом
+ * класса ServerRunner. Он создает объект класса ServerRunner, передает ему параметры инициализации сервера (кол-во буферов и
+ * их максимальный размер), переносит его в отдельный поток, и настраивает так, чтобы runner запускался сразу после запуска потока.
+ * Менеджер запускается вызовом метода start().
+ * Сервер инициализируется по умолчанию BUFFER_COUNT буферами с максимальным размером BUFFER_MAX_SIZE. При этом они заполняются значениями по формуле:
+ * SignalValue(timeStamp * bufferMaxSize + id, 0).
+ * После этого создается клиент, устанавливается соединение с сервером и посылается блокирующий getBuffersDump-запрос.
+ * Если все прошло успешно, то вернется дамп буферов.
+ */
+TEST(AcceptanceTest, BlockingGetBuffersDump) {
+    const BufferId BUFFER_COUNT = 64;
+    const BufferSize BUFFER_MAX_SIZE = 1655;
+    ThreadedServerRunnerManager<AutoFilledServerRunner> runner(BUFFER_COUNT, BUFFER_MAX_SIZE);
+    runner.start();
+
+    TimeStampVector expectedTimeStamps;
+    for (int i = 0; i < BUFFER_MAX_SIZE; ++i)
+        expectedTimeStamps.append(i);
+
+    QHash<BufferId, SignalValueVector> expectedDump;
+    for (BufferId bufferId = 0; bufferId < 2 * BUFFER_COUNT; bufferId += 2) {
+        SignalValueVector signalValues;
+        for (BufferSize timeStamp = 0; timeStamp < BUFFER_MAX_SIZE; ++timeStamp)
+            signalValues.append(SignalValue(timeStamp * BUFFER_MAX_SIZE + bufferId, 0));
+
+        expectedDump.insert(bufferId, signalValues);
+    }
+
+    try {
+        BufferClientImplementation client;
+        client.blockingConnectToServer();
+        const BuffersDump &buffersDump = client.blockingGetBuffersDump();
+        EXPECT_EQ(expectedTimeStamps, buffersDump.timeStamps);
+        EXPECT_EQ(expectedDump, buffersDump.buffers);
+    } catch (BufferStorageException &exception) {
+        qFatal("Error while testing '%s': '%s'", Q_FUNC_INFO, exception.getReason().toUtf8().constData());
+        FAIL();
+    }
+}
+
 #include "tst_AcceptanceTesting.moc"

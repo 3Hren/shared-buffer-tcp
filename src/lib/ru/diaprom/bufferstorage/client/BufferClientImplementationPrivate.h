@@ -23,7 +23,7 @@ class BufferClientImplementationPrivate : public QObject
     QTcpSocket *socket;
     ConnectionHandler *handler;
 public:        
-    BufferClientImplementationPrivate(BufferClientImplementation *bufferClient); //! @todo: rename to ConnectionDispatcher
+    BufferClientImplementationPrivate(BufferClientImplementation *bufferClient);
 
     bool isConnected() const;
 

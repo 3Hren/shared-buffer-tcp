@@ -29,5 +29,8 @@ public:
 
     void getBuffer(BufferId bufferId);
     SignalBuffer blockingGetBuffer(BufferId bufferId, int timeout = 1000);
+
+    void getBuffersDump();
+    BuffersDump blockingGetBuffersDump(int timeout = 1000);
 };
 }

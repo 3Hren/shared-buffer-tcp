@@ -236,52 +236,52 @@ TEST(GetSignalValuesResponse, EncodingDecoding) {
     EXPECT_EQ(signalValues, clientResponse.getSignalValues());
 }
 
-#include "ru/diaprom/bufferstorage/protocol/GetDataDumpRequest.h"
-TEST(GetDataDumpRequest, Class) {
-    GetDataDumpRequest request;
+#include "ru/diaprom/bufferstorage/protocol/GetBuffersDumpRequest.h"
+TEST(GetBuffersDumpRequest, Class) {
+    GetBuffersDumpRequest request;
     Q_UNUSED(request);
 }
 
-TEST(GetDataDumpRequest, InitializesType) {
-    GetDataDumpRequest request;
-    EXPECT_EQ(REQUEST_GET_DATA_DUMP, request.getType());
+TEST(GetBuffersDumpRequest, InitializesType) {
+    GetBuffersDumpRequest request;
+    EXPECT_EQ(REQUEST_GET_BUFFERS_DUMP, request.getType());
 }
 
-#include "ru/diaprom/bufferstorage/protocol/GetDataDumpResponse.h"
-TEST(GetDataDumpResponse, Class) {
-    GetDataDumpResponse response;
+#include "ru/diaprom/bufferstorage/protocol/GetBuffersDumpResponse.h"
+TEST(GetBuffersDumpResponse, Class) {
+    GetBuffersDumpResponse response;
     Q_UNUSED(response);
 }
 
-TEST(GetDataDumpResponse, InitializesType) {
-    GetDataDumpResponse response;
-    EXPECT_EQ(RESPONSE_GET_DATA_DUMP, response.getType());
+TEST(GetBuffersDumpResponse, InitializesType) {
+    GetBuffersDumpResponse response;
+    EXPECT_EQ(RESPONSE_GET_BUFFERS_DUMP, response.getType());
 }
 
-TEST(GetDataDumpResponse, InitializesRequestType) {
-    GetDataDumpResponse response;
-    EXPECT_EQ(REQUEST_GET_DATA_DUMP, response.getRequestType());
+TEST(GetBuffersDumpResponse, InitializesRequestType) {
+    GetBuffersDumpResponse response;
+    EXPECT_EQ(REQUEST_GET_BUFFERS_DUMP, response.getRequestType());
 }
 
-TEST(GetDataDumpResponse, InitializationConstructor) {
+TEST(GetBuffersDumpResponse, InitializationConstructor) {
     const TimeStampVector &timeStamps = {0, 1};
-    QHash<BufferId, SignalValueVector> dump;
-    dump.insert(0, {{0.89, 0}, {5.25, 1}});
-    dump.insert(2, {{1.25, 1}, {-2.3, 0}});
+    Buffers buffers;
+    buffers.insert(0, {{0.89, 0}, {5.25, 1}});
+    buffers.insert(2, {{1.25, 1}, {-2.3, 0}});
 
-    GetDataDumpResponse response(timeStamps, dump);
+    GetBuffersDumpResponse response(timeStamps, buffers);
     EXPECT_EQ(timeStamps, response.getTimeStamps());
-    EXPECT_EQ(dump, response.getDataDump());
+    EXPECT_EQ(buffers, response.getBuffers());
 }
 
-TEST(GetDataDumpResponse, EncodingDecoding) {
+TEST(GetBuffersDumpResponse, EncodingDecoding) {
     const TimeStampVector &timeStamps = {0, 1};
-    QHash<BufferId, SignalValueVector> dump;
-    dump.insert(0, {{0.89, 0}, {5.25, 1}});
-    dump.insert(2, {{1.25, 1}, {-2.3, 0}});
+    Buffers buffers;
+    buffers.insert(0, {{0.89, 0}, {5.25, 1}});
+    buffers.insert(2, {{1.25, 1}, {-2.3, 0}});
 
-    GetDataDumpResponse serverResponse(timeStamps, dump);
-    GetDataDumpResponse clientResponse = EncodeDecode(serverResponse, RESPONSE_GET_DATA_DUMP);
+    GetBuffersDumpResponse serverResponse(timeStamps, buffers);
+    GetBuffersDumpResponse clientResponse = EncodeDecode(serverResponse, RESPONSE_GET_BUFFERS_DUMP);
     EXPECT_EQ(timeStamps, clientResponse.getTimeStamps());
-    EXPECT_EQ(dump, clientResponse.getDataDump());
+    EXPECT_EQ(buffers, clientResponse.getBuffers());
 }
