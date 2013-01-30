@@ -9,8 +9,7 @@ namespace BufferStorage {
 struct BuffersDump
 {
     BuffersDump() {}
-    //! @todo: toTest
-    BuffersDump(const TimeStampVector &timeStamps, const QHash<BufferId, SignalValueVector> &buffers) :
+    BuffersDump(const TimeStampVector &timeStamps, const Buffers &buffers) :
         timeStamps(timeStamps),
         buffers(buffers)
     {}

@@ -122,7 +122,6 @@ void BufferClientImplementation::getBuffersDump()
     d->sendRequest(&request);
 }
 
-//! @todo: Подумать насчет cv-квантификаторов
 BuffersDump BufferClientImplementation::blockingGetBuffersDump(int timeout)
 {
     Q_D(BufferClientImplementation);

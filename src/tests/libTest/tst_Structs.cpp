@@ -44,3 +44,17 @@ TEST(SignalBuffer, Serializing) {
     TestStructSerializing(signalBuffer);
 }
 
+TEST(BuffersDump, Class) {
+    BuffersDump buffersDump;
+    Q_UNUSED(buffersDump);
+}
+
+TEST(BuffersDump, InitializationConstructor) {
+    const TimeStampVector &timeStamps = {0, 1, 2};
+    Buffers buffers;
+    buffers.insert(0, {{1.0, 0}, {1.5, 0}, {2.0, 0}});
+    buffers.insert(2, {{1.0, 0}, {1.5, 0}, {2.0, 0}});
+    BuffersDump buffersDump(timeStamps, buffers);
+    EXPECT_EQ(timeStamps, buffersDump.timeStamps);
+    EXPECT_EQ(buffers, buffersDump.buffers);
+}
