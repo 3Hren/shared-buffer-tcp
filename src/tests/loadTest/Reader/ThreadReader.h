@@ -2,6 +2,7 @@
 
 #include <QThread>
 #include <QTimer>
+#include <QElapsedTimer>
 
 #include <ru/diaprom/bufferstorage/BufferClientImplementation.h>
 #include <ru/diaprom/bufferstorage/protocol/GetBufferResponse.h>
@@ -39,9 +40,10 @@ private slots:
     }
 
     void readAll() {
-        for (BufferId bufferId = 0; bufferId < bufferCount; ++bufferId) {
-            qDebug() << client->blockingGetBuffer(startAddress + 2 * bufferId).signalValueVector.size();
-        }
+        QElapsedTimer timer;
+        timer.start();
+        const BuffersDump &dump = client->blockingGetBuffersDump();
+        qDebug() << timer.elapsed() << "ms." << dump.timeStamps.size();
         QTimer::singleShot(timeout, this, SLOT(readAll()));
     }
 
