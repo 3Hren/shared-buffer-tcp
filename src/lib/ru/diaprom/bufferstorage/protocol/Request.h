@@ -6,6 +6,6 @@ namespace BufferStorage {
 class Request : public ProtocolMessage
 {
 public:
-    Request(ProtocolType type);
+    Request(ProtocolType type);   
 };
 }

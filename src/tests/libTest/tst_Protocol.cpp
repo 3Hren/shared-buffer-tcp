@@ -235,3 +235,53 @@ TEST(GetSignalValuesResponse, EncodingDecoding) {
     EXPECT_EQ(TimeStamp(10), clientResponse.getTimeStamp());
     EXPECT_EQ(signalValues, clientResponse.getSignalValues());
 }
+
+#include "ru/diaprom/bufferstorage/protocol/GetDataDumpRequest.h"
+TEST(GetDataDumpRequest, Class) {
+    GetDataDumpRequest request;
+    Q_UNUSED(request);
+}
+
+TEST(GetDataDumpRequest, InitializesType) {
+    GetDataDumpRequest request;
+    EXPECT_EQ(REQUEST_GET_DATA_DUMP, request.getType());
+}
+
+#include "ru/diaprom/bufferstorage/protocol/GetDataDumpResponse.h"
+TEST(GetDataDumpResponse, Class) {
+    GetDataDumpResponse response;
+    Q_UNUSED(response);
+}
+
+TEST(GetDataDumpResponse, InitializesType) {
+    GetDataDumpResponse response;
+    EXPECT_EQ(RESPONSE_GET_DATA_DUMP, response.getType());
+}
+
+TEST(GetDataDumpResponse, InitializesRequestType) {
+    GetDataDumpResponse response;
+    EXPECT_EQ(REQUEST_GET_DATA_DUMP, response.getRequestType());
+}
+
+TEST(GetDataDumpResponse, InitializationConstructor) {
+    const TimeStampVector &timeStamps = {0, 1};
+    const QList<SignalValueVector> &dump = {
+        {{0.89, 0}, {5.25, 1}},
+        {{1.25, 1}, {-2.3, 0}}
+    };
+    GetDataDumpResponse response(timeStamps, dump);
+    EXPECT_EQ(timeStamps, response.getTimeStamps());
+    EXPECT_EQ(dump, response.getDataDump());
+}
+
+TEST(GetDataDumpResponse, EncodingDecoding) {
+    const TimeStampVector &timeStamps = {0, 1};
+    const QList<SignalValueVector> &dump = {
+        {{0.89, 0}, {5.25, 1}},
+        {{1.25, 1}, {-2.3, 0}}
+    };
+    GetDataDumpResponse serverResponse(timeStamps, dump);
+    GetDataDumpResponse clientResponse = EncodeDecode(serverResponse, RESPONSE_GET_DATA_DUMP);
+    EXPECT_EQ(timeStamps, clientResponse.getTimeStamps());
+    EXPECT_EQ(dump, clientResponse.getDataDump());
+}
