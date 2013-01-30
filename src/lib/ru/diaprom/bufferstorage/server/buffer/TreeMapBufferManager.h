@@ -3,6 +3,7 @@
 #include "../BufferManager.h"
 
 namespace BufferStorage {
+//! @deprecated: По производительности отстает от HashTableBufferManager.
 class TreeMapBufferManager : public BufferManager
 {    
     FixedSizeQueue<TimeStamp> timeStamps;

@@ -49,6 +49,11 @@ void HashTableBufferManager::initBuffers(BufferId count, BufferSize maxSize, Buf
     initBuffers(bufferInfoTable);
 }
 
+TimeStampVector HashTableBufferManager::getTimeStamps() const
+{
+    return timeStamps.toVector();
+}
+
 TimeStampVector HashTableBufferManager::getTimeStampsForBuffer(BufferId bufferId) const
 {
     Buffer *buffer = getBuffer(bufferId);
@@ -87,4 +92,13 @@ void HashTableBufferManager::pushSignalValues(const SignalValueVector &signalVal
     }
 
     timeStamps.enqueue(timeStamp);
+}
+
+QHash<BufferId, SignalValueVector> HashTableBufferManager::getDataDump() const
+{
+    QHash<BufferId, SignalValueVector> dump;
+    foreach (BufferId id, buffers.keys())
+        dump.insert(id, buffers.value(id)->toVector());
+
+    return dump;
 }

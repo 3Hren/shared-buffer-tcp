@@ -17,6 +17,7 @@ public:
 
     virtual void pushSignalValues(const SignalValueVector &signalValues, TimeStamp timeStamp) = 0;
 
+    virtual TimeStampVector getTimeStamps() const = 0;
     virtual TimeStampVector getTimeStampsForBuffer(BufferId bufferId) const = 0;
     virtual SignalValue getSignalValue(BufferId bufferId, TimeStamp timeStamp) const = 0;
 };

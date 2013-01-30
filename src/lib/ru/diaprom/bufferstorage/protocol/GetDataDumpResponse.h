@@ -8,13 +8,13 @@ namespace BufferStorage {
 class GetDataDumpResponse : public Response
 {
     TimeStampVector timeStamps;
-    QList<SignalValueVector> dataDump;
+    QHash<BufferId, SignalValueVector> dataDump;
 public:
     GetDataDumpResponse();
-    GetDataDumpResponse(const TimeStampVector &timeStamps, const QList<SignalValueVector> &dataDump);
+    GetDataDumpResponse(const TimeStampVector &timeStamps, const QHash<BufferId, SignalValueVector> &dataDump);
 
     TimeStampVector getTimeStamps() const;
-    QList<SignalValueVector> getDataDump() const;
+    QHash<BufferId, SignalValueVector> getDataDump() const;
 
 protected:
     void encodeData(QDataStream *out) const;

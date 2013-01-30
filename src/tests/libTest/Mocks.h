@@ -68,6 +68,7 @@ public:
     MOCK_METHOD1(initBuffers, void(const BufferInfoTable&));
     MOCK_METHOD4(initBuffers, void(BufferId, BufferSize, BufferId, BufferId));
     MOCK_METHOD2(pushSignalValues, void(const SignalValueVector&, TimeStamp));
+    MOCK_CONST_METHOD0(getTimeStamps, TimeStampVector());
     MOCK_CONST_METHOD1(getTimeStampsForBuffer, TimeStampVector(BufferId));
     MOCK_CONST_METHOD2(getSignalValue, SignalValue(BufferId, TimeStamp));
 };

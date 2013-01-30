@@ -7,7 +7,7 @@ GetDataDumpResponse::GetDataDumpResponse() :
 {
 }
 
-GetDataDumpResponse::GetDataDumpResponse(const TimeStampVector &timeStamps, const QList<SignalValueVector> &dataDump) :
+GetDataDumpResponse::GetDataDumpResponse(const TimeStampVector &timeStamps, const QHash<BufferId, SignalValueVector> &dataDump) :
     Response(RESPONSE_GET_DATA_DUMP, REQUEST_GET_DATA_DUMP),
     timeStamps(timeStamps),
     dataDump(dataDump)
@@ -19,7 +19,7 @@ TimeStampVector GetDataDumpResponse::getTimeStamps() const
     return timeStamps;
 }
 
-QList<SignalValueVector> GetDataDumpResponse::getDataDump() const
+QHash<BufferId, SignalValueVector> GetDataDumpResponse::getDataDump() const
 {
     return dataDump;
 }
