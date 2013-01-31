@@ -7,6 +7,8 @@
 #include "ru/diaprom/bufferstorage/protocol/Response.h"
 #include "ru/diaprom/bufferstorage/protocol/ErrorResponse.h"
 
+#include "listener/BlockingListener.h"
+
 #include <QAbstractSocket>
 #include <QSharedPointer>
 
@@ -22,10 +24,11 @@ class BufferClientImplementationPrivate : public QObject
     BufferClientImplementation *client;
     QTcpSocket *socket;
     ConnectionHandler *handler;
-public:        
+public:
     BufferClientImplementationPrivate(BufferClientImplementation *bufferClient);
 
     bool isConnected() const;
+    void checkConnection() const;
 
     void connectToHost(const QString &host, quint16 port);
     bool waitForConnected(int timeout = 1000) const;
@@ -35,7 +38,21 @@ public:
     bool waitForDisconnected(int timeout = 1000) const;
     bool blockingDisconnectFromHost(int timeout = 1000);
 
-    qint64 sendRequest(Request *request);        
+    qint64 sendRequest(Request *request);
+
+    template<typename T>
+    QSharedPointer<T> receiveResponse(int timeout = 1000) const {
+        BlockingListener listener(client);
+        try {
+            listener.listen(timeout);
+            QSharedPointer<T> response = listener.getSharedResponse<T>();
+            return response;
+        } catch (BufferStorageException &exception) {
+            throw exception;
+        }
+
+        return QSharedPointer<T>();
+    }
 
     void callResponseReceived(SharedResponse response);
     void callErrorReceived(SharedErrorResponse errorResponse);

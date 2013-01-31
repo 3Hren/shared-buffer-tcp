@@ -36,6 +36,12 @@ bool BufferClientImplementationPrivate::isConnected() const
     return socket->state() == QAbstractSocket::ConnectedState;
 }
 
+void BufferClientImplementationPrivate::checkConnection() const
+{
+    if (!isConnected())
+        throw BufferStorageException(tr("There is no connection to the server"));
+}
+
 void BufferClientImplementationPrivate::connectToHost(const QString &host, quint16 port)
 {
     socket->connectToHost(host, port);

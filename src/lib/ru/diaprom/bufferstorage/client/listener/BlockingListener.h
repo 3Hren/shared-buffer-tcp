@@ -22,6 +22,7 @@ public:
 
     void listen(int timeout);
 
+    //! @deprecated - заменен на getSharedResponse()
     template<typename T>
     T getResponse() const {
         if (!response)
@@ -33,6 +34,19 @@ public:
         }
 
         return static_cast<T>(response.data());
+    }
+
+    template<typename T>
+    QSharedPointer<T> getSharedResponse() const {
+        if (!response)
+            throw BufferStorageException("Timeout");
+
+        if (response->getType() == RESPONSE_ERROR) {
+            ErrorResponse *errorResponse = static_cast<ErrorResponse *>(response.data());
+            throw ProtocolException(errorResponse->getRequestType(), errorResponse->getErrorType(), errorResponse->getReason());
+        }
+
+        return response.staticCast<T>();
     }
 
     Q_SLOT void stopListening();

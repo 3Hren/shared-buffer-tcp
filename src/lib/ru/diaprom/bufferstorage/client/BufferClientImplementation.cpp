@@ -68,17 +68,9 @@ void BufferClientImplementation::push(const SignalValueVector &signalValues, Tim
 void BufferClientImplementation::blockingPush(const SignalValueVector &signalValues, TimeStamp timeStamp, int timeout)
 {
     Q_D(BufferClientImplementation);
-    if (!d->isConnected())
-        throw BufferStorageException("There is no connection to the server");
-
+    d->checkConnection();
     push(signalValues, timeStamp);
-    BlockingListener listener(this);
-    try {
-        listener.listen(timeout);
-        listener.getResponse<PushResponse *>();
-    } catch (BufferStorageException &exception) {
-        throw;
-    }
+    d->receiveResponse<PushResponse>(timeout);
 }
 
 void BufferClientImplementation::getSignalData(const QVector<BufferId> &bufferIds, TimeStamp timeStamp)
@@ -98,21 +90,10 @@ void BufferClientImplementation::getBuffer(BufferId bufferId)
 SignalBuffer BufferClientImplementation::blockingGetBuffer(BufferId bufferId, int timeout)
 {    
     Q_D(BufferClientImplementation);
-    if (!d->isConnected())
-        throw BufferStorageException("There is no connection to the server");
-
-    SignalBuffer signalBuffer;
+    d->checkConnection();
     getBuffer(bufferId);
-    BlockingListener listener(this);
-    try {
-        listener.listen(timeout);
-        GetBufferResponse *response = listener.getResponse<GetBufferResponse *>();
-        signalBuffer = response->getSignalBuffer();
-    } catch (BufferStorageException &exception) {
-        throw exception;
-    }
-
-    return signalBuffer;
+    QSharedPointer<GetBufferResponse> response = d->receiveResponse<GetBufferResponse>(timeout);
+    return response->getSignalBuffer();
 }
 
 void BufferClientImplementation::getBuffersDump()
@@ -125,20 +106,8 @@ void BufferClientImplementation::getBuffersDump()
 BuffersDump BufferClientImplementation::blockingGetBuffersDump(int timeout)
 {
     Q_D(BufferClientImplementation);
-    if (!d->isConnected())
-        throw BufferStorageException("There is no connection to the server");
-
-    BuffersDump buffersDump;
+    d->checkConnection();
     getBuffersDump();
-    BlockingListener listener(this);
-    try {
-        listener.listen(timeout);
-        GetBuffersDumpResponse *response = listener.getResponse<GetBuffersDumpResponse *>();
-        buffersDump.timeStamps = response->getTimeStamps();
-        buffersDump.buffers = response->getBuffers();
-    } catch (BufferStorageException &exception) {
-        throw exception;
-    }
-
-    return buffersDump;
+    QSharedPointer<GetBuffersDumpResponse> response = d->receiveResponse<GetBuffersDumpResponse>(timeout);
+    return BuffersDump(response->getTimeStamps(), response->getBuffers());
 }
