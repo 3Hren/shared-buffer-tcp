@@ -4,8 +4,6 @@ ROOT_PATH = ../../..
 LIBRARY_PATH = $$ROOT_PATH/lib
 DESTDIR = $$ROOT_PATH/bin/app
 
-QMAKE_CXXFLAGS += #-Weverything
-
 QT       += core network
 QT       -= gui
 

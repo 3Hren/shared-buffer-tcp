@@ -6,7 +6,7 @@ DESTDIR = ../../lib
 QT       += core network
 QT       -= gui
 
-VERSION = 1.1.1
+VERSION = 1.1.2
 
 CONFIG   += console static build_all warn_on
 CONFIG   -= app_bundle
