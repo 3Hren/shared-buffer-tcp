@@ -13,7 +13,7 @@ GetBufferRequest::GetBufferRequest(BufferId bufferId) :
     bufferId(bufferId)
 {
 }
-//! @todo: test
+
 GetBufferRequest::GetBufferRequest(BufferId bufferId, const StartIndex &startIndex, const EndIndex &endIndex, const Step &step) :
     Request(REQUEST_GET_BUFFER),
     bufferId(bufferId),
@@ -27,17 +27,17 @@ BufferId GetBufferRequest::getBufferId() const
 {
     return bufferId;
 }
-//! @todo: test в т.ч. дефолтные значения
+
 StartIndex GetBufferRequest::getStartIndex() const
 {
     return startIndex;
 }
-//! @todo: test в т.ч. дефолтные значения
+
 EndIndex GetBufferRequest::getEndIndex() const
 {
     return endIndex;
 }
-//! @todo: test в т.ч. дефолтные значения
+
 Step GetBufferRequest::getStep() const
 {
     return step;

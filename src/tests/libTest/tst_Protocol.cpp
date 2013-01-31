@@ -14,7 +14,29 @@ TEST(GetBufferRequest, InitializesType) {
 TEST(GetBufferRequest, BufferIdConstructor) {
     GetBufferRequest request(10);
     EXPECT_EQ(REQUEST_GET_BUFFER, request.getType());
-    EXPECT_EQ(10, request.getBufferId());
+    EXPECT_EQ(10, request.getBufferId());    
+}
+
+TEST(GetBufferRequest, InitializesStartIndexProperly) {
+    GetBufferRequest request;
+    EXPECT_EQ(0, request.getStartIndex().value);
+}
+
+TEST(GetBufferRequest, InitializesEndIndexProperly) {
+    GetBufferRequest request;
+    EXPECT_EQ(-1, request.getEndIndex().value);
+}
+
+TEST(GetBufferRequest, InitializesStepProperly) {
+    GetBufferRequest request;
+    EXPECT_EQ(1, request.getStep().value);
+}
+
+TEST(GetBufferRequest, ExtendedConstructor) {
+    GetBufferRequest request(0, StartIndex(10), EndIndex(-2), Step(2));
+    EXPECT_EQ(10, request.getStartIndex().value);
+    EXPECT_EQ(-2, request.getEndIndex().value);
+    EXPECT_EQ(2, request.getStep().value);
 }
 
 template<typename T>
