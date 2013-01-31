@@ -134,6 +134,7 @@ TEST(AcceptanceTest, BlockingGetBuffer) {
         EXPECT_EQ(expectedSignalBuffer, signalBuffer);
     } catch (BufferStorageException &exception) {
         qFatal("Error while testing '%s': '%s'", Q_FUNC_INFO, exception.getReason().toUtf8().constData());
+        FAIL();
     }
 }
 
