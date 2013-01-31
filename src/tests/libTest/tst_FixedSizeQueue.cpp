@@ -67,3 +67,40 @@ TEST(FixedSizeQueue, Dequeue) {
     EXPECT_EQ(4, queue.dequeue());
     EXPECT_TRUE(queue.isEmpty());
 }
+
+TEST(FixedSizeQueue, InitializerConstructor) {
+    FixedSizeQueue<int> queue = {1, 2, 3, 4};
+    EXPECT_EQ(4, queue.getMaximumSize());
+    EXPECT_EQ(4, queue.size());
+}
+
+TEST(FixedSizeQueue, toVectorWhenEndIndexIsSet) {
+    const FixedSizeQueue<int> &queue = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    const QVector<int> &expected = {1, 2, 3, 4, 5};
+    EXPECT_EQ(expected, queue.toVector(0, 5));
+}
+
+TEST(FixedSizeQueue, toVectorWhenStartAndEndIndexIsSet) {
+    const FixedSizeQueue<int> &queue = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    const QVector<int> &expected = {6, 7};
+    EXPECT_EQ(expected, queue.toVector(5, 7));
+}
+
+TEST(FixedSizeQueue, toVectorWhenNegativeStartIndexIsSet) {
+    const FixedSizeQueue<int> &queue = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    const QVector<int> &expected = {6, 7, 8, 9, 10};
+    // Берем последние 5 элементов
+    EXPECT_EQ(expected, queue.toVector(-5));
+}
+
+TEST(FixedSizeQueue, toVectorWhenNegativeStartAndEndIndexesIsSet) {
+    const FixedSizeQueue<int> &queue = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    const QVector<int> &expected = {6, 7, 8, 9};
+    EXPECT_EQ(expected, queue.toVector(-5, -2));
+}
+
+TEST(FixedSizeQueue, toVectorWhenAllIndexesIsSet) {
+    const FixedSizeQueue<int> &queue = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    const QVector<int> &expected = {3, 5, 7};
+    EXPECT_EQ(expected, queue.toVector(2, 8, 2));
+}
