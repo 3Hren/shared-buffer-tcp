@@ -139,6 +139,37 @@ TEST(AcceptanceTest, BlockingGetBuffer) {
 }
 
 /*!
+ * \brief Приемочный тест, который тестирует всю клиент-серверную архитектуру на примере блокирующего get-запроса с функцией выборки данных.
+ *
+ * Выполнение аналогично предыдущему тесту, с тем исключением, что буфер возвращается частично (первые [100; 200] элементов с шагом 9)
+ * Если все прошло успешно, то вернется буфер, имеющий значения (150 + 0 * 1024, 150 + 9 * 1024 ... 150 + 198 * 1024).
+ */
+TEST(AcceptanceTest, BlockingGetBufferSliced) {
+    const BufferId BUFFER_COUNT = 300;
+    const BufferSize BUFFER_MAX_SIZE = 1024;
+    ThreadedServerRunnerManager<AutoFilledServerRunner> runner(BUFFER_COUNT, BUFFER_MAX_SIZE);
+    runner.start();
+
+    TimeStampVector expectedTimeStamps;
+    SignalValueVector expectedSignalValues;
+    for (int i = 100; i < 200; i+= 9) {
+        expectedTimeStamps.append(i);
+        expectedSignalValues.append(SignalValue(150 + i * BUFFER_MAX_SIZE, 0));
+    }
+    SignalBuffer expectedSignalBuffer(expectedTimeStamps, expectedSignalValues);
+
+    try {
+        BufferClientImplementation client;
+        client.blockingConnectToServer();
+        const SignalBuffer &signalBuffer = client.blockingGetBuffer(150, StartIndex(100), EndIndex(200), Step(9));
+        EXPECT_EQ(expectedSignalBuffer, signalBuffer);
+    } catch (BufferStorageException &exception) {
+        qFatal("Error while testing '%s': '%s'", Q_FUNC_INFO, exception.getReason().toUtf8().constData());
+        FAIL();
+    }
+}
+
+/*!
  * \brief Приемочный тест, который проверяет способность метода blockingGetBuffer выбрасывать исключение в случае неправильно заданного индекса буфера.
  */
 TEST(AcceptanceTest, BlockingGetBufferWithWrongIndexResultsInException) {

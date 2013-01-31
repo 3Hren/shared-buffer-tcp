@@ -70,7 +70,7 @@ public:
     MOCK_METHOD4(initBuffers, void(BufferId, BufferSize, BufferId, BufferId));
     MOCK_METHOD2(pushSignalValues, void(const SignalValueVector&, TimeStamp));
     MOCK_CONST_METHOD0(getTimeStamps, TimeStampVector());
-    MOCK_CONST_METHOD1(getTimeStampsForBuffer, TimeStampVector(BufferId));
+    MOCK_CONST_METHOD4(getTimeStampsForBuffer, TimeStampVector(BufferId, int, int, int));
     MOCK_CONST_METHOD2(getSignalValue, SignalValue(BufferId, TimeStamp));
     MOCK_CONST_METHOD0(getBuffers, Buffers());
 };

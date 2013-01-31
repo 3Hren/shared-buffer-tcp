@@ -80,18 +80,23 @@ void BufferClientImplementation::getSignalData(const QVector<BufferId> &bufferId
     d->sendRequest(&request);
 }
 
-void BufferClientImplementation::getBuffer(BufferId bufferId)
+void BufferClientImplementation::getBuffer(BufferId bufferId, const StartIndex &startIndex, const EndIndex &endIndex, const Step &step)
 {
     Q_D(BufferClientImplementation);
-    GetBufferRequest request(bufferId);
+    GetBufferRequest request(bufferId, startIndex, endIndex, step);
     d->sendRequest(&request);
 }
 
 SignalBuffer BufferClientImplementation::blockingGetBuffer(BufferId bufferId, int timeout)
 {    
+    return blockingGetBuffer(bufferId, StartIndex(), EndIndex(), Step(), timeout);
+}
+
+SignalBuffer BufferClientImplementation::blockingGetBuffer(BufferId bufferId, const StartIndex &startIndex, const EndIndex &endIndex, const Step &step, int timeout)
+{
     Q_D(BufferClientImplementation);
     d->checkConnection();
-    getBuffer(bufferId);
+    getBuffer(bufferId, startIndex, endIndex, step);
     QSharedPointer<GetBufferResponse> response = d->receiveResponse<GetBufferResponse>(timeout);
     return response->getSignalBuffer();
 }

@@ -32,7 +32,7 @@ public:
 
     virtual void getSignalData(const QVector<BufferId> &bufferIds, TimeStamp timeStamp) = 0;
 
-    virtual void getBuffer(BufferId bufferId) = 0;
+    virtual void getBuffer(BufferId bufferId, const StartIndex &startIndex = StartIndex(), const EndIndex &endIndex = EndIndex(), const Step &step = Step()) = 0;
     virtual SignalBuffer blockingGetBuffer(BufferId bufferId, int timeout = 1000) = 0;
 
     virtual void getBuffersDump() = 0;

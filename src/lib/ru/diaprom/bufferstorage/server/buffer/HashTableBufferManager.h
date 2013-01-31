@@ -19,7 +19,7 @@ public:
     QHash<BufferId, SignalValueVector> getBuffers() const;
 
     TimeStampVector getTimeStamps() const;
-    TimeStampVector getTimeStampsForBuffer(BufferId bufferId) const;
+    TimeStampVector getTimeStampsForBuffer(BufferId bufferId, int startPos = 0, int endPos = -1, int step = 1) const;
     SignalValue getSignalValue(BufferId bufferId, TimeStamp timeStamp) const;
     void pushSignalValues(const SignalValueVector &signalValues, TimeStamp timeStamp);    
 };

@@ -47,6 +47,21 @@ typedef QMapIterator<BufferId, BufferSize> BufferInfoTableIterator;
 typedef quint32 TimeStamp;
 typedef QVector<TimeStamp> TimeStampVector;
 
+struct StartIndex {
+    StartIndex(int id = 0) : value(id) {}
+    int value;
+};
+
+struct EndIndex {
+    EndIndex(int id = -1) : value(id) {}
+    int value;
+};
+
+struct Step {
+    Step(int step = 1) : value(step) {}
+    int value;
+};
+
 static const Magic MAGIC = 927932743;
 enum ProtocolType {
     REQUEST_PUSH = 0,

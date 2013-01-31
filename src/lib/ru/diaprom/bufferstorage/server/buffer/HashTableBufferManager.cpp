@@ -63,14 +63,18 @@ TimeStampVector HashTableBufferManager::getTimeStamps() const
     return timeStamps.toVector();
 }
 
-TimeStampVector HashTableBufferManager::getTimeStampsForBuffer(BufferId bufferId) const
+TimeStampVector HashTableBufferManager::getTimeStampsForBuffer(BufferId bufferId, int startPos, int endPos, int step) const
 {
     Buffer *buffer = getBuffer(bufferId);
     TimeStampVector timeStamps;
     BufferSize offset = this->timeStamps.size() - buffer->size();
+
+    startPos = startPos >= 0 ? startPos :buffer->size() + startPos;
+    endPos = endPos >= 0 ? endPos : buffer->size() + endPos + 1;
+
     timeStamps.reserve(buffer->size());
 
-    for (int i = 0; i < buffer->size(); ++i)
+    for (int i = startPos; i < buffer->size() && i < endPos; i += step)
         timeStamps.append(this->timeStamps.at(offset + i));
 
     return timeStamps;

@@ -27,8 +27,9 @@ public:
 
     void getSignalData(const QVector<BufferId> &bufferIds, TimeStamp timeStamp);
 
-    void getBuffer(BufferId bufferId);
+    void getBuffer(BufferId bufferId, const StartIndex &startIndex = StartIndex(), const EndIndex &endIndex = EndIndex(), const Step &step = Step());
     SignalBuffer blockingGetBuffer(BufferId bufferId, int timeout = 1000);
+    SignalBuffer blockingGetBuffer(BufferId bufferId, const StartIndex &startIndex, const EndIndex &endIndex = EndIndex(), const Step &step = Step(), int timeout = 1000);
 
     void getBuffersDump();
     BuffersDump blockingGetBuffersDump(int timeout = 1000);
