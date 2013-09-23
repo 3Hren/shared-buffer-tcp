@@ -71,6 +71,7 @@ TimeStampVector HashTableBufferManager::getTimeStampsForBuffer(BufferId bufferId
 
     startPos = startPos >= 0 ? startPos :buffer->size() + startPos;
     endPos = endPos >= 0 ? endPos : buffer->size() + endPos + 1;
+    //! @todo: Проверку поля step. Возможно падение сервера! :(
 
     timeStamps.reserve(buffer->size());
 

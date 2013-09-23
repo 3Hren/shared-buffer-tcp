@@ -10,7 +10,7 @@ class FixedSizeQueue {
     QQueue<T> queue;
 
 public:
-    FixedSizeQueue() : maximumSize(1) {}    
+    FixedSizeQueue() : maximumSize(1) {}
 #ifdef Q_COMPILER_INITIALIZER_LISTS
     inline FixedSizeQueue(std::initializer_list<T> args) : maximumSize(args.end() - args.begin()) {
         qCopy(args.begin(), args.end(), std::back_inserter(queue));
@@ -44,14 +44,16 @@ public:
         return queue.toVector();
     }
 
+    //! @todo: Откатиться чуток назад и протестировать багу, которая может убить сервер
     QVector<T> toVector(int startPos, int endPos = -1, int step = 1) const {
         startPos = startPos >= 0 ? startPos : size() + startPos;
         endPos = endPos >= 0 ? endPos : size() + endPos + 1;
+        step = qMax(1, step);
         int size = endPos - startPos;
 
         QVector<T> result;
         result.reserve(size);
-        for (int i = startPos; i < endPos; i += step)
+        for (int i = startPos; i < qMin(endPos, queue.size()); i += step)
             result << queue.at(i);
         return result;
     }
