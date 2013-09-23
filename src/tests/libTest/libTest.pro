@@ -9,7 +9,6 @@ DESTDIR = $$ROOT_PATH/bin
 OBJECTS_DIR = .obj
 MOC_DIR = .moc
 
-DEFINES += Q_COMPILER_INITIALIZER_LISTS
 QMAKE_CXXFLAGS += -std=c++11
 
 QT       += network testlib
@@ -36,3 +35,6 @@ SOURCES += \
 
 HEADERS += \
     Mocks.h
+
+LIBS += -lgcov
+QMAKE_CXXFLAGS += -g -Wall -fprofile-arcs -ftest-coverage -O0
